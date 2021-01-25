@@ -1,0 +1,45 @@
+{
+    "name": "simplonprod/craftcms-newsletter",
+    "description": "Craft CMS Newsletter plugin",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "newsletter"
+    ],
+    "support": {
+        "docs": "???",
+        "issues": "???"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simplon.Prod",
+            "homepage": "https://www.simplonprod.co"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.5.0",
+        "mailjet/mailjet-apiv3-php": "^1.5"
+    },
+    "require-dev": {
+      "craftcms/cms": "^3.5.0",
+      "codeception/codeception": "^3.0",
+      "vlucas/phpdotenv": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "simplonprod\\newsletter\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Newsletter",
+        "handle": "newsletter",
+        "developer": "Simplon.Prod",
+        "developerUrl": "https://www.simplonprod.co",
+        "class": "simplonprod\\newsletter\\Newsletter"
+    }
+}

@@ -1,0 +1,36 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Newsletter plugin for Craft CMS 3.x
+ *
+ * Newsletter Settings.twig
+ *
+ * @author    Simplon.Prod
+ * @copyright Copyright (c) 2021 Simplon.Prod
+ * @link      https://www.simplonprod.co
+ * @package   Newsletter
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.selectField({
+    label: "Service type"|t('newsletter'),
+    instructions: "Which service should be use to handle newsletter users subscription?"|t('newsletter'),
+    id: 'adapterType',
+    name: 'adapterType',
+    options: adapterTypeOptions,
+    value: className(adapter),
+    errors: adapter.getErrors('type') ?? null,
+    toggle: true
+}) }}
+
+{% for _adapter in allAdapters %}
+    {% set isCurrent = (className(_adapter) == className(adapter)) %}
+    <div id="{{ className(_adapter)|id }}"{% if not isCurrent %} class="hidden"{% endif %}>
+        {% namespace 'adapterSettings['~className(_adapter)~']' %}
+            {{ (isCurrent ? adapter : _adapter).getSettingsHtml()|raw }}
+        {% endnamespace %}
+    </div>
+{% endfor %}

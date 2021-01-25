@@ -1,0 +1,9 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.autosuggestField({
+    label: "Some attribute"|t('newsletter'),
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: adapter.someAttribute,
+    errors: adapter.getErrors('someAttribute')
+}) }}

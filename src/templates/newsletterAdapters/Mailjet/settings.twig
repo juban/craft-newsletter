@@ -1,0 +1,31 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.autosuggestField({
+    label: "API Key"|t('newsletter'),
+    id: 'apiKey',
+    name: 'apiKey',
+    required: true,
+    suggestEnvVars: true,
+    value: adapter.apiKey,
+    errors: adapter.getErrors('apiKey')
+}) }}
+
+{{ forms.autosuggestField({
+    label: "API Secret"|t('newsletter'),
+    id: 'apiSecret',
+    name: 'apiSecret',
+    required: true,
+    suggestEnvVars: true,
+    value: adapter.apiSecret,
+    errors: adapter.getErrors('apiSecret')
+}) }}
+
+{{ forms.autosuggestField({
+    label: "Contact List ID"|t('newsletter'),
+    warning: "If left empty, users will not be associated with any specific list."|t('newsletter'),
+    id: 'listId',
+    name: 'listId',
+    suggestEnvVars: true,
+    value: adapter.listId,
+    errors: adapter.getErrors('listId')
+}) }}
