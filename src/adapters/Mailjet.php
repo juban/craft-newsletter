@@ -11,6 +11,7 @@ use Craft;
 use craft\behaviors\EnvAttributeParserBehavior;
 use Mailjet\Client;
 use Mailjet\Resources;
+use yii\helpers\VarDumper;
 
 /**
  * Mailjet class
@@ -140,19 +141,29 @@ class Mailjet extends BaseNewsletterAdapter
      */
     private function _getErrorMessageFromRessource(\Mailjet\Response $response): string
     {
-        $messages = [
-            'mj18' => Craft::t('newsletter', "You are already subscribed to our newsletter."),
-            'mj08' => Craft::t('newsletter', "Please provide a valid email address."),
-        ];
-
-        $body = $response->getBody();
-        $output = Craft::t('newsletter', "Unknown error. Please, try again.");
-        foreach ($messages as $errorCode => $errorMessage) {
-            if (preg_match("/{$errorCode}/i", implode(" ", [($body['ErrorInfo'] ?? ""), ($body['ErrorMessage'] ?? "")]))) {
-                $output = $errorMessage;
+        $errorMessage = Craft::t('newsletter', 'The newsletter service is not available at that time. Please, try again later.');
+        if ($response->getStatus() === 401) {
+            Craft::error('Mailjet apiKey or secretKey are incorrect (401). ' . VarDumper::dumpAsString($response), __METHOD__);
+        } elseif ($response->getStatus() === 400) {
+            Craft::error('Mailjet bad request occurred (400).' . VarDumper::dumpAsString($response), __METHOD__);
+        } elseif ($response->getStatus() === 403) {
+            Craft::error('Mailjet did not authorized to access a resource (403).' . VarDumper::dumpAsString($response), __METHOD__);
+        } elseif ($response->getStatus() === 404) {
+            Craft::error('Mailjet resource was not found (404).' . VarDumper::dumpAsString($response), __METHOD__);
+        } elseif ($response->getStatus() === 405) {
+            Craft::error('Mailjet method requested on the resource does not exist (405).' . VarDumper::dumpAsString($response), __METHOD__);
+        } elseif ($response->getStatus() === 429) {
+            Craft::error('Mailjet maximum number of calls allowed per minute was reached (429).' . VarDumper::dumpAsString($response), __METHOD__);
+        } elseif ($response->getStatus() === 500) {
+            Craft::error('Mailjet internal server error (500).' . VarDumper::dumpAsString($response), __METHOD__);
+        } else {
+            $body = $response->getBody();
+            if (isset($body['ErrorInfo']) || isset($body['ErrorMessage'])) {
+                $errorMessage = Craft::t('newsletter', "An error has occurred : {errorMessage}.", ['errorMessage' => trim(($body['ErrorInfo'] ?? "") . " " . ($body['ErrorMessage'] ?? ""))]);
+                Craft::error(VarDumper::dumpAsString($response), __METHOD__);
             }
         }
-        return $output;
+        return $errorMessage;
     }
 
     /**
@@ -168,7 +179,7 @@ class Mailjet extends BaseNewsletterAdapter
             'Action'     => "addnoforce",
             'Email'      => $email
         ];
-        $response = $client->post(Resources::$ContactslistManagecontact, ['id' => $this->listId, 'body' => $body]);
+        $response = $client->post(Resources::$ContactslistManagecontact, ['id' => Craft::parseEnv($this->listId), 'body' => $body]);
         if (!$response->success()) {
             $this->_errorMessage = $this->_getErrorMessageFromRessource($response);
         }
