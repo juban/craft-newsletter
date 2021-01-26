@@ -11,8 +11,8 @@
         "newsletter"
     ],
     "support": {
-        "docs": "???",
-        "issues": "???"
+        "docs": "https://gitlab.ecedi.fr/simplonprod/devops/craft-cms-plugins/newsletter",
+        "issues": "https://gitlab.ecedi.fr/simplonprod/devops/craft-cms-plugins/newsletter/-/issues"
     },
     "license": "MIT",
     "authors": [
@@ -40,6 +40,8 @@
         "handle": "newsletter",
         "developer": "Simplon.Prod",
         "developerUrl": "https://www.simplonprod.co",
+        "documentationUrl": "https://gitlab.ecedi.fr/simplonprod/devops/craft-cms-plugins/newsletter",
+        "changelogUrl": "https://gitlab.ecedi.fr/simplonprod/devops/craft-cms-plugins/newsletter/-/blob/master/CHANGELOG.md",
         "class": "simplonprod\\newsletter\\Newsletter"
     }
 }
