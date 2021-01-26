@@ -131,8 +131,7 @@ class Newsletter extends Plugin
     public static function getAdaptersTypes(): array
     {
         $adaptersTypes = [
-            Mailjet::class,
-            Dummy::class
+            Mailjet::class
         ];
 
         $event = new RegisterComponentTypesEvent([
