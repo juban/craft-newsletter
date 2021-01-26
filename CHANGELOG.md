@@ -4,5 +4,8 @@
 ### Changed
 - Better Mailjet errors handling
 
+### Added
+- Front-end form example in README
+
 ## 1.0.0-beta.1 - 2021-01-25
 - Initial release of public beta.
