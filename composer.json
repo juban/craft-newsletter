@@ -2,7 +2,7 @@
     "name": "simplonprod/craftcms-newsletter",
     "description": "Craft CMS Newsletter plugin",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
