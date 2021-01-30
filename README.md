@@ -23,10 +23,17 @@ You can use the following template as a starting point for your registration for
 {# @var newsletterForm \simplonprod\newsletter\models\NewsletterForm #}
 
 {% if craft.app.plugins.plugin('newsletter') is not null %}
-	{# If there were any validation errors, a `newsletterForm` variable will be passed to the template, which contains the posted values and validation errors. If that’s not set, we’ll default to a new newsletterForm. #}
+    {# If there were any validation errors, a `newsletterForm` variable will be passed to the template, which contains the posted values and validation errors. If that’s not set, we’ll default to a new newsletterForm. #}
     {% set newsletterForm = newsletterForm ?? create('simplonprod\\newsletter\\models\\NewsletterForm') %}
 
-   <form action="" method="post">
+    {# success notification #}
+    {% if success is defined and success %}
+        <div role="alert">
+            <p>{{ 'Your newsletter subscription has been taken into account. Thank you.'|t }}</p>
+        </div>
+    {% endif %}
+    
+    <form action="" method="post">
         {{ csrfInput() }}
         {# subscription process is handled by the newsletter plugin controller #}
         {{ actionInput('newsletter/newsletter/subscribe') }}
