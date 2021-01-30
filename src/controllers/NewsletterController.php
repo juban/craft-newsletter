@@ -36,7 +36,6 @@ class NewsletterController extends Controller
             return null;
         }
 
-        Craft::$app->session->setNotice(Craft::t('newsletter', "Your newsletter subscription has been taken into account. Thank you."));
         return $this->redirectToPostedUrl();
     }
 
