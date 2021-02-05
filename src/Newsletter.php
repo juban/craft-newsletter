@@ -14,6 +14,7 @@ use simplonprod\newsletter\adapters\BaseNewsletterAdapter;
 use simplonprod\newsletter\adapters\Dummy;
 use simplonprod\newsletter\adapters\Mailjet;
 use simplonprod\newsletter\adapters\NewsletterAdapterInterface;
+use simplonprod\newsletter\adapters\Sendinblue;
 use simplonprod\newsletter\models\Settings;
 use yii\base\Event;
 
@@ -131,7 +132,8 @@ class Newsletter extends Plugin
     public static function getAdaptersTypes(): array
     {
         $adaptersTypes = [
-            Mailjet::class
+            Mailjet::class,
+            Sendinblue::class
         ];
 
         $event = new RegisterComponentTypesEvent([
