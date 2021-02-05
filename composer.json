@@ -23,7 +23,8 @@
     ],
     "require": {
         "craftcms/cms": "^3.5.0",
-        "mailjet/mailjet-apiv3-php": "^1.5"
+        "mailjet/mailjet-apiv3-php": "^1.5",
+        "sendinblue/api-v3-sdk": "^v7.4"
     },
     "require-dev": {
       "craftcms/cms": "^3.5.0",
