@@ -11,7 +11,6 @@ use craft\helpers\Component;
 use craft\helpers\UrlHelper;
 use craft\services\Plugins;
 use simplonprod\newsletter\adapters\BaseNewsletterAdapter;
-use simplonprod\newsletter\adapters\Dummy;
 use simplonprod\newsletter\adapters\Mailjet;
 use simplonprod\newsletter\adapters\NewsletterAdapterInterface;
 use simplonprod\newsletter\adapters\Sendinblue;
@@ -27,6 +26,8 @@ use yii\base\Event;
  * as well as some semi-advanced concepts like object-oriented programming and PHP namespaces.
  *
  * https://docs.craftcms.com/v3/extend/
+ *
+ * @property NewsletterAdapterInterface $adapter
  *
  * @author    Simplon.Prod
  * @package   Newsletter
@@ -88,6 +89,11 @@ class Newsletter extends Plugin
 
         $this->_registerAfterInstallEvent();
 
+        // Register adapter component
+        $this->set('adapter', function () {
+            return self::createAdapter($this->settings->adapterType, $this->settings->adapterTypeSettings);
+        });
+
         Craft::info(
             Craft::t(
                 'newsletter',
@@ -107,7 +113,7 @@ class Newsletter extends Plugin
             function (PluginEvent $event) {
                 if ($event->plugin === $this) {
                     // Create and save default settings
-                    $projectConfigSettings = Craft::$app->projectConfig->get('plugins.newsletter', true);
+                    $projectConfigSettings = Craft::$app->getProjectConfig()->get('plugins.newsletter', true);
                     if (!isset($projectConfigSettings['settings'])) {
                         $adapterTypes = self::getAdaptersTypes();
                         $this->settings->adapterType = $adapterTypes[0];
@@ -144,19 +150,13 @@ class Newsletter extends Plugin
         return $event->types;
     }
 
-    public function beforeSaveSettings(): bool
-    {
-        $postSettings = Craft::$app->request->post('settings');
-        $adapterSettings = $postSettings['adapterSettings'][$postSettings['adapterType']] ?? [];
-        $adapter = self::createAdapter($postSettings['adapterType'], $adapterSettings);
-        if (!$adapter->validate()) {
-            return false;
-        } else {
-            $this->settings->adapterTypeSettings = $adapter->getAttributes();
-        }
-        return true;
-    }
-
+    /**
+     * @param string $type
+     * @param array|null $settings
+     * @return NewsletterAdapterInterface
+     * @throws \craft\errors\MissingComponentException
+     * @throws \yii\base\InvalidConfigException
+     */
     public static function createAdapter(string $type, array $settings = null): NewsletterAdapterInterface
     {
         /** @var BaseNewsletterAdapter $adapter */
@@ -168,6 +168,25 @@ class Newsletter extends Plugin
         return $adapter;
     }
 
+    public function beforeSaveSettings(): bool
+    {
+        if (Craft::$app->request->isPost) {
+            $postSettings = Craft::$app->request->post('settings');
+            if (isset($postSettings['adapterType'])) {
+                $adapterSettings = $postSettings['adapterSettings'][$postSettings['adapterType']] ?? [];
+                $adapter = self::createAdapter($postSettings['adapterType'], $adapterSettings);
+                if (!$adapter->validate()) {
+                    return false;
+                } else {
+                    $this->settings->adapterTypeSettings = $adapter->getAttributes();
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Protected Methods
     // =========================================================================
 
@@ -176,7 +195,7 @@ class Newsletter extends Plugin
      *
      * @return Settings|null
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?Settings
     {
         return new Settings();
     }
@@ -192,7 +211,7 @@ class Newsletter extends Plugin
         $allAdapterTypes = self::getAdaptersTypes();
         $allAdapters = [];
         $adapterTypeOptions = [];
-        $adapter = $this->getAdapter();
+        $adapter = $this->adapter;
 
         if (Craft::$app->request->post('settings')) {
             $postSettings = Craft::$app->request->post('settings');
@@ -222,15 +241,5 @@ class Newsletter extends Plugin
                 'adapter'            => $adapter
             ]
         );
-    }
-
-    public function getAdapter(): \craft\base\ComponentInterface
-    {
-        $adapter = Component::createComponent([
-            'type'     => $this->settings->adapterType,
-            'settings' => $this->settings->adapterTypeSettings,
-        ], NewsletterAdapterInterface::class);
-
-        return $adapter;
     }
 }

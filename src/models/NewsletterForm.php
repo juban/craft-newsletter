@@ -21,13 +21,13 @@ class NewsletterForm extends Model
     public $email;
     public $consent;
 
-    public function rules()
+    public function rules(): array
     {
         return [
-            ['email', 'required', 'message' => Craft::t('newsletter', 'Please provide a valid email address.')],
             ['email', 'trim'],
-            ['consent', 'required', 'message' => Craft::t('newsletter', 'Please provide your consent.')],
-            ['email', 'email', 'message' => Craft::t('newsletter', 'Please provide a valid email address.')]
+            ['email', 'required', 'message' => Craft::t('newsletter', 'Please provide a valid email address.')],
+            ['email', 'email', 'message' => Craft::t('newsletter', 'Please provide a valid email address.')],
+            ['consent', 'required', 'requiredValue' => true, 'message' => Craft::t('newsletter', 'Please provide your consent.')]
         ];
     }
 
@@ -37,7 +37,7 @@ class NewsletterForm extends Model
             return false;
         }
         // Use newsletter module to register new user
-        $newsletterAdapater = Newsletter::$plugin->getAdapter();
+        $newsletterAdapater = Newsletter::$plugin->adapter;
         if (!$newsletterAdapater->subscribe($this->email)) {
             $this->addError('email', $newsletterAdapater->getSubscriptionError());
             return false;

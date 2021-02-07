@@ -19,7 +19,11 @@ class NewsletterController extends Controller
 {
     protected $allowAnonymous = true;
 
-    public function actionSubscribe()
+    /**
+     * @return \yii\web\Response|null
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionSubscribe(): ?\yii\web\Response
     {
         $this->requirePostRequest();
 
