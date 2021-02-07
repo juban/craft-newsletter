@@ -39,7 +39,7 @@ class Mailjet extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         $behaviors = parent::behaviors();
         $behaviors['parser'] = [
@@ -56,7 +56,7 @@ class Mailjet extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'apiKey'    => Craft::t('newsletter', 'API Key'),
@@ -68,7 +68,7 @@ class Mailjet extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Mailjet/settings', [
             'adapter' => $this
@@ -189,7 +189,7 @@ class Mailjet extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function getSubscriptionError()
+    public function getSubscriptionError(): ?string
     {
         return $this->_errorMessage;
     }

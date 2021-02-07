@@ -23,6 +23,6 @@
  */
 
 return [
-    "adapterType" => \newsletter\adapters\Mailjet::class,
+    "adapterType"         => \simplonprod\newsletter\adapters\Mailjet::class,
     "adapterTypeSettings" => []
 ];

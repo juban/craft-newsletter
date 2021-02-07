@@ -5,14 +5,20 @@ namespace simplonprod\newsletter\adapters;
 
 use Craft;
 use craft\behaviors\EnvAttributeParserBehavior;
+use GuzzleHttp\Client;
 use SendinBlue\Client\Api\ContactsApi;
 use SendinBlue\Client\ApiException;
 use SendinBlue\Client\Configuration;
 use SendinBlue\Client\Model\CreateContact;
-use GuzzleHttp\Client;
 use yii\helpers\Json;
 use yii\helpers\VarDumper;
 
+/**
+ *
+ * @property-read ContactsApi $clientContactApi
+ * @property-read mixed $settingsHtml
+ * @property-read null|string $subscriptionError
+ */
 class Sendinblue extends BaseNewsletterAdapter
 {
     public $apiKey;
@@ -24,17 +30,17 @@ class Sendinblue extends BaseNewsletterAdapter
      */
     public static function displayName(): string
     {
-        return 'Sendin blue';
+        return 'Sendinblue';
     }
 
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         $behaviors = parent::behaviors();
         $behaviors['parser'] = [
-            'class' => EnvAttributeParserBehavior::class,
+            'class'      => EnvAttributeParserBehavior::class,
             'attributes' => [
                 'apiKey',
                 'listId'
@@ -46,11 +52,39 @@ class Sendinblue extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function attributeLabels(): array
+    {
+        return [
+            'apiKey' => Craft::t('newsletter', 'API Key'),
+            'listId' => Craft::t('newsletter', 'Contact List ID'),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Sendinblue/settings', [
             'adapter' => $this
         ]);
+    }
+
+    public function subscribe(string $email): bool
+    {
+        $clientContactApi = $this->getClientContactApi();
+        $listId = Craft::parseEnv($this->listId);
+
+        if (!$this->_contactExist($email, $clientContactApi)) {
+
+            if (!empty($this->listId) && (int)$listId !== 0) {
+                return $this->_registerContactToList($email, $clientContactApi, (int)$listId);
+            }
+
+            return $this->_registerContact($email, $clientContactApi);
+        }
+
+        return true;
     }
 
     public function getClientContactApi(): ContactsApi
@@ -63,51 +97,10 @@ class Sendinblue extends BaseNewsletterAdapter
         );
     }
 
-    public function subscribe(string $email): bool
-    {
-        $clientContactApi = $this->getClientContactApi();
-        $listId = Craft::parseEnv($this->listId);
-
-        if(!$this->_contactExist($email, $clientContactApi)){
-
-            if (!empty($this->listId) && (int)$listId !== 0) {
-                return $this->_registerContactToList($email, $clientContactApi, (int)$listId);
-            }
-
-            return $this->_registerContact($email, $clientContactApi);
-        }
-
-        return true;
-    }
-
     private function _contactExist(string $email, ContactsApi $client): bool
     {
         try {
             $client->getContactInfo($email);
-            return true;
-        } catch (ApiException $apiException) {
-            return $this->_getErrorMessage($apiException);
-        }
-    }
-
-    private function _registerContact(string $email, ContactsApi $clientContactApi): bool
-    {
-        try {
-            $contact = new CreateContact();
-            $contact['email'] = $email;
-            $clientContactApi->createContact($contact);
-            return true;
-        } catch (ApiException $apiException) {
-            return $this->_getErrorMessage($apiException);
-        }
-    }
-
-    private function _registerContactToList(string $email, ContactsApi $clientContactApi, int $listId): bool{
-        try {
-            $contact = new CreateContact();
-            $contact['email'] = $email;
-            $contact['listIds'] = [$listId];
-            $clientContactApi->createContact($contact);
             return true;
         } catch (ApiException $apiException) {
             return $this->_getErrorMessage($apiException);
@@ -142,6 +135,31 @@ class Sendinblue extends BaseNewsletterAdapter
         $this->_errorMessage = $errorMessage;
 
         return false;
+    }
+
+    private function _registerContactToList(string $email, ContactsApi $clientContactApi, int $listId): bool
+    {
+        try {
+            $contact = new CreateContact();
+            $contact['email'] = $email;
+            $contact['listIds'] = [$listId];
+            $clientContactApi->createContact($contact);
+            return true;
+        } catch (ApiException $apiException) {
+            return $this->_getErrorMessage($apiException);
+        }
+    }
+
+    private function _registerContact(string $email, ContactsApi $clientContactApi): bool
+    {
+        try {
+            $contact = new CreateContact();
+            $contact['email'] = $email;
+            $clientContactApi->createContact($contact);
+            return true;
+        } catch (ApiException $apiException) {
+            return $this->_getErrorMessage($apiException);
+        }
     }
 
     public function getSubscriptionError(): ?string
