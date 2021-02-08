@@ -153,19 +153,16 @@ class Newsletter extends Plugin
     /**
      * @param string $type
      * @param array|null $settings
-     * @return NewsletterAdapterInterface
+     * @return \craft\base\ComponentInterface
      * @throws \craft\errors\MissingComponentException
      * @throws \yii\base\InvalidConfigException
      */
-    public static function createAdapter(string $type, array $settings = null): NewsletterAdapterInterface
+    public static function createAdapter(string $type, array $settings = null): \craft\base\ComponentInterface
     {
-        /** @var BaseNewsletterAdapter $adapter */
-        $adapter = Component::createComponent([
+        return Component::createComponent([
             'type'     => $type,
             'settings' => $settings,
         ], NewsletterAdapterInterface::class);
-
-        return $adapter;
     }
 
     public function beforeSaveSettings(): bool
