@@ -53,6 +53,15 @@ class PluginUnitTest extends Unit
     /**
      *
      */
+    public function testPluginInstallation()
+    {
+        $this->assertNull(Craft::$app->getPlugins()->getPlugin('newsletter')->uninstall());
+        $this->assertNull(Craft::$app->getPlugins()->getPlugin('newsletter')->install());
+    }
+
+    /**
+     *
+     */
     public function testCraftEdition()
     {
         Craft::$app->setEdition(Craft::Pro);
