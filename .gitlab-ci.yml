@@ -58,7 +58,7 @@ sonarqube_publish:
     SONAR_URL: https://sonar.ecedi.net
     SONAR_ANALYSIS_MODE: publish
   script:
-    - gitlab-sonar-scanner
+    - gitlab-sonar-scanner -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONARQUBE_LOGIN -Dsonar.gitlab.project_id=$CI_PROJECT_URL
   only:
     - master
 
@@ -69,7 +69,7 @@ sonarqube_issues:
     SONAR_URL: https://sonar.ecedi.net
     SONAR_ANALYSIS_MODE: issues
   script:
-    - gitlab-sonar-scanner -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+    - gitlab-sonar-scanner -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONARQUBE_LOGIN -Dsonar.gitlab.project_id=$CI_PROJECT_URL
   allow_failure: true
   only:
     - master
