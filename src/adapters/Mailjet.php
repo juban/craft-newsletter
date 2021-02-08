@@ -80,6 +80,7 @@ class Mailjet extends BaseNewsletterAdapter
      */
     public function subscribe(string $email): bool
     {
+        $this->_errorMessage = null;
         $client = $this->_getClient();
         if (!$this->_contactExist($email, $client) && !$this->_registerContact($email, $client)) {
             return false;
@@ -124,7 +125,6 @@ class Mailjet extends BaseNewsletterAdapter
             'IsExcludedFromCampaigns' => "false",
             'Email'                   => $email
         ];
-        $this->_errorMessage = null;
 
         $response = $client->post(Resources::$Contact, ['body' => $body]);
         if (!$response->success()) {
