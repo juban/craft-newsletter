@@ -11,9 +11,10 @@
 namespace simplonprod\newslettertests\unit;
 
 use Codeception\Test\Unit;
+use Craft;
+use simplonprod\newsletter\adapters\BaseNewsletterAdapter;
 use simplonprod\newsletter\Newsletter;
 use UnitTester;
-use Craft;
 
 /**
  * ExampleUnitTest
@@ -70,5 +71,17 @@ class PluginUnitTest extends Unit
             Craft::Pro,
             Craft::$app->getEdition()
         );
+    }
+
+    public function testGetAdaptersTypes()
+    {
+        $this->tester->expectEvent(Newsletter::class, Newsletter::EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES, function() {
+            Newsletter::getAdaptersTypes();
+        });
+        $adapters = Newsletter::getAdaptersTypes();
+        $this->assertIsArray($adapters);
+        foreach ($adapters as $adapter) {
+            $this->assertSame(BaseNewsletterAdapter::class, get_parent_class($adapter));
+        }
     }
 }
