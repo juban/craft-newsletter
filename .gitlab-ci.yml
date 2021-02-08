@@ -26,7 +26,7 @@ build:
     - master
 
 test:
-  stage: build
+  stage: test 
   image: $CI_REGISTRY/simplonprod/devops/docker-images/php/7.4-xdebug
   services:
     - mysql:5.6
