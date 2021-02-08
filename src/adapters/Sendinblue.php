@@ -72,13 +72,14 @@ class Sendinblue extends BaseNewsletterAdapter
 
     public function subscribe(string $email): bool
     {
+        $this->_errorMessage = null;
         $clientContactApi = $this->getClientContactApi();
-        $listId = Craft::parseEnv($this->listId);
+        $parsedListId = Craft::parseEnv($this->listId);
 
         if (!$this->_contactExist($email, $clientContactApi)) {
 
-            if (!empty($this->listId) && (int)$listId !== 0) {
-                return $this->_registerContactToList($email, $clientContactApi, (int)$listId);
+            if (!empty($this->listId) && (int)$parsedListId !== 0) {
+                return $this->_registerContactToList($email, $clientContactApi, (int)$parsedListId);
             }
 
             return $this->_registerContact($email, $clientContactApi);
@@ -103,38 +104,31 @@ class Sendinblue extends BaseNewsletterAdapter
             $client->getContactInfo($email);
             return true;
         } catch (ApiException $apiException) {
-            return $this->_getErrorMessage($apiException);
+            $this->_errorMessage = $this->_getErrorMessage($apiException);
+            return false;
         }
     }
 
-    private function _getErrorMessage(ApiException $apiException): bool
+    private function _getErrorMessage(ApiException $apiException): string
     {
+        $errorLogMessages = [
+            400 => 'Sendinblue request is invalid. Check the error code in JSON (400).',
+            401 => 'Sendinblue authentication error (401). Make sure the provided api-key is correct.',
+            403 => 'Sendinblue resource access error (403).',
+            404 => 'Sendinblue resource was not found (404).',
+            405 => 'Sendinblue verb is not allowed for this endpoint (405).',
+            406 => 'Sendinblue empty or invalid json value (406).',
+            429 => 'Sendinblue rate limit is exceeded. (429).',
+            500 => 'Sendinblue internal server error (500).'
+        ];
         $errorMessage = Craft::t('newsletter', 'The newsletter service is not available at that time. Please, try again later.');
-
-        if ($apiException->getCode() === 401) {
-            Craft::error('Sendin blue You have not been authenticated. Make sure the provided api-key is correct. ' . VarDumper::dumpAsString($apiException->getMessage()), __METHOD__);
-        } elseif ($apiException->getCode() === 400) {
-            Craft::error('Sendin blue Request is invalid. Check the error code in JSON (400)' . VarDumper::dumpAsString($apiException->getMessage()), __METHOD__);
-        } elseif ($apiException->getCode() === 403) {
-            Craft::error('Sendin blue You do not have the rights to access the resource (403).' . VarDumper::dumpAsString($apiException->getMessage()), __METHOD__);
-        } elseif ($apiException->getCode() === 404) {
-            Craft::error('Sendin blue resource was not found (404).' . VarDumper::dumpAsString($apiException->getMessage()), __METHOD__);
-        } elseif ($apiException->getCode() === 405) {
-            Craft::error('Sendin blue method The verb you\'re using is not allowed for this endpoint (405).' . VarDumper::dumpAsString($apiException->getMessage()), __METHOD__);
-        } elseif ($apiException->getCode() === 406) {
-            Craft::error('Sendin blue Make sure the value is application/json only and not empty (406).' . VarDumper::dumpAsString($apiException->getMessage()), __METHOD__);
-        } elseif ($apiException->getCode() === 429) {
-            Craft::error('Sendin blue The expected rate limit is exceeded. (429).' . VarDumper::dumpAsString($apiException->getMessage()), __METHOD__);
-        } elseif ($apiException->getCode() === 500) {
-            Craft::error('Sendin blue internal server error (500).' . VarDumper::dumpAsString($apiException->getMessage()), __METHOD__);
+        if (array_key_exists($apiException->getCode(), $errorLogMessages)) {
+            Craft::error($errorLogMessages[$apiException->getCode()] . " " . VarDumper::dumpAsString($apiException), __METHOD__);
         } else {
             $body = Json::decode($apiException->getResponseBody(), false);
             $errorMessage = Craft::t('newsletter', 'An error has occurred : {errorMessage}.', ['errorMessage' => $body->message ?? '']);
         }
-
-        $this->_errorMessage = $errorMessage;
-
-        return false;
+        return $errorMessage;
     }
 
     private function _registerContactToList(string $email, ContactsApi $clientContactApi, int $listId): bool
@@ -146,7 +140,8 @@ class Sendinblue extends BaseNewsletterAdapter
             $clientContactApi->createContact($contact);
             return true;
         } catch (ApiException $apiException) {
-            return $this->_getErrorMessage($apiException);
+            $this->_errorMessage = $this->_getErrorMessage($apiException);
+            return false;
         }
     }
 
@@ -158,7 +153,8 @@ class Sendinblue extends BaseNewsletterAdapter
             $clientContactApi->createContact($contact);
             return true;
         } catch (ApiException $apiException) {
-            return $this->_getErrorMessage($apiException);
+            $this->_errorMessage = $this->_getErrorMessage($apiException);
+            return false;
         }
     }
 
