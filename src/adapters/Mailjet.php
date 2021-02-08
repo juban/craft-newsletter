@@ -81,10 +81,8 @@ class Mailjet extends BaseNewsletterAdapter
     public function subscribe(string $email): bool
     {
         $client = $this->_getClient();
-        if (!$this->_contactExist($email, $client)) {
-            if (!$this->_registerContact($email, $client)) {
-                return false;
-            }
+        if (!$this->_contactExist($email, $client) && !$this->_registerContact($email, $client)) {
+            return false;
         }
         if ($this->listId) {
             return $this->_subscribeContactToList($email, $client);
