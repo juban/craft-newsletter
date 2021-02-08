@@ -4,6 +4,7 @@ default:
 stages:
   - build
   - test
+  - quality
   - deploy
 
 build:
@@ -53,7 +54,7 @@ test:
 
 sonarqube_publish:
   image: ciricihq/gitlab-sonar-scanner
-  stage: test
+  stage: quality
   variables:
     SONAR_URL: https://sonar.ecedi.net
     SONAR_ANALYSIS_MODE: publish
@@ -64,7 +65,7 @@ sonarqube_publish:
 
 sonarqube_issues:
   image: ciricihq/gitlab-sonar-scanner
-  stage: test
+  stage: quality
   variables:
     SONAR_URL: https://sonar.ecedi.net
     SONAR_ANALYSIS_MODE: issues
