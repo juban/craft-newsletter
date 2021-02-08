@@ -26,7 +26,7 @@ build:
     - master
 
 test:
-  stage: test 
+  stage: test
   image: $CI_REGISTRY/simplonprod/devops/docker-images/php/7.4-xdebug
   services:
     - mysql:5.6
@@ -48,6 +48,29 @@ test:
       - tests/_output/coverage
     reports:
       junit: tests/_output/report.xml
+  only:
+    - master
+
+sonarqube_publish:
+  image: ciricihq/gitlab-sonar-scanner
+  stage: test
+  variables:
+    SONAR_URL: https://sonar.ecedi.net
+    SONAR_ANALYSIS_MODE: publish
+  script:
+    - gitlab-sonar-scanner
+  only:
+    - master
+
+sonarqube_issues:
+  image: ciricihq/gitlab-sonar-scanner
+  stage: test
+  variables:
+    SONAR_URL: https://sonar.ecedi.net
+    SONAR_ANALYSIS_MODE: issues
+  script:
+    - gitlab-sonar-scanner -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+  allow_failure: true
   only:
     - master
 
