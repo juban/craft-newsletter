@@ -1,5 +1,5 @@
 default:
-  tags: [ 'smp-runner-shell' ]
+  tags: [ 'smp-runner-docker' ]
 
 stages:
   - build
