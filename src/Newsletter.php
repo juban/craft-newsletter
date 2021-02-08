@@ -10,12 +10,12 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\Component;
 use craft\helpers\UrlHelper;
 use craft\services\Plugins;
-use simplonprod\newsletter\adapters\BaseNewsletterAdapter;
 use simplonprod\newsletter\adapters\Mailjet;
 use simplonprod\newsletter\adapters\NewsletterAdapterInterface;
 use simplonprod\newsletter\adapters\Sendinblue;
 use simplonprod\newsletter\models\Settings;
 use yii\base\Event;
+use yii\helpers\VarDumper;
 
 /**
  * Craft plugins are very much like little applications in and of themselves. We’ve made
@@ -91,6 +91,11 @@ class Newsletter extends Plugin
 
         // Register adapter component
         $this->set('adapter', function () {
+            if($this->settings->adapterType === null) {
+                $adapterTypes = self::getAdaptersTypes();
+                $this->settings->adapterType = $adapterTypes[0];
+                $this->settings->adapterTypeSettings = [];
+            }
             return self::createAdapter($this->settings->adapterType, $this->settings->adapterTypeSettings);
         });
 
@@ -112,14 +117,6 @@ class Newsletter extends Plugin
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
             function (PluginEvent $event) {
                 if ($event->plugin === $this) {
-                    // Create and save default settings
-                    $projectConfigSettings = Craft::$app->getProjectConfig()->get('plugins.newsletter', true);
-                    if (!isset($projectConfigSettings['settings'])) {
-                        $adapterTypes = self::getAdaptersTypes();
-                        $this->settings->adapterType = $adapterTypes[0];
-                        Craft::$app->plugins->savePluginSettings(self::$plugin, $this->settings->getAttributes());
-                    }
-
                     if (Craft::$app->getRequest()->getIsCpRequest()) {
                         // Redirect to settings page
                         Craft::$app->getResponse()->redirect(
