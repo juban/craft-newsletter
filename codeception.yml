@@ -16,6 +16,7 @@ coverage:
     - src/templates/*
     - src/translations/*
     - src/web/assets/*
+    - src/config.php
     - docs/*
     - templates/*
     - tests/*
