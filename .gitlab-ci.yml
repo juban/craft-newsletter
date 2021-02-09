@@ -40,7 +40,7 @@ test:
   before_script:
     - cp tests/example-env tests/.env
   script:
-    - ./vendor/bin/codecept run unit --no-colors --steps --xml --html --coverage --coverage-xml --coverage-html
+    - ./vendor/bin/codecept run --no-colors --steps --xml --html --coverage --coverage-xml --coverage-html
   artifacts:
     paths:
       - tests/_output/report.xml
