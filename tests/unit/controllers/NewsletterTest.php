@@ -8,18 +8,17 @@ namespace simplonprod\newslettertests\unit\controllers;
 
 use Codeception\Stub;
 use Codeception\Stub\Expected;
-use Codeception\Test\Unit;
 use Craft;
 use craft\web\Response;
 use simplonprod\newsletter\Newsletter;
-use yii\base\InvalidRouteException;
+use simplonprod\newslettertests\unit\BaseUnitTest;
 
 /**
  * RegisterTest class
  *
  * @author albanjubert
  **/
-class NewsletterTest extends Unit
+class NewsletterTest extends BaseUnitTest
 {
     public function testSubscribeSuccess()
     {
@@ -36,20 +35,6 @@ class NewsletterTest extends Unit
 
         $this->assertInstanceOf("\craft\web\Response", $result);
         $this->assertEquals(302, $result->statusCode);
-    }
-
-    /**
-     * @param string $action
-     * @param array $params
-     *
-     * @return mixed
-     * @throws InvalidRouteException
-     */
-    protected function runActionWithParams(string $action, array $params)
-    {
-        Craft::$app->request->setBodyParams($params);
-
-        return Newsletter::$plugin->runAction($action);
     }
 
     public function testSubscribeFailOnMissingConsent()

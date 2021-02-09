@@ -10,9 +10,9 @@
 
 namespace simplonprod\newslettertests\unit;
 
-use Codeception\Test\Unit;
 use Craft;
 use simplonprod\newsletter\adapters\BaseNewsletterAdapter;
+use simplonprod\newsletter\adapters\Dummy;
 use simplonprod\newsletter\Newsletter;
 use UnitTester;
 
@@ -24,7 +24,7 @@ use UnitTester;
  * @package   Newsletter
  * @since     1.0.0
  */
-class PluginUnitTest extends Unit
+class PluginUnitTest extends BaseUnitTest
 {
     // Properties
     // =========================================================================
@@ -75,7 +75,7 @@ class PluginUnitTest extends Unit
 
     public function testGetAdaptersTypes()
     {
-        $this->tester->expectEvent(Newsletter::class, Newsletter::EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES, function() {
+        $this->tester->expectEvent(Newsletter::class, Newsletter::EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES, function () {
             Newsletter::getAdaptersTypes();
         });
         $adapters = Newsletter::getAdaptersTypes();
@@ -83,5 +83,54 @@ class PluginUnitTest extends Unit
         foreach ($adapters as $adapter) {
             $this->assertSame(BaseNewsletterAdapter::class, get_parent_class($adapter));
         }
+    }
+
+    public function testSuccessfulBeforeSaveSettings()
+    {
+        // Force post request
+        $_POST[Craft::$app->request->methodParam] = 'post';
+
+        // Disable CSRF validation
+        Craft::$app->request->enableCsrfValidation = false;
+
+        \Craft::$app->request->setBodyParams([
+            'pluginHandle' => 'newsletter',
+            'settings'     => [
+                'adapterType'     => Dummy::class,
+                'adapterSettings' => [
+                    Dummy::class => [
+                        'someAttribute' => 'azertyuiop'
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertTrue(Newsletter::$plugin->beforeSaveSettings());
+    }
+
+    public function testFailedBeforeSaveSettings()
+    {
+        // Force post request
+        $_POST[Craft::$app->request->methodParam] = 'post';
+
+        // Disable CSRF validation
+        Craft::$app->request->enableCsrfValidation = false;
+
+        \Craft::$app->request->setBodyParams([
+            'pluginHandle' => 'newsletter',
+            'settings'     => []
+        ]);
+
+        $this->assertFalse(Newsletter::$plugin->beforeSaveSettings());
+
+        \Craft::$app->request->setBodyParams([
+            'pluginHandle' => 'newsletter',
+            'settings'     => [
+                'adapterType'     => Dummy::class,
+                'adapterSettings' => []
+            ]
+        ]);
+
+        $this->assertFalse(Newsletter::$plugin->beforeSaveSettings());
     }
 }

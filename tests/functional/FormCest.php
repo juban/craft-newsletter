@@ -3,6 +3,8 @@
 namespace simplonprod\newslettertests\functional;
 
 use FunctionalTester;
+use simplonprod\newsletter\adapters\Dummy;
+use simplonprod\newsletter\models\Settings;
 use simplonprod\newsletter\Newsletter;
 
 class FormCest
@@ -11,7 +13,6 @@ class FormCest
 
     public function _before(FunctionalTester $I)
     {
-        Newsletter::$plugin->set('adapter', Newsletter::createAdapter(\simplonprod\newsletter\adapters\Dummy::class, ['someAttribute' => true]));
     }
 
     // tests
