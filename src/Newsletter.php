@@ -15,7 +15,6 @@ use simplonprod\newsletter\adapters\NewsletterAdapterInterface;
 use simplonprod\newsletter\adapters\Sendinblue;
 use simplonprod\newsletter\models\Settings;
 use yii\base\Event;
-use yii\helpers\VarDumper;
 
 /**
  * Craft plugins are very much like little applications in and of themselves. We’ve made
@@ -91,7 +90,7 @@ class Newsletter extends Plugin
 
         // Register adapter component
         $this->set('adapter', function () {
-            if($this->settings->adapterType === null) {
+            if ($this->settings->adapterType === null) {
                 $adapterTypes = self::getAdaptersTypes();
                 $this->settings->adapterType = $adapterTypes[0];
                 $this->settings->adapterTypeSettings = [];
@@ -116,13 +115,11 @@ class Newsletter extends Plugin
             Plugins::class,
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
             function (PluginEvent $event) {
-                if ($event->plugin === $this) {
-                    if (Craft::$app->getRequest()->getIsCpRequest()) {
-                        // Redirect to settings page
-                        Craft::$app->getResponse()->redirect(
-                            UrlHelper::cpUrl('settings/plugins/newsletter')
-                        )->send();
-                    }
+                if ($event->plugin === $this && Craft::$app->getRequest()->getIsCpRequest()) {
+                    // Redirect to settings page
+                    Craft::$app->getResponse()->redirect(
+                        UrlHelper::cpUrl('settings/plugins/newsletter')
+                    )->send();
                 }
             }
         );
