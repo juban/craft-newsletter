@@ -3,9 +3,6 @@
 namespace simplonprod\newslettertests\functional;
 
 use FunctionalTester;
-use simplonprod\newsletter\adapters\Dummy;
-use simplonprod\newsletter\models\Settings;
-use simplonprod\newsletter\Newsletter;
 
 class FormCest
 {
