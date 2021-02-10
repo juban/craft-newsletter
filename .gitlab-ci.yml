@@ -75,8 +75,8 @@ pages:
   stage: deploy
   script:
     - mkdir .public
-    - cp -r coverage .public
-    - cp report.html .public
+    - cp -r tests/_output/coverage .public/coverage
+    - cp tests/_output/report.html .public index.html
     - mv .public public
   artifacts:
     paths:
