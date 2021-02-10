@@ -1,0 +1,7 @@
+# `gitlab-ci` environment config goes here
+modules:
+  enabled:
+    - Db:
+        dsn: 'mysql:host=mysql;dbname=db'
+        user: 'db'
+        password: 'db'

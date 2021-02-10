@@ -55,6 +55,8 @@ class CpCest
             ]
         ]);
         $I->seeResponseCodeIs(200);
+        $I->see('Plugin settings saved');
+        $I->seeInDatabase('projectconfig', ['path' => 'plugins.newsletter.settings.adapterType', 'value' => '"simplonprod\\\\newsletter\\\\adapters\\\\Mailjet"']);
 
     }
 }
