@@ -54,7 +54,7 @@ class CpCest
                 ]
             ]
         ]);
-        $I->seeResponseCodeIs(300);
+        $I->seeResponseCodeIs(200);
 
     }
 }
