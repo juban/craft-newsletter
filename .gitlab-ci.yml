@@ -76,7 +76,7 @@ pages:
   script:
     - mkdir .public
     - cp -r tests/_output/coverage .public/coverage
-    - cp tests/_output/report.html .public index.html
+    - cp tests/_output/report.html .public/index.html
     - mv .public public
   artifacts:
     paths:
