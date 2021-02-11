@@ -4,7 +4,7 @@ Newsletter for Craft CMS is a plugin that enables users subscription with variou
 
 ## Requirements
 
-This plugin requires Craft CMS 3.5.0 or later.
+This plugin requires Craft CMS 3.5.0 or later and PHP 7.2.5 or later.
 
 
 ## Installation
@@ -12,6 +12,22 @@ This plugin requires Craft CMS 3.5.0 or later.
 1. Install with composer via `composer require simplonprod/craftcms-newsletter` from your project directory.
 2. Install the plugin in the Craft Control Panel under Settings → Plugins, or from the command line via `./craft install/plugin newsletter`.
 3. Select and configure the service under Settings → Newsletter
+
+## Service configuration
+
+### Mailjet
+
+Provide an API Key and API Secret from your [Mailjet account informations](https://app.mailjet.com/account) in the REST API keys section.
+
+You can also provide a [contact list ID](https://app.mailjet.com/contacts) in order to subscribe the enduser to a specific one. 
+> If no list ID is provided, user will only be created as a contact.
+
+### Sendinblue
+
+Provide an API Key from your [Sendinblue account](https://account.sendinblue.com/advanced/api).
+
+You can also provide a [contact list ID](https://my.sendinblue.com/lists) in order to subscribe the enduser to a specific one. 
+> If no list ID is provided, user will only be created as a contact.
 
 
 ## Front-end forms
@@ -63,5 +79,8 @@ You can use the following template as a starting point for your registration for
 ## Supported services
 
 * Mailjet
+* Sendinblue
 
+---
 
+<small>Created by [Simplon.Prod](https://www.simplonprod.co/).</small>
