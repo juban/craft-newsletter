@@ -81,7 +81,7 @@ class Mailjet extends BaseNewsletterAdapter
     public function subscribe(string $email): bool
     {
         $this->_errorMessage = null;
-        $client = $this->_getClient();
+        $client = $this->getClient();
         if (!$this->_contactExist($email, $client) && !$this->_registerContact($email, $client)) {
             return false;
         }
@@ -94,7 +94,7 @@ class Mailjet extends BaseNewsletterAdapter
     /**
      * @return Client
      */
-    private function _getClient(): Client
+    public function getClient(): Client
     {
         if (is_null($this->_client)) {
             $this->_client = new Client(Craft::parseEnv($this->apiKey), Craft::parseEnv($this->apiSecret), true, ['version' => 'v3']);
@@ -154,7 +154,6 @@ class Mailjet extends BaseNewsletterAdapter
         } else {
             $body = $response->getBody();
             if (isset($body['ErrorInfo']) || isset($body['ErrorMessage'])) {
-                $errorMessage = Craft::t('newsletter', "An error has occurred : {errorMessage}.", ['errorMessage' => trim(($body['ErrorInfo'] ?? "") . " " . ($body['ErrorMessage'] ?? ""))]);
                 Craft::error("Mailjet unknown error ({$response->getStatus()}). " . VarDumper::dumpAsString($response), __METHOD__);
             }
         }
