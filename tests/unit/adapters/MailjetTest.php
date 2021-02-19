@@ -2,7 +2,6 @@
 
 namespace simplonprod\newslettertests\unit\adapters;
 
-use AspectMock\Test;
 use Mailjet\Client;
 use Mailjet\Resources;
 use Mailjet\Response;
@@ -27,6 +26,7 @@ class MailjetTest extends BaseUnitTest
 
     public function testSuccessfullSubscriptionOfExistingContact()
     {
+        $email = 'some@email.com';
         $clientMock = $this->createMock(Client::class);
         $clientMock
             ->expects($this->once())
@@ -40,12 +40,8 @@ class MailjetTest extends BaseUnitTest
         $clientMock
             ->expects($this->never())
             ->method('post');
-        $mailjetAdapter = $this->make(new Mailjet(),
-            [
-                'getClient' => $clientMock
-            ]
-        );
-        $this->assertTrue($mailjetAdapter->subscribe('some@email.com'));
+        $mailjetAdapter = $this->_getMailjetAdapterMock($clientMock);
+        $this->assertTrue($mailjetAdapter->subscribe($email));
     }
 
     public function testSuccessfullSubscriptionNewContact()
@@ -75,11 +71,7 @@ class MailjetTest extends BaseUnitTest
                     'success' => true
                 ])
             );
-        $mailjetAdapter = $this->make(new Mailjet(),
-            [
-                'getClient' => $clientMock
-            ]
-        );
+        $mailjetAdapter = $this->_getMailjetAdapterMock($clientMock);
         $this->assertTrue($mailjetAdapter->subscribe($email));
     }
 
@@ -111,11 +103,7 @@ class MailjetTest extends BaseUnitTest
                     'getStatus' => 429
                 ])
             );
-        $mailjetAdapter = $this->make(new Mailjet(),
-            [
-                'getClient' => $clientMock
-            ]
-        );
+        $mailjetAdapter = $this->_getMailjetAdapterMock($clientMock);
         $this->assertFalse($mailjetAdapter->subscribe($email));
         $this->assertEquals('The newsletter service is not available at that time. Please, try again later.', $mailjetAdapter->getSubscriptionError());
     }
@@ -152,11 +140,7 @@ class MailjetTest extends BaseUnitTest
                     ]
                 ])
             );
-        $mailjetAdapter = $this->make(new Mailjet(),
-            [
-                'getClient' => $clientMock
-            ]
-        );
+        $mailjetAdapter = $this->_getMailjetAdapterMock($clientMock);
         $this->assertFalse($mailjetAdapter->subscribe($email));
         $this->assertEquals('The newsletter service is not available at that time. Please, try again later.', $mailjetAdapter->getSubscriptionError());
     }
@@ -190,12 +174,7 @@ class MailjetTest extends BaseUnitTest
                     'success' => true
                 ])
             );
-        $mailjetAdapter = $this->make(Mailjet::class,
-            [
-                'listId'    => 1234,
-                'getClient' => $clientMock
-            ]
-        );
+        $mailjetAdapter = $this->_getMailjetAdapterMock($clientMock, ['listId' => 1234]);
         $this->assertEquals(1234, $mailjetAdapter->listId);
         $this->assertTrue($mailjetAdapter->subscribe($email));
     }
@@ -229,12 +208,7 @@ class MailjetTest extends BaseUnitTest
                     'success' => false
                 ])
             );
-        $mailjetAdapter = $this->make(Mailjet::class,
-            [
-                'listId'    => 1234,
-                'getClient' => $clientMock
-            ]
-        );
+        $mailjetAdapter = $this->_getMailjetAdapterMock($clientMock, ['listId' => 1234]);
         $this->assertEquals(1234, $mailjetAdapter->listId);
         $this->assertFalse($mailjetAdapter->subscribe($email));
         $this->assertEquals('The newsletter service is not available at that time. Please, try again later.', $mailjetAdapter->getSubscriptionError());
@@ -247,5 +221,18 @@ class MailjetTest extends BaseUnitTest
 
     protected function _after()
     {
+    }
+
+    /**
+     *
+     * @param \PHPUnit\Framework\MockObject\MockObject $clientMock
+     * @param array $params
+     * @return mixed|\PHPUnit\Framework\MockObject\MockObject
+     * @throws \Exception
+     */
+    private function _getMailjetAdapterMock(\PHPUnit\Framework\MockObject\MockObject $clientMock, $params = []): \PHPUnit\Framework\MockObject\MockObject
+    {
+        $params = array_merge(['getClient' => $clientMock], $params);
+        return $this->make(Mailjet::class, $params);
     }
 }
