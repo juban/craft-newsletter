@@ -35,9 +35,10 @@ class CpCest
     // tests
     public function tryToShowControlPannel(FunctionalTester $I)
     {
+        Craft::$app->language = 'fr-FR';
         $I->amOnPage('/' . $this->cpTrigger . '/settings/plugins/newsletter');
         $I->seeResponseCodeIs(200);
-        $I->see('Service type');
+        $I->see('Type de service');
     }
 
     public function tryToSaveSettingFromControlPannel(FunctionalTester $I)
