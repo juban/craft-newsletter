@@ -1,0 +1,7 @@
+#!/bin/bash
+
+## Description: Run codeception inside the web container
+## Usage: codecept [flags] [args]
+## Example: "ddev codecept run -- -c frontend" or "ddev codecept run -- -c backend"
+
+./vendor/bin/codecept $@

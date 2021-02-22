@@ -32,8 +32,6 @@
         "vlucas/phpdotenv": "^3.0",
         "codeception/module-yii2": "^1.0.0",
         "codeception/module-asserts": "^1.0.0",
-        "phpstan/phpstan": "^0.12.72",
-        "studio-stomp/phpstan-craftcms": "^0.2.0",
         "codeception/module-db": "^1.1"
     },
     "autoload": {

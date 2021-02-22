@@ -4,7 +4,7 @@ modules:
     - \craft\test\Craft
     - \Helper\Functional
     - Db:
-        dsn: 'mysql:host=db;dbname=db_test'
-        user: 'db'
-        password: 'db'
+        dsn: 'mysql:host=%DB_SERVER%;dbname=%DB_DATABASE%'
+        user: '%DB_USER%'
+        password: '%DB_PASSWORD%'
   step_decorators: ~
