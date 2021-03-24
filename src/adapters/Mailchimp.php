@@ -90,10 +90,10 @@ class Mailchimp extends BaseNewsletterAdapter
     {
         $client = $this->getClient();
         $listsApi = $this->getListApi($client);
-        $listId = Craft::parseEnv($this->listId);
+        $parsedListId = Craft::parseEnv($this->listId);
 
-        if (!$this->_contactExist($email, $listsApi, $listId)) {
-            return $this->_registerContact($email, $listsApi, $listId);
+        if (!$this->_contactExist($email, $listsApi, $parsedListId)) {
+            return $this->_registerContact($email, $listsApi, $parsedListId);
         }
 
         return true;
