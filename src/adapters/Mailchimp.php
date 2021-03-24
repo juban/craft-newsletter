@@ -155,9 +155,9 @@ class Mailchimp extends BaseNewsletterAdapter
         ];
         $errorMessage = Craft::t('newsletter', 'The newsletter service is not available at that time. Please, try again later.');
         if (array_key_exists($clientException->getCode(), $errorLogMessages)) {
-            Craft::error($errorLogMessages[$clientException->getCode()] . " " . VarDumper::dumpAsString($errorLogMessages), __METHOD__);
+            Craft::error($errorLogMessages[$clientException->getCode()] . " " . VarDumper::dumpAsString($clientException->getResponse()), __METHOD__);
         } else {
-            Json::decode($clientException->getResponse()->getBody()->getContents(), false);
+            $body = Json::decode($clientException->getResponse()->getBody()->getContents(), false);
             $errorMessage = Craft::t('newsletter', 'An error has occurred : {errorMessage}.', ['errorMessage' => $body->detail ?? '']);
         }
         return $errorMessage;
