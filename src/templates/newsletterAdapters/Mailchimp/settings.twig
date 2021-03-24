@@ -18,15 +18,16 @@
     suggestEnvVars: true,
     value: adapter.serverPrefix,
     errors: adapter.getErrors('serverPrefix'),
-    instructions: "https://us19.admin.mailchimp.com/ the \"us19\" part is the server prefix. Note that your specific value may be different."|t('newsletter')
+    instructions: "Mailchimp server prefix (i.e. \"us19\"), in order determine to appropriate host url"|t('newsletter')
 }) }}
 
 {{ forms.autosuggestField({
-    label: "Contact List ID / Audience ID"|t('newsletter'),
+    label: "Audience ID"|t('newsletter'),
     id: 'listId',
     name: 'listId',
     required: 'true',
     suggestEnvVars: true,
     value: adapter.listId,
-    errors: adapter.getErrors('listId')
+    errors: adapter.getErrors('listId'),
+    instructions: "Audience ID can be found in Mailchimp account in Audience > All contacts > Settings > Audience name and defaults"|t('newsletter')
 }) }}
