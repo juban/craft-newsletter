@@ -24,6 +24,7 @@ class Sendinblue extends BaseNewsletterAdapter
     public $apiKey;
     public $listId;
     private $_errorMessage;
+    private $contactsApi;
 
     /**
      * @inheritdoc
@@ -40,7 +41,7 @@ class Sendinblue extends BaseNewsletterAdapter
     {
         $behaviors = parent::behaviors();
         $behaviors['parser'] = [
-            'class'      => EnvAttributeParserBehavior::class,
+            'class' => EnvAttributeParserBehavior::class,
             'attributes' => [
                 'apiKey',
                 'listId'
@@ -72,14 +73,13 @@ class Sendinblue extends BaseNewsletterAdapter
 
     public function subscribe(string $email): bool
     {
-        $this->_errorMessage = null;
         $clientContactApi = $this->getClientContactApi();
-        $parsedListId = Craft::parseEnv($this->listId);
+        $listId = $this->listId ?? Craft::parseEnv($this->listId);
+        $listId = (int)$listId;
 
         if (!$this->_contactExist($email, $clientContactApi)) {
-
-            if (!empty($this->listId) && (int)$parsedListId !== 0) {
-                return $this->_registerContactToList($email, $clientContactApi, (int)$parsedListId);
+            if ($listId !== 0) {
+                return $this->_registerContactToList($email, $clientContactApi);
             }
 
             return $this->_registerContact($email, $clientContactApi);
@@ -90,18 +90,55 @@ class Sendinblue extends BaseNewsletterAdapter
 
     public function getClientContactApi(): ContactsApi
     {
-        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', Craft::parseEnv($this->apiKey));
+        if (!$this->contactsApi) {
+            $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', Craft::parseEnv($this->apiKey));
 
-        return new ContactsApi(
-            new Client(),
-            $config
-        );
+            $this->contactsApi = new ContactsApi(
+                new Client(),
+                $config
+            );
+        }
+
+        return $this->contactsApi;
+    }
+
+    public function setClientContactApi(ContactsApi $contactsApi): void
+    {
+        $this->contactsApi = $contactsApi;
     }
 
     private function _contactExist(string $email, ContactsApi $client): bool
     {
         try {
             $client->getContactInfo($email);
+            return true;
+        } catch (ApiException $apiException) {
+            $this->_errorMessage = $this->_getErrorMessage($apiException);
+            return false;
+        }
+    }
+
+    private function _registerContactToList(string $email, ContactsApi $clientContactApi): bool
+    {
+        try {
+            $listId = (int)$this->listId;
+            $contact = new CreateContact();
+            $contact['email'] = $email;
+            $contact['listIds'] = [$listId];
+            $clientContactApi->createContact($contact);
+            return true;
+        } catch (ApiException $apiException) {
+            $this->_errorMessage = $this->_getErrorMessage($apiException);
+            return false;
+        }
+    }
+
+    private function _registerContact(string $email, ContactsApi $clientContactApi): bool
+    {
+        try {
+            $contact = new CreateContact();
+            $contact['email'] = $email;
+            $clientContactApi->createContact($contact);
             return true;
         } catch (ApiException $apiException) {
             $this->_errorMessage = $this->_getErrorMessage($apiException);
@@ -125,37 +162,9 @@ class Sendinblue extends BaseNewsletterAdapter
         if (array_key_exists($apiException->getCode(), $errorLogMessages)) {
             Craft::error($errorLogMessages[$apiException->getCode()] . " " . VarDumper::dumpAsString($apiException), __METHOD__);
         } else {
-            $body = Json::decode($apiException->getResponseBody(), false);
-            $errorMessage = Craft::t('newsletter', 'An error has occurred : {errorMessage}.', ['errorMessage' => $body->message ?? '']);
+            Craft::error("Sendinblue unknown error ({$apiException->getCode()}). " . VarDumper::dumpAsString($apiException->getResponseBody()), __METHOD__);
         }
         return $errorMessage;
-    }
-
-    private function _registerContactToList(string $email, ContactsApi $clientContactApi, int $listId): bool
-    {
-        try {
-            $contact = new CreateContact();
-            $contact['email'] = $email;
-            $contact['listIds'] = [$listId];
-            $clientContactApi->createContact($contact);
-            return true;
-        } catch (ApiException $apiException) {
-            $this->_errorMessage = $this->_getErrorMessage($apiException);
-            return false;
-        }
-    }
-
-    private function _registerContact(string $email, ContactsApi $clientContactApi): bool
-    {
-        try {
-            $contact = new CreateContact();
-            $contact['email'] = $email;
-            $clientContactApi->createContact($contact);
-            return true;
-        } catch (ApiException $apiException) {
-            $this->_errorMessage = $this->_getErrorMessage($apiException);
-            return false;
-        }
     }
 
     public function getSubscriptionError(): ?string

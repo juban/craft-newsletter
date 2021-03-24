@@ -1,0 +1,32 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.autosuggestField({
+    label: "API Key"|t('newsletter'),
+    id: 'apiKey',
+    name: 'apiKey',
+    required: true,
+    suggestEnvVars: true,
+    value: adapter.apiKey,
+    errors: adapter.getErrors('apiKey')
+}) }}
+
+{{ forms.autosuggestField({
+    label: "Server Prefix"|t('newsletter'),
+    id: 'serverPrefix',
+    name: 'serverPrefix',
+    required: 'true',
+    suggestEnvVars: true,
+    value: adapter.serverPrefix,
+    errors: adapter.getErrors('serverPrefix'),
+    instructions: "https://us19.admin.mailchimp.com/ the \"us19\" part is the server prefix. Note that your specific value may be different."|t('newsletter')
+}) }}
+
+{{ forms.autosuggestField({
+    label: "Contact List ID / Audience ID"|t('newsletter'),
+    id: 'listId',
+    name: 'listId',
+    required: 'true',
+    suggestEnvVars: true,
+    value: adapter.listId,
+    errors: adapter.getErrors('listId')
+}) }}

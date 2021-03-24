@@ -15,7 +15,7 @@ class MailjetTest extends BaseUnitTest
      */
     protected $tester;
 
-    public function testGetClient()
+    public function testGetClient(): void
     {
         $mailjetAdapter = new Mailjet([
             'apiKey'    => 'myKey',
@@ -24,7 +24,7 @@ class MailjetTest extends BaseUnitTest
         $this->assertInstanceOf(Client::class, $mailjetAdapter->getClient());
     }
 
-    public function testSuccessfullSubscriptionOfExistingContact()
+    public function testSuccessFullSubscriptionOfExistingContact(): void
     {
         $email = 'some@email.com';
         $clientMock = $this->createMock(Client::class);
@@ -44,7 +44,7 @@ class MailjetTest extends BaseUnitTest
         $this->assertTrue($mailjetAdapter->subscribe($email));
     }
 
-    public function testSuccessfullSubscriptionNewContact()
+    public function testSuccessFullSubscriptionNewContact(): void
     {
         $email = 'some@email.com';
         $clientMock = $this->createMock(Client::class);

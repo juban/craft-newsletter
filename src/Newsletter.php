@@ -10,6 +10,7 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\Component;
 use craft\helpers\UrlHelper;
 use craft\services\Plugins;
+use simplonprod\newsletter\adapters\Mailchimp;
 use simplonprod\newsletter\adapters\Mailjet;
 use simplonprod\newsletter\adapters\NewsletterAdapterInterface;
 use simplonprod\newsletter\adapters\Sendinblue;
@@ -133,7 +134,8 @@ class Newsletter extends Plugin
     {
         $adaptersTypes = [
             Mailjet::class,
-            Sendinblue::class
+            Sendinblue::class,
+            Mailchimp::class
         ];
 
         $event = new RegisterComponentTypesEvent([
