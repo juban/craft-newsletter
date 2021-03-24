@@ -29,6 +29,15 @@ Provide an API Key from your [Sendinblue account](https://account.sendinblue.com
 You can also provide a [contact list ID](https://my.sendinblue.com/lists) in order to subscribe the enduser to a specific one. 
 > If no list ID is provided, user will only be created as a contact.
 
+### Mailchimp
+
+Provide :
+
+* API Key from your [Mailchimp account](https://us4.admin.mailchimp.com/account/api/).
+* Server prefix which you can get by looking at the url when logged into your Mailchimp account.  
+For instance, `https://us4.admin.mailchimp.com/account/api/` indicate the server prefix to use is `us4`
+* Audience ID which you will find in `Audience` > `All contacts` > `Settings` >  `Audience name and campaign defaults`
+
 
 ## Front-end forms
 
@@ -80,6 +89,7 @@ You can use the following template as a starting point for your registration for
 
 * Mailjet
 * Sendinblue
+* Mailchimp
 
 ---
 
