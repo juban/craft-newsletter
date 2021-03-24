@@ -13,5 +13,6 @@ return [
     "Contact List ID"                                                                => "ID Liste de contacts",
     "If left empty, users will not be associated with any specific list."            => "Si laissé vide, les utilisateurs ne seront associés à aucune liste spécifique.",
     "Service type"                                                                   => "Type de service",
-    "Which service should be use to handle newsletter users subscription?"           => "Quel service doit être utilisé pour gérer l'abonnement des utilisateurs à la newsletter?"
+    "Which service should be use to handle newsletter users subscription?"           => "Quel service doit être utilisé pour gérer l'abonnement des utilisateurs à la newsletter?",
+    "https://us19.admin.mailchimp.com/ the \"us19\" part is the server prefix. Note that your specific value may be different." => "https://us19.admin.mailchimp.com/ la partie \"us19\" est le préfixe du serveur. Notez que votre valeur spécifique peut être différente."
 ];
