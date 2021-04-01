@@ -5,6 +5,7 @@ return [
     "You are already subscribed to our newsletter."                                                                    => "Vous êtes déjà inscrit à notre newsletter.",
     "Please provide a valid email address."                                                                            => "Veuillez fournir une adresse email valide.",
     "Please provide your consent."                                                                                     => "Veuillez fournir votre consentement.",
+    "Please prove you are not a robot."                                                                                => "Veuillez prouver que vous n’êtes pas un robot.",
     "The newsletter service is not available at that time. Please, try again later."                                   => "Le service de newsletter n’est pas accessible actuellement. Veuillez réessayer ultérieurement.",
     "An error has occurred : {errorMessage}."                                                                          => "Une erreur est survenue : {errorMessage}.",
     "Unknown error. Please, try again."                                                                                => "Erreur inconnue. Veuillez réessayer.",
