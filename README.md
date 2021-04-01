@@ -6,6 +6,8 @@ Newsletter for Craft CMS is a plugin that enables users subscription with variou
 
 This plugin requires Craft CMS 3.5.0 or later and PHP 7.2.5 or later.
 
+> In order to support Google reCAPTCHA verification, you will need to install `simplonprod/craft-google-recaptcha` plugin.
+
 
 ## Installation
 

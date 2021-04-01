@@ -1,5 +1,9 @@
 # Release Notes for Newsletter
 
+## 1.2.0 - 2021-04-01
+### Added
+- Google reCAPTCHA plugin support
+
 ## 1.1.0 - 2021-03-24
 ### Added
 - Mailchimp adapter
