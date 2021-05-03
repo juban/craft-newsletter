@@ -1,5 +1,7 @@
 # Newsletter Plugin for Craft CMS
 
+![](logo.png)
+
 Newsletter for Craft CMS is a plugin that enables users subscription with various services.
 
 ## Requirements
