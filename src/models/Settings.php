@@ -19,6 +19,7 @@ class Settings extends Model
 {
     public $adapterType;
     public $adapterTypeSettings = [];
+    public $recaptchaEnabled = true;
 
     /**
      * @inheritdoc

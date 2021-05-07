@@ -10,10 +10,12 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\Component;
 use craft\helpers\UrlHelper;
 use craft\services\Plugins;
+use simplonprod\googlerecaptcha\GoogleRecaptcha;
 use simplonprod\newsletter\adapters\Mailchimp;
 use simplonprod\newsletter\adapters\Mailjet;
 use simplonprod\newsletter\adapters\NewsletterAdapterInterface;
 use simplonprod\newsletter\adapters\Sendinblue;
+use simplonprod\newsletter\models\NewsletterForm;
 use simplonprod\newsletter\models\Settings;
 use yii\base\Event;
 
@@ -88,6 +90,7 @@ class Newsletter extends Plugin
         Craft::setAlias('@newsletter', __DIR__);
 
         $this->_registerAfterInstallEvent();
+        $this->_registerRecaptchaVerification();
 
         // Register adapter component
         $this->set('adapter', function () {
@@ -106,23 +109,6 @@ class Newsletter extends Plugin
                 ['name' => $this->name]
             ),
             __METHOD__
-        );
-    }
-
-    private function _registerAfterInstallEvent(): void
-    {
-        // Do something after we're installed
-        Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this && Craft::$app->getRequest()->getIsCpRequest()) {
-                    // Redirect to settings page
-                    Craft::$app->getResponse()->redirect(
-                        UrlHelper::cpUrl('settings/plugins/newsletter')
-                    )->send();
-                }
-            }
         );
     }
 
@@ -234,5 +220,44 @@ class Newsletter extends Plugin
                 'adapter'            => $adapter
             ]
         );
+    }
+
+    /**
+     * Redirect user to plugin setting after installation if from CP
+     */
+    private function _registerAfterInstallEvent(): void
+    {
+        // Do something after we're installed
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            function (PluginEvent $event) {
+                if ($event->plugin === $this && Craft::$app->getRequest()->getIsCpRequest()) {
+                    // Redirect to settings page
+                    Craft::$app->getResponse()->redirect(
+                        UrlHelper::cpUrl('settings/plugins/newsletter')
+                    )->send();
+                }
+            }
+        );
+    }
+
+    /**
+     * Verify user submission with Google reCAPTCHA plugin if enabled
+     */
+    private function _registerRecaptchaVerification(): void
+    {
+        if (Newsletter::$plugin->settings->recaptchaEnabled && Craft::$app->plugins->isPluginEnabled('google-recaptcha')) {
+            Event::on(
+                NewsletterForm::class,
+                NewsletterForm::EVENT_AFTER_VALIDATE,
+                static function (Event $event) {
+                    $form = $event->sender;
+                    if (!GoogleRecaptcha::$plugin->recaptcha->verify()) {
+                        $form->addError('recaptcha', Craft::t('newsletter', 'Please prove you are not a robot.'));
+                    }
+                }
+            );
+        }
     }
 }

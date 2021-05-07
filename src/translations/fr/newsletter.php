@@ -18,5 +18,6 @@ return [
     "Service type"                                                                                                     => "Type de service",
     "Which service should be use to handle newsletter users subscription?"                                             => "Quel service doit être utilisé pour gérer l'abonnement des utilisateurs à la newsletter?",
     "Mailchimp server prefix (i.e. \"us19\"), in order determine to appropriate host url"                              => "Le préfixe du serveur mailchimp (ex. \"us19\"), afin de déterminer l'url de l'hôte correspondant",
-    "Audience ID can be found in Mailchimp account in Audience > All contacts > Settings > Audience name and defaults" => "ID d’Audience peut être trouvé dans le compte Mailchimp dans Audience > All contacts > Settings > Audience name and defaults"
+    "Audience ID can be found in Mailchimp account in Audience > All contacts > Settings > Audience name and defaults" => "ID d’Audience peut être trouvé dans le compte Mailchimp dans Audience > All contacts > Settings > Audience name and defaults",
+    "If enabled, newsletter subscription form will be verified using Google reCAPTCHA plugin."                         => "Si activé, le formulaire d‘abonnement à la newsletter sera vérifié à l‘aide du plugin Google ReCAPTCHA."
 ];

@@ -18,6 +18,7 @@
 {{ forms.selectField({
     label: "Service type"|t('newsletter'),
     instructions: "Which service should be use to handle newsletter users subscription?"|t('newsletter'),
+    first: true,
     id: 'adapterType',
     name: 'adapterType',
     options: adapterTypeOptions,
@@ -34,3 +35,13 @@
         {% endnamespace %}
     </div>
 {% endfor %}
+
+{% if craft.app.plugins.isPluginEnabled('google-recaptcha') %}
+    {{ forms.lightswitchField({
+        label: "Enable Google reCAPTCHA"|t("newsletter"),
+        instructions: "If enabled, newsletter subscription form will be verified using Google reCAPTCHA plugin."|t('newsletter'),
+        name: "recaptchaEnabled",
+        on: settings.recaptchaEnabled,
+        errors: settings.errors("recaptchaEnabled")
+    }) }}
+{% endif %}

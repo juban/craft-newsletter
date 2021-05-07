@@ -1,6 +1,9 @@
 # Release Notes for Newsletter
 
-## 1.2.1 - 2021-05-03
+## 1.3.0 - 2021-05-07
+### Added
+- Setting to enable Google reCAPTCHA if available
+
 ### Changed
 - Updated plugin icon
 

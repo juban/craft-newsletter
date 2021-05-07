@@ -6,10 +6,8 @@
 
 namespace simplonprod\newsletter\models;
 
-
 use Craft;
 use craft\base\Model;
-use simplonprod\googlerecaptcha\GoogleRecaptcha;
 use simplonprod\newsletter\Newsletter;
 
 /**
@@ -21,7 +19,6 @@ class NewsletterForm extends Model
 {
     public $email;
     public $consent;
-    public $recaptcha;
 
     public function rules(): array
     {
@@ -37,12 +34,6 @@ class NewsletterForm extends Model
     {
         if (!$this->validate()) {
             return false;
-        }
-        if (class_exists('simplonprod\\googlerecaptcha\\GoogleRecaptcha')) {
-            if (!GoogleRecaptcha::$plugin->recaptcha->verify()) {
-                $this->addError('recaptcha', Craft::t('newsletter', 'Please prove you are not a robot.'));
-                return false;
-            }
         }
         // Use newsletter module to register new user
         $newsletterAdapater = Newsletter::$plugin->adapter;
