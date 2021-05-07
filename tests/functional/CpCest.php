@@ -33,7 +33,7 @@ class CpCest
     }
 
     // tests
-    public function tryToShowControlPannel(FunctionalTester $I)
+    public function tryToShowControlPanel(FunctionalTester $I)
     {
         Craft::$app->language = 'fr-FR';
         $I->amOnPage('/' . $this->cpTrigger . '/settings/plugins/newsletter');
@@ -41,7 +41,7 @@ class CpCest
         $I->see('Type de service');
     }
 
-    public function tryToSaveSettingFromControlPannel(FunctionalTester $I)
+    public function tryToSaveSettingFromControlPanel(FunctionalTester $I)
     {
         $I->amOnPage('/' . $this->cpTrigger . '/settings/plugins/newsletter');
         $I->submitForm('#main-form', [
@@ -58,6 +58,5 @@ class CpCest
         $I->seeResponseCodeIs(200);
         $I->see('Plugin settings saved');
         $I->seeInDatabase('projectconfig', ['path' => 'plugins.newsletter.settings.adapterType', 'value' => '"simplonprod\\\\newsletter\\\\adapters\\\\Mailjet"']);
-
     }
 }
