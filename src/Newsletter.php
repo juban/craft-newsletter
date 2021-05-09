@@ -199,6 +199,7 @@ class Newsletter extends Plugin
             $adapter->validate();
         }
 
+        // Create every available adapter
         foreach ($allAdapterTypes as $adapterType) {
             /** @var string|NewsletterAdapterInterface $adapterType */
             $allAdapters[] = self::createAdapter($adapterType);
@@ -211,13 +212,21 @@ class Newsletter extends Plugin
         // Sort them by name
         ArrayHelper::multisort($adapterTypeOptions, 'label');
 
+        // check if a configuration file may override Control Panel settings
+        $configService = Craft::$app->getConfig();
+        $config = $configService->getConfigFromFile('newsletter');
+        if (!empty($config)) {
+            $configPath = $configService->getConfigFilePath('newsletter');
+        }
+
         return Craft::$app->view->renderTemplate(
             'newsletter/settings',
             [
                 'settings'           => $this->getSettings(),
                 'allAdapters'        => $allAdapters,
                 'adapterTypeOptions' => $adapterTypeOptions,
-                'adapter'            => $adapter
+                'adapter'            => $adapter,
+                'configPath'         => $configPath ?? null
             ]
         );
     }

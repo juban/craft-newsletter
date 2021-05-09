@@ -15,6 +15,19 @@
 
 {% import "_includes/forms" as forms %}
 
+{% if configPath %}
+    <div class="readable">
+        <blockquote class="note warning">
+            <p>
+                {{ 'It looks like these settings are being overridden by {paths}.'|t('app', {
+                    paths: configPath
+                }) }}
+            </p>
+        </blockquote>
+    </div>
+    <hr>
+{% endif %}
+
 {{ forms.selectField({
     label: "Service type"|t('newsletter'),
     instructions: "Which service should be use to handle newsletter users subscription?"|t('newsletter'),
