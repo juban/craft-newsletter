@@ -23,7 +23,7 @@ This plugin requires Craft CMS 3.5.0 or later and PHP 7.2.5 or later.
 
 ## Installation
 
-1. Install with composer via `composer require simplonprod/craftcms-newsletter` from your project directory.
+1. Install with composer via `composer require simplonprod/craft-newsletter` from your project directory.
 2. Install the plugin in the Craft Control Panel under Settings → Plugins, or from the command line via `./craft install/plugin newsletter`.
 
 ## Configuration

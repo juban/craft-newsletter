@@ -6,6 +6,7 @@
 - Settings override warning
 
 ### Changed
+- Changed package signature to `simplonprod/craft-newsletter` for more consistency
 - Updated plugin icon
 - Updated README
 - Small refactoring

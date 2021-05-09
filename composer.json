@@ -1,5 +1,5 @@
 {
-    "name": "simplonprod/craftcms-newsletter",
+    "name": "simplonprod/craft-newsletter",
     "description": "Craft CMS Newsletter plugin",
     "type": "craft-plugin",
     "version": "1.3.0",
@@ -11,8 +11,8 @@
         "newsletter"
     ],
     "support": {
-        "docs": "https://gitlab.ecedi.fr/simplonprod/devops/craft-cms-plugins/newsletter",
-        "issues": "https://gitlab.ecedi.fr/simplonprod/devops/craft-cms-plugins/newsletter/-/issues"
+        "docs": "https://github.com/Simplon-Prod/craft-newsletter/blob/master/README.md",
+        "issues": "https://github.com/Simplon-Prod/craft-newsletter/issues"
     },
     "license": "MIT",
     "authors": [
@@ -45,8 +45,8 @@
         "handle": "newsletter",
         "developer": "Simplon.Prod",
         "developerUrl": "https://www.simplonprod.co",
-        "documentationUrl": "https://gitlab.ecedi.fr/simplonprod/devops/craft-cms-plugins/newsletter",
-        "changelogUrl": "https://gitlab.ecedi.fr/simplonprod/devops/craft-cms-plugins/newsletter/-/blob/master/CHANGELOG.md",
+        "documentationUrl": "https://github.com/Simplon-Prod/craft-newsletter/blob/master/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/Simplon-Prod/craft-newsletter/master/CHANGELOG.md",
         "class": "simplonprod\\newsletter\\Newsletter"
     }
 }
