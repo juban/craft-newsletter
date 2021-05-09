@@ -6,7 +6,6 @@
 
 namespace simplonprod\newsletter\adapters;
 
-
 use Craft;
 
 /**
@@ -31,7 +30,7 @@ class Dummy extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'someAttribute' => Craft::t('newsletter', 'Some attribute')
@@ -41,18 +40,25 @@ class Dummy extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Dummy/settings', [
             'adapter' => $this
         ]);
     }
 
+    /**
+     * @param string $email
+     * @return bool
+     */
     public function subscribe(string $email): bool
     {
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getSubscriptionError(): string
     {
         return "Some error";
