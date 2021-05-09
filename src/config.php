@@ -24,5 +24,10 @@
 
 return [
     "adapterType"         => \simplonprod\newsletter\adapters\Mailjet::class,
-    "adapterTypeSettings" => []
+    "adapterTypeSettings" => [
+        'apiKey'    => '',
+        'apiSecret' => '',
+        'listId'    => ''
+    ],
+    "recaptchaEnabled"    => true
 ];
