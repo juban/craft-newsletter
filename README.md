@@ -2,17 +2,17 @@
 
 ![](logo.png)
 
-Newsletter for Craft CMS plugin enables users subscription with various emailing services.
+Newsletter for Craft CMS plugin makes it possible to let end users subscribe with various emailing services from a frontend form.
 
-It is actually compatible out of the box with:
+It currently supports the following services out of the box:
 
 * Mailchimp
 * Mailjet
 * Sendinblue
 
-This plugin is GDPR compliant and require the user gives its consent when subscribing to the newsletter.
+This plugin is GDPR compliant and requires the user to give its consent when subscribing to the newsletter.
 
-> Similar to Craft Mailer adapters, you can even create your own adapter to connect to unsupported services.
+> 💡 Similar to Craft Mailer adapters, you can even [create your own adapter](#Create_an_adapter) to connect to unsupported services.
 
 ## Requirements
 
@@ -32,37 +32,63 @@ This plugin requires Craft CMS 3.5.0 or later and PHP 7.2.5 or later.
 
 You can manage configuration setting through the Control Panel by going to Settings → Newsletter
 
-* From the Service type dropdown, select the service type you wish to use to handle newsletter users subscription
+* From the **Service type** dropdown, select the service type you wish to use to handle newsletter users subscription
 * Provide the required API keys and parameters [as described below](#Service-configuration).  
-* If Google reCAPTCHA plugin is installed and enabled, choose whether to verify the submission or not using the Enable Google reCAPTCHA light-switch.
+* If Google reCAPTCHA plugin is installed and enabled, choose whether to verify the submission or not using the **Enable Google reCAPTCHA** light-switch.
 
-### Service configuration
+#### Service configuration
 
-#### Mailjet
+##### Mailjet settings
 
-Provide an API Key and API Secret from your [Mailjet account informations](https://app.mailjet.com/account) in the REST API keys section.
+* **API Key** (`apiKey`)
+* **API Secret** (`apiSecret`)
+* **List ID** (optional) (`listId`)
 
-You can also provide a [contact list ID](https://app.mailjet.com/contacts) in order to subscribe the enduser to a specific one. 
+You can find these informations in your [Mailjet account informations](https://app.mailjet.com/account) in the REST API keys section.
+
+You can provide a [contact list ID](https://app.mailjet.com/contacts) in order to subscribe the enduser to a specific one. 
+
 > If no list ID is provided, user will only be created as a contact.
 
-#### Sendinblue
+##### Sendinblue settings
 
-Provide an API Key from your [Sendinblue account](https://account.sendinblue.com/advanced/api).
+* **API Key** (`apiKey`)
+* **List ID** (optional) (`listId`)
 
-You can also provide a [contact list ID](https://my.sendinblue.com/lists) in order to subscribe the enduser to a specific one. 
+You can find these informations in your [Sendinblue account](https://account.sendinblue.com/advanced/api).
+
+You can provide a [contact list ID](https://my.sendinblue.com/lists) in order to subscribe the enduser to a specific one. 
+
 > If no list ID is provided, user will only be created as a contact.
 
-#### Mailchimp
+##### Mailchimp settings
 
-Provide :
+* **API Key** (`apiKey`): You can find that information from your [Mailchimp account](https://us4.admin.mailchimp.com/account/api/).
+* **Server prefix** (`serverPrefix`): You can find that information by looking at the url when logged into your Mailchimp account. For instance, `https://us4.admin.mailchimp.com/account/api/` indicate the server prefix to use is `us4`
+* **Audience ID** (`listId`): You can find that information in `Audience` > `All contacts` > `Settings` >  `Audience name and campaign defaults`
 
-* API Key from your [Mailchimp account](https://us4.admin.mailchimp.com/account/api/).
-* Server prefix which you can get by looking at the url when logged into your Mailchimp account.  
-For instance, `https://us4.admin.mailchimp.com/account/api/` indicate the server prefix to use is `us4`
-* Audience ID which you will find in `Audience` > `All contacts` > `Settings` >  `Audience name and campaign defaults`
+### Configuration file
+
+You can create a `newsletter.php` file in the `config` folder of your project and provide the settings as follow (example):
+
+```php
+return [
+    "adapterType"         => \simplonprod\newsletter\adapters\Mailjet::class,
+    "adapterTypeSettings" => [
+        'apiKey'    => '',
+        'apiSecret' => '',
+        'listId'    => ''
+    ],
+    "recaptchaEnabled"    => true
+];
+```
+
+Depending on the service and its specific settings, adjust the `adapterType` to the according service adapter class name and provide required parameters in the `adapterTypeSettings` associative array (see [Service configuration](#Service_configuration)).
+
+> ⚠️ Any value provided in that file will override the settings from the Control Panel.
 
 
-## Front-end forms
+## Front-end form
 
 You can use the following template as a starting point for your registration form:
 
@@ -107,7 +133,7 @@ You can use the following template as a starting point for your registration for
 {% endif %}
 ```
 
-The `newsletter/newsletter/subscribe` action expect the following inputs submitted as `POST`:
+The `newsletter/newsletter/subscribe` action expects the following inputs submitted as `POST`:
 
 * `email`: User email to subscribe
 * `consent`: Any value indicating that the user gives its consent to receive the newsletter
@@ -132,6 +158,138 @@ Event::on(
 	}
 );
 ```
+
+## How to create an adapter
+
+To add a new adapter for unsupported services:
+
+Create an adapter class that extends the `simplonprod\newsletter\adapters\BaseNewsletterAdapter` class.
+
+Some small example:
+
+```php
+namespace simplonprod\newsletter\adapters;
+
+use Craft;
+
+class MySuperNewsletterAdapter extends BaseNewsletterAdapter
+{
+
+	// Declare every attributes required by the service (ie API keys and secrets, etc...)
+    public $apiKey;
+    // Store any error occuring in the subscribe method here
+    private $_errorMessage;
+    
+    /**
+     * @inheritdoc
+     */
+    public function behaviors(): array
+    {
+        // Support for setting defined in environment variables or aliases
+        $behaviors = parent::behaviors();
+        $behaviors['parser'] = [
+            'class'      => EnvAttributeParserBehavior::class,
+            'attributes' => [
+                'apiKey'
+            ],
+        ];
+        return $behaviors;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return 'My Service Name'; // Service name as shown in the adapter type dropdown
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSettingsHtml()
+    {
+        // Render the adapter settings templates
+        // Adapt the path according to your module / plugin
+        return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/MySuperNewsletterAdapter/settings', [
+            'adapter' => $this
+        ]);
+	    }
+	
+	/**
+	 * Try to subscribe the given email into the newsletter mailing list service
+	 * @param string $email
+	 * @return bool
+	 */
+    public function subscribe(string $email): bool
+    {
+        // Call the service API here
+        $this->_errorMessage = null;
+        if(!MySuperNewsletterService::subscribe($email)) {
+            // If something goes wrong, store the error message
+            $this->_errorMessage = MySuperNewsletterService::getError();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Return the latest error message after a call to the subscribe method
+     * @return null|string
+     */
+    public function getSubscriptionError(): string
+    {
+        return $this->_errorMessage;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function defineRules(): array
+    {
+        // Validation rules for the adapter settings should be defined here
+        $rules = parent::defineRules();
+        $rules[] = [['apiKey'], 'trim'];
+        $rules[] = [['apiKey'], 'required'];
+        return $rules;
+    }
+}
+```
+
+The template settings view could look like this:
+
+```twig
+{% import "_includes/forms" as forms %}
+
+{{ forms.autosuggestField({
+    label: "API Key"|t('newsletter'),
+    id: 'apiKey',
+    name: 'apiKey',
+    required: true,
+    suggestEnvVars: true,
+    value: adapter.apiKey,
+    errors: adapter.getErrors('apiKey')
+}) }}
+```
+
+> The adapter model can be accessed in the twig view using the `adapter` variable. 
+
+Last, in a module or a plugin, register the adapter as follow:
+
+```php
+use craft\events\RegisterComponentTypesEvent;
+use simplonprod\newsletter\Newsletter;
+
+Event::on(
+    Newsletter::class,
+    Newsletter::EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES,
+    static function (RegisterComponentTypesEvent $event) {
+        $event->types[] = MySuperNewsletterAdapter::class;
+    }
+);
+```
+
+
 
 ---
 
