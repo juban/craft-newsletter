@@ -4,7 +4,7 @@
 
 Newsletter for Craft CMS plugin makes it possible to let end users subscribe with various emailing services from a frontend form.
 
-It currently supports the following services out of the box:
+It currently supports the following services:
 
 * Mailchimp
 * Mailjet
@@ -35,6 +35,8 @@ You can manage configuration setting through the Control Panel by going to Setti
 * From the **Service type** dropdown, select the service type you wish to use to handle newsletter users subscription
 * Provide the required API keys and parameters [as described below](#service-configuration).  
 * If Google reCAPTCHA plugin is installed and enabled, choose whether to verify the submission or not using the **Enable Google reCAPTCHA** light-switch.
+
+> ⚠️ When enabled, the Google reCAPTCHA feature will **not** render the frontend widget for you. You have to add `{{ craft.googleRecaptcha.render() }}` somewhere in the form view.
 
 #### Service configuration
 
@@ -138,6 +140,8 @@ The `newsletter/newsletter/subscribe` action expects the following inputs submit
 * `email`: User email to subscribe
 * `consent`: Any value indicating that the user gives its consent to receive the newsletter
 
+> ⚠️ Don’t forget to add `{{ craft.googleRecaptcha.render() }}` in the form view if the Google reCAPTCHA verification is enabled.
+ 
 ## Custom validations
 
 You can provide your own validations on frontend form submission in a project module or a plugin using the `afterValidate` event on the `NewsletterForm` model:
@@ -289,6 +293,10 @@ Event::on(
 );
 ```
 
+## Roadmap
+
+* Support additional form fields
+* Support for multiple lists
 
 
 ---
