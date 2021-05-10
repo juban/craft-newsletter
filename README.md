@@ -12,7 +12,7 @@ It currently supports the following services out of the box:
 
 This plugin is GDPR compliant and requires the user to give its consent when subscribing to the newsletter.
 
-> 💡 Similar to Craft Mailer adapters, you can even [create your own adapter](#create-an-adapter) to connect to unsupported services.
+> 💡 Similar to Craft Mailer adapters, you can even [create your own adapter](#how-to-create-an-adapter) to connect to unsupported services.
 
 ## Requirements
 
