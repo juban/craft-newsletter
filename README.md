@@ -12,7 +12,7 @@ It currently supports the following services out of the box:
 
 This plugin is GDPR compliant and requires the user to give its consent when subscribing to the newsletter.
 
-> 💡 Similar to Craft Mailer adapters, you can even [create your own adapter](#Create_an_adapter) to connect to unsupported services.
+> 💡 Similar to Craft Mailer adapters, you can even [create your own adapter](#create-an-adapter) to connect to unsupported services.
 
 ## Requirements
 
@@ -33,7 +33,7 @@ This plugin requires Craft CMS 3.5.0 or later and PHP 7.2.5 or later.
 You can manage configuration setting through the Control Panel by going to Settings → Newsletter
 
 * From the **Service type** dropdown, select the service type you wish to use to handle newsletter users subscription
-* Provide the required API keys and parameters [as described below](#Service-configuration).  
+* Provide the required API keys and parameters [as described below](#service-configuration).  
 * If Google reCAPTCHA plugin is installed and enabled, choose whether to verify the submission or not using the **Enable Google reCAPTCHA** light-switch.
 
 #### Service configuration
@@ -83,7 +83,7 @@ return [
 ];
 ```
 
-Depending on the service and its specific settings, adjust the `adapterType` to the according service adapter class name and provide required parameters in the `adapterTypeSettings` associative array (see [Service configuration](#Service_configuration)).
+Depending on the service and its specific settings, adjust the `adapterType` to the according service adapter class name and provide required parameters in the `adapterTypeSettings` associative array (see [Service configuration](#service-configuration)).
 
 > ⚠️ Any value provided in that file will override the settings from the Control Panel.
 
