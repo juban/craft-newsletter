@@ -301,4 +301,6 @@ Event::on(
 
 ---
 
+<small>Base plugin icon makes use of [Font Awesome Free](https://fontawesome.com)</small>
+
 <small>Created by [Simplon.Prod](https://www.simplonprod.co/).</small>
