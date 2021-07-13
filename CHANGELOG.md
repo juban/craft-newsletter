@@ -1,5 +1,9 @@
 # Release Notes for Newsletter
 
+## 1.4.0 - 2021-07-13
+### Added
+- AJAX support (thx to @jerome2710)
+
 ## 1.3.0 - 2021-05-09
 ### Added
 - Setting to enable Google reCAPTCHA if available

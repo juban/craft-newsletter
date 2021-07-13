@@ -142,11 +142,12 @@ The `newsletter/newsletter/subscribe` action expects the following inputs submit
 
 > ⚠️ Don’t forget to add `{{ craft.googleRecaptcha.render() }}` in the form view if the Google reCAPTCHA verification is enabled.
 
-## XHR / ajax form
+## XHR / AJAX form
 
-Alternatively, you can submit the newsletter form with Javascript. 
-This gives you more freedom to provide visual effects to the user and prevents the page from reloading and scrolling to the top of the page.
-The downside is that you need to write the ajax-request. Use the example below as a reference, note the required `application/json` header:
+Alternatively, you can submit the newsletter form with Javascript.   
+This gives you more freedom to provide visual effects to the user and prevents the page from reloading and scrolling to the top of the page.  
+The downside is that you need to write the ajax-request.  
+Use the example below as a reference, note the required `application/json` header:  
 
 ```javascript
 var data = new FormData();
