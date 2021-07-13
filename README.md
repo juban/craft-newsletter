@@ -141,6 +141,33 @@ The `newsletter/newsletter/subscribe` action expects the following inputs submit
 * `consent`: Any value indicating that the user gives its consent to receive the newsletter
 
 > ⚠️ Don’t forget to add `{{ craft.googleRecaptcha.render() }}` in the form view if the Google reCAPTCHA verification is enabled.
+
+## XHR / ajax form
+
+Alternatively, you can submit the newsletter form with Javascript. 
+This gives you more freedom to provide visual effects to the user and prevents the page from reloading and scrolling to the top of the page.
+The downside is that you need to write the ajax-request. Use the example below as a reference, note the required `application/json` header:
+
+```javascript
+var data = new FormData();
+data.append("consent", consent);
+data.append("email", email);
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function() {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("POST", "https://{YOUR_DOMAIN}/actions/newsletter/newsletter/subscribe/");
+xhr.setRequestHeader("Accept", "application/json");
+xhr.send(data);
+```
+
+> ⚠️ If the Google reCAPTCHA verification is enabled, add the `data.append("g-recaptcha-response", "");` to the request as well!
  
 ## Custom validations
 
