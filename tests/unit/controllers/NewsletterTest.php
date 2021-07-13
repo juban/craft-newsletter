@@ -12,6 +12,7 @@ use Craft;
 use craft\web\Response;
 use simplonprod\newsletter\Newsletter;
 use simplonprod\newslettertests\unit\BaseUnitTest;
+use Yii;
 
 /**
  * RegisterTest class
@@ -37,6 +38,28 @@ class NewsletterTest extends BaseUnitTest
         $this->assertEquals(302, $result->statusCode);
     }
 
+    public function testAjaxSubscribeSuccess()
+    {
+        $componentInstance = \Craft::$app->get('urlManager');
+        \Craft::$app->set('urlManager', Stub::construct(get_class($componentInstance), [], [
+            'setRouteParams' => Expected::never()
+        ], $this));
+
+        \Craft::$app->request->headers->set('Accept', 'application/json');
+
+        /** @var Response $result */
+        $result = $this->runActionWithParams('newsletter/subscribe', [
+            'consent' => true,
+            'email'   => 'some@email.com',
+        ]);
+
+        $this->assertInstanceOf("\craft\web\Response", $result);
+        $this->assertEquals(200, $result->statusCode);
+        $this->assertEquals(\yii\web\Response::FORMAT_JSON, $result->format);
+        $this->assertArrayHasKey('success', $result->data);
+        $this->assertTrue($result->data['success']);
+    }
+
     public function testSubscribeFailOnMissingConsent()
     {
         $componentInstance = \Craft::$app->get('urlManager');
@@ -51,6 +74,30 @@ class NewsletterTest extends BaseUnitTest
         ]);
 
         $this->assertNull($result);
+    }
+
+    public function testAjaxSubscribeFailOnMissingConsent()
+    {
+        $componentInstance = \Craft::$app->get('urlManager');
+        \Craft::$app->set('urlManager', Stub::construct(get_class($componentInstance), [], [
+            'setRouteParams' => Expected::never()
+        ], $this));
+
+        \Craft::$app->request->headers->set('Accept', 'application/json');
+
+        /** @var Response $result */
+        $result = $this->runActionWithParams('newsletter/subscribe', [
+            'consent' => false,
+            'email'   => 'some@email.com',
+        ]);
+
+        $this->assertInstanceOf("\craft\web\Response", $result);
+        $this->assertEquals(200, $result->statusCode);
+        $this->assertEquals(\yii\web\Response::FORMAT_JSON, $result->format);
+        $this->assertArrayHasKey('success', $result->data);
+        $this->assertFalse($result->data['success']);
+        $this->assertArrayHasKey('errors', $result->data);
+        $this->assertEquals('Please provide your consent.', $result->data['errors']['consent'][0]);
     }
 
     public function testSubscribeFailOnInvalidEmail()
