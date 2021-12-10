@@ -10,12 +10,37 @@
     errors: adapter.getErrors('apiKey')
 }) }}
 
-{{ forms.autosuggestField({
-    label: "Contact List ID"|t('newsletter'),
-    warning: "If left empty, users will not be associated with any specific list."|t('newsletter'),
-    id: 'listId',
-    name: 'listId',
-    suggestEnvVars: true,
-    value: adapter.listId,
-    errors: adapter.getErrors('listId')
+{{ forms.lightswitchField({
+    label: "Send DOI mail to subscriber"|t('newsletter'),
+    instructions: "If switched on, a DOI mail will be send using your DOI mail template in Sendinblue."|t('newsletter'),
+    id: 'doi',
+    name: 'doi',
+    on: adapter.doi,
+    errors: adapter.getErrors('doi'),
+    toggle: 'doi-settings',
+    reverseToggle: 'no-doi-settings'
 }) }}
+
+<div id="no-doi-settings"{% if adapter.doi %} class="hidden"{% endif %}>
+    {{ forms.autosuggestField({
+        label: "Contact List ID"|t('newsletter'),
+        warning: "If left empty, users will not be associated with any specific list."|t('newsletter'),
+        id: 'listId',
+        name: 'listId',
+        suggestEnvVars: true,
+        value: adapter.listId,
+        errors: adapter.getErrors('listId')
+    }) }}
+</div>
+
+<div id="doi-settings"{% if not adapter.doi %} class="hidden"{% endif %}>
+    {{ forms.autosuggestField({
+        label: "Contact List ID"|t('newsletter'),
+        required: true,
+        id: 'listId',
+        name: 'listId',
+        suggestEnvVars: true,
+        value: adapter.listId,
+        errors: adapter.getErrors('listId')
+    }) }}
+</div>

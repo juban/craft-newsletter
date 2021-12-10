@@ -23,6 +23,8 @@ class Sendinblue extends BaseNewsletterAdapter
 {
     public $apiKey;
     public $listId;
+    public $doi;
+    public $doiId;
     private $_errorMessage;
     private $contactsApi;
 
@@ -44,7 +46,9 @@ class Sendinblue extends BaseNewsletterAdapter
             'class' => EnvAttributeParserBehavior::class,
             'attributes' => [
                 'apiKey',
-                'listId'
+                'listId',
+                'doi',
+                'doiId',
             ],
         ];
         return $behaviors;
@@ -58,6 +62,8 @@ class Sendinblue extends BaseNewsletterAdapter
         return [
             'apiKey' => Craft::t('newsletter', 'API Key'),
             'listId' => Craft::t('newsletter', 'Contact List ID'),
+            'doi' => Craft::t('newsletter', 'Send DOI mail to new subscribers'),
+            'doiId' => Craft::t('newsletter', 'DOI mail template ID'),
         ];
     }
 
@@ -125,7 +131,11 @@ class Sendinblue extends BaseNewsletterAdapter
             $contact = new CreateContact();
             $contact['email'] = $email;
             $contact['listIds'] = [$listId];
-            $clientContactApi->createContact($contact);
+            if ($this->doi) {
+                $clientContactApi->createDoiContact();
+            } else {
+                $clientContactApi->createContact($contact);
+            }
             return true;
         } catch (ApiException $apiException) {
             $this->_errorMessage = $this->_getErrorMessage($apiException);
