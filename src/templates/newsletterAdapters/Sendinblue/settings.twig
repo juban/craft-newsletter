@@ -11,6 +11,14 @@
 }) }}
 
 {{ forms.lightswitchField({
+    label: "Add subscriber to list when he already exists as contact"|t('newsletter'),
+    id: 'addIfExists',
+    name: 'addIfExists',
+    on: adapter.addIfExists,
+    errors: adapter.getErrors('addIfExists'),
+}) }}
+
+{{ forms.lightswitchField({
     label: "Send DOI mail to subscriber"|t('newsletter'),
     instructions: "If switched on, a DOI mail will be send using your DOI mail template in Sendinblue."|t('newsletter'),
     id: 'doi',
@@ -18,7 +26,7 @@
     on: adapter.doi,
     errors: adapter.getErrors('doi'),
     toggle: 'doi-settings',
-    reverseToggle: 'no-doi-settings'
+    reverseToggle: 'no-doi-settings',
 }) }}
 
 <div id="no-doi-settings"{% if adapter.doi %} class="hidden"{% endif %}>
@@ -36,11 +44,33 @@
 <div id="doi-settings"{% if not adapter.doi %} class="hidden"{% endif %}>
     {{ forms.autosuggestField({
         label: "Contact List ID"|t('newsletter'),
+        id: 'doiListId',
+        name: 'doiListId',
         required: true,
-        id: 'listId',
-        name: 'listId',
         suggestEnvVars: true,
-        value: adapter.listId,
-        errors: adapter.getErrors('listId')
+        value: adapter.doiListId,
+        errors: adapter.getErrors('doiListId')
+    }) }}
+
+    {{ forms.autosuggestField({
+        label: "DOI Mail Template ID"|t('newsletter'),
+        required: true,
+        id: 'doiTemplateId',
+        name: 'doiTemplateId',
+        suggestEnvVars: true,
+        value: adapter.doiTemplateId,
+        errors: adapter.getErrors('doiTemplateId')
+    }) }}
+
+    {{ forms.autosuggestField({
+        label: "Redirection URL"|t('newsletter'),
+        instructions: "URL of the web page that user will be redirected to after clicking on the double opt in URL."|t('newsletter'),
+        id: 'doiRedirectionUrl',
+        name: 'doiRedirectionUrl',
+        required: true,
+        suggestEnvVars: true,
+        suggestAliases: true,
+        value: adapter.doiRedirectionUrl,
+        errors: adapter.getErrors('doiRedirectionUrl')
     }) }}
 </div>
