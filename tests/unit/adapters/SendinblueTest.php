@@ -114,7 +114,6 @@ class SendinblueTest extends \Codeception\Test\Unit
     {
         $email = "mozelle.remy@gmail12345.com";
         $this->sendinblue->listId = 75;
-        $this->sendinblue->addIfExists = true;
 
         $contactApi = $this->make(ContactsApi::class, [
             'getContactInfo' => function () {

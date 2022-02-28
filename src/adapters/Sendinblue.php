@@ -25,7 +25,6 @@ class Sendinblue extends BaseNewsletterAdapter
 {
     public $apiKey;
     public $listId;
-    public $addIfExists;
     public $doi = false;
     public $doiTemplateId;
     public $doiRedirectionUrl;
@@ -97,7 +96,7 @@ class Sendinblue extends BaseNewsletterAdapter
             return $this->_registerContact($email, $clientContactApi);
         }
 
-        if ($listId !== 0 && $this->addIfExists) {
+        if ($listId !== 0) {
             return $this->_addContactToList($email, $listId, $clientContactApi);
         }
 
