@@ -19,5 +19,10 @@ return [
     "Which service should be use to handle newsletter users subscription?"                                             => "Quel service doit être utilisé pour gérer l'abonnement des utilisateurs à la newsletter?",
     "Mailchimp server prefix (i.e. \"us19\"), in order determine to appropriate host url"                              => "Le préfixe du serveur mailchimp (ex. \"us19\"), afin de déterminer l'url de l'hôte correspondant",
     "Audience ID can be found in Mailchimp account in Audience > All contacts > Settings > Audience name and defaults" => "ID d’Audience peut être trouvé dans le compte Mailchimp dans Audience > All contacts > Settings > Audience name and defaults",
-    "If enabled, newsletter subscription form will be verified using Google reCAPTCHA plugin."                         => "Si activé, le formulaire d‘abonnement à la newsletter sera vérifié à l‘aide du plugin Google ReCAPTCHA."
+    "If enabled, newsletter subscription form will be verified using Google reCAPTCHA plugin."                         => "Si activé, le formulaire d‘abonnement à la newsletter sera vérifié à l‘aide du plugin Google ReCAPTCHA.",
+    "Activate Double Opt-in (DOI)"                                                                                     => "Activer le double Opt-in (DOI)",
+    "If switched on, a Double Opt-in email will be sent to the subscriber using a Sendinblue template."                => "Si activé, un email Double Opt-in sera adressé à l'abonné en utilisant un template Sendinblue.",
+    "Mail Template ID"                                                                                                 => "ID du template d'email",
+    "Template to be used during the Double Opt-in process (DOI)."                                                      => "Template à utiliser lors du processus de Double Opt-in (DOI).",
+    "URL of the web page that user will be redirected to after clicking on the double opt in URL."                     => "URL de la page web vers laquelle l'abonné sera redirigé après avoir cliqué sur le lien de l'email de double opt-in"
 ];
