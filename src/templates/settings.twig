@@ -50,11 +50,12 @@
 {% endfor %}
 
 {% if craft.app.plugins.isPluginEnabled('google-recaptcha') %}
-    {{ forms.lightswitchField({
+    {{ forms.booleanMenuField({
         label: "Enable Google reCAPTCHA"|t("newsletter"),
         instructions: "If enabled, newsletter subscription form will be verified using Google reCAPTCHA plugin."|t('newsletter'),
         name: "recaptchaEnabled",
-        on: settings.recaptchaEnabled,
+        includeEnvVars: true,
+        value: settings.recaptchaEnabled,
         errors: settings.errors("recaptchaEnabled")
     }) }}
 {% endif %}

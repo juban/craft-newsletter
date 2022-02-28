@@ -9,6 +9,7 @@ namespace simplonprod\newsletter\models;
 
 use Craft;
 use craft\base\Model;
+use craft\behaviors\EnvAttributeParserBehavior;
 
 /**
  * NewsletterSettings class
@@ -20,6 +21,21 @@ class Settings extends Model
     public $adapterType;
     public $adapterTypeSettings = [];
     public $recaptchaEnabled = true;
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors(): array
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['parser'] = [
+            'class'      => EnvAttributeParserBehavior::class,
+            'attributes' => [
+                'recaptchaEnabled'
+            ],
+        ];
+        return $behaviors;
+    }
 
     /**
      * @inheritdoc

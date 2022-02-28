@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Plugin;
 use craft\events\PluginEvent;
 use craft\events\RegisterComponentTypesEvent;
+use craft\helpers\App;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Component;
 use craft\helpers\UrlHelper;
@@ -113,6 +114,46 @@ class Newsletter extends Plugin
     }
 
     /**
+     * Redirect user to plugin setting after installation if from CP
+     */
+    private function _registerAfterInstallEvent(): void
+    {
+        // Do something after we're installed
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            function (PluginEvent $event) {
+                if ($event->plugin === $this && Craft::$app->getRequest()->getIsCpRequest()) {
+                    // Redirect to settings page
+                    Craft::$app->getResponse()->redirect(
+                        UrlHelper::cpUrl('settings/plugins/newsletter')
+                    )->send();
+                }
+            }
+        );
+    }
+
+    /**
+     * Verify user submission with Google reCAPTCHA plugin if enabled
+     */
+    private function _registerRecaptchaVerification(): void
+    {
+        if (App::parseBooleanEnv(Newsletter::$plugin->settings->recaptchaEnabled) === true
+            && Craft::$app->plugins->isPluginEnabled('google-recaptcha')) {
+            Event::on(
+                NewsletterForm::class,
+                NewsletterForm::EVENT_AFTER_VALIDATE,
+                static function (Event $event) {
+                    $form = $event->sender;
+                    if (!GoogleRecaptcha::$plugin->recaptcha->verify()) {
+                        $form->addError('recaptcha', Craft::t('newsletter', 'Please prove you are not a robot.'));
+                    }
+                }
+            );
+        }
+    }
+
+    /**
      * Return the list of available newsletter adapters
      * @return string[]
      */
@@ -131,6 +172,9 @@ class Newsletter extends Plugin
 
         return $event->types;
     }
+
+    // Protected Methods
+    // =========================================================================
 
     /**
      * @param string $type
@@ -165,9 +209,6 @@ class Newsletter extends Plugin
         }
         return true;
     }
-
-    // Protected Methods
-    // =========================================================================
 
     /**
      * Creates and returns the model used to store the plugin’s settings.
@@ -229,44 +270,5 @@ class Newsletter extends Plugin
                 'configPath'         => $configPath ?? null
             ]
         );
-    }
-
-    /**
-     * Redirect user to plugin setting after installation if from CP
-     */
-    private function _registerAfterInstallEvent(): void
-    {
-        // Do something after we're installed
-        Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this && Craft::$app->getRequest()->getIsCpRequest()) {
-                    // Redirect to settings page
-                    Craft::$app->getResponse()->redirect(
-                        UrlHelper::cpUrl('settings/plugins/newsletter')
-                    )->send();
-                }
-            }
-        );
-    }
-
-    /**
-     * Verify user submission with Google reCAPTCHA plugin if enabled
-     */
-    private function _registerRecaptchaVerification(): void
-    {
-        if (Newsletter::$plugin->settings->recaptchaEnabled && Craft::$app->plugins->isPluginEnabled('google-recaptcha')) {
-            Event::on(
-                NewsletterForm::class,
-                NewsletterForm::EVENT_AFTER_VALIDATE,
-                static function (Event $event) {
-                    $form = $event->sender;
-                    if (!GoogleRecaptcha::$plugin->recaptcha->verify()) {
-                        $form->addError('recaptcha', Craft::t('newsletter', 'Please prove you are not a robot.'));
-                    }
-                }
-            );
-        }
     }
 }
