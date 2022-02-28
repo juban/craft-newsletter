@@ -64,7 +64,7 @@ You can find these informations in your [Sendinblue account](https://account.sen
 
 You can provide a [contact list ID](https://my.sendinblue.com/lists) in order to subscribe the enduser to a specific one. 
 
-You can also enable Sendinblue Double Opt-in feature. You will to select a Sendinblue template as described [here](https://help.sendinblue.com/hc/en-us/articles/360019540880-Create-a-double-opt-in-DOI-confirmation-template-for-Sendinblue-form).
+You can also enable Sendinblue Double Opt-in feature. You will need a Sendinblue template as described [here](https://help.sendinblue.com/hc/en-us/articles/360019540880-Create-a-double-opt-in-DOI-confirmation-template-for-Sendinblue-form).
 
 > If no list ID is provided, user will only be created as a contact.
 
