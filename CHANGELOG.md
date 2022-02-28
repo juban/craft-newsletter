@@ -1,5 +1,13 @@
 # Release Notes for Newsletter
 
+## 1.5.0 - 2022-02-28
+### Added
+- Sendinblue Double Opt-in support (thx to @kringkaste)
+- Google reCAPTCHA activation can be set with environment variable
+
+### Changed
+- Bump minimum required Craft version to 3.7.29
+
 ## 1.4.0 - 2021-07-13
 ### Added
 - AJAX support (thx to @jerome2710)
