@@ -5,12 +5,14 @@ namespace simplonprod\newsletter\adapters;
 
 use Craft;
 use craft\behaviors\EnvAttributeParserBehavior;
+use craft\helpers\App;
 use GuzzleHttp\Client;
 use SendinBlue\Client\Api\ContactsApi;
 use SendinBlue\Client\ApiException;
 use SendinBlue\Client\Configuration;
 use SendinBlue\Client\Model\CreateContact;
-use yii\helpers\Json;
+use SendinBlue\Client\Model\CreateDoiContact;
+use SendinBlue\Client\Model\UpdateContact;
 use yii\helpers\VarDumper;
 
 /**
@@ -23,8 +25,13 @@ class Sendinblue extends BaseNewsletterAdapter
 {
     public $apiKey;
     public $listId;
+    public $addIfExists;
+    public $doi = false;
+    public $doiTemplateId;
+    public $doiRedirectionUrl;
+
     private $_errorMessage;
-    private $contactsApi;
+    private $_contactsApi;
 
     /**
      * @inheritdoc
@@ -44,7 +51,10 @@ class Sendinblue extends BaseNewsletterAdapter
             'class' => EnvAttributeParserBehavior::class,
             'attributes' => [
                 'apiKey',
-                'listId'
+                'listId',
+                'doi',
+                'doiTemplateId',
+                'doiRedirectionUrl',
             ],
         ];
         return $behaviors;
@@ -58,6 +68,9 @@ class Sendinblue extends BaseNewsletterAdapter
         return [
             'apiKey' => Craft::t('newsletter', 'API Key'),
             'listId' => Craft::t('newsletter', 'Contact List ID'),
+            'doi' => Craft::t('newsletter', 'Activate Double Opt-in'),
+            'doiTemplateId' => Craft::t('newsletter', 'Double Opt-in Template ID'),
+            'doiRedirectionUrl' => Craft::t('newsletter', 'Double Opt-in Redirection URL'),
         ];
     }
 
@@ -74,15 +87,18 @@ class Sendinblue extends BaseNewsletterAdapter
     public function subscribe(string $email): bool
     {
         $clientContactApi = $this->getClientContactApi();
-        $listId = $this->listId ?? Craft::parseEnv($this->listId);
-        $listId = (int)$listId;
+        $listId = (int)App::parseEnv($this->listId);
 
         if (!$this->_contactExist($email, $clientContactApi)) {
             if ($listId !== 0) {
-                return $this->_registerContactToList($email, $clientContactApi);
+                return $this->_registerContactToList($email, $listId, $clientContactApi);
             }
 
             return $this->_registerContact($email, $clientContactApi);
+        }
+
+        if ($listId !== 0 && $this->addIfExists) {
+            return $this->_addContactToList($email, $listId, $clientContactApi);
         }
 
         return true;
@@ -90,21 +106,21 @@ class Sendinblue extends BaseNewsletterAdapter
 
     public function getClientContactApi(): ContactsApi
     {
-        if (!$this->contactsApi) {
-            $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', Craft::parseEnv($this->apiKey));
+        if (!$this->_contactsApi) {
+            $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', App::parseEnv($this->apiKey));
 
-            $this->contactsApi = new ContactsApi(
+            $this->_contactsApi = new ContactsApi(
                 new Client(),
                 $config
             );
         }
 
-        return $this->contactsApi;
+        return $this->_contactsApi;
     }
 
     public function setClientContactApi(ContactsApi $contactsApi): void
     {
-        $this->contactsApi = $contactsApi;
+        $this->_contactsApi = $contactsApi;
     }
 
     private function _contactExist(string $email, ContactsApi $client): bool
@@ -118,14 +134,22 @@ class Sendinblue extends BaseNewsletterAdapter
         }
     }
 
-    private function _registerContactToList(string $email, ContactsApi $clientContactApi): bool
+    private function _registerContactToList(string $email, int $listId, ContactsApi $clientContactApi): bool
     {
         try {
-            $listId = (int)$this->listId;
-            $contact = new CreateContact();
-            $contact['email'] = $email;
-            $contact['listIds'] = [$listId];
-            $clientContactApi->createContact($contact);
+            if (App::parseBooleanEnv($this->doi)) {
+                $contact = new CreateDoiContact();
+                $contact['email'] = $email;
+                $contact['includeListIds'] = [$listId];
+                $contact['templateId'] = (int)App::parseEnv($this->doiTemplateId);
+                $contact['redirectionUrl'] = App::parseEnv($this->doiRedirectionUrl);
+                $clientContactApi->createDoiContact($contact);
+            } else {
+                $contact = new CreateContact();
+                $contact['email'] = $email;
+                $contact['listIds'] = [$listId];
+                $clientContactApi->createContact($contact);
+            }
             return true;
         } catch (ApiException $apiException) {
             $this->_errorMessage = $this->_getErrorMessage($apiException);
@@ -139,6 +163,19 @@ class Sendinblue extends BaseNewsletterAdapter
             $contact = new CreateContact();
             $contact['email'] = $email;
             $clientContactApi->createContact($contact);
+            return true;
+        } catch (ApiException $apiException) {
+            $this->_errorMessage = $this->_getErrorMessage($apiException);
+            return false;
+        }
+    }
+
+    private function _addContactToList(string $email, int $listId, ContactsApi $clientContactApi): bool
+    {
+        try {
+            $contact = new UpdateContact();
+            $contact['listIds'] = [$listId];
+            $clientContactApi->updateContact($email, $contact);
             return true;
         } catch (ApiException $apiException) {
             $this->_errorMessage = $this->_getErrorMessage($apiException);
@@ -180,7 +217,11 @@ class Sendinblue extends BaseNewsletterAdapter
         $rules = parent::defineRules();
         $rules[] = [['apiKey'], 'trim'];
         $rules[] = [['apiKey'], 'required'];
-        $rules[] = [['listId'], 'integer'];
+        $rules[] = [['listId', 'doiTemplateId'], 'integer'];
+        $rules[] = [['doiRedirectionUrl'], 'string'];
+        if ($this->doi) {
+            $rules[] = [['listId', 'doiTemplateId', 'doiRedirectionUrl'], 'required'];
+        }
         return $rules;
     }
 }

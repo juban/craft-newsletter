@@ -19,3 +19,39 @@
     value: adapter.listId,
     errors: adapter.getErrors('listId')
 }) }}
+
+{{ forms.booleanMenuField({
+    label: "Activate Double Opt-in (DOI)"|t('newsletter'),
+    instructions: "If switched on, a Double Opt-in email will be sent to the subscriber using a Sendinblue template."|t('newsletter'),
+    id: 'doi',
+    name: 'doi',
+    includeEnvVars: true,
+    value: adapter.doi,
+    errors: adapter.getErrors('doi'),
+    toggle: 'doi-settings',
+}) }}
+
+<div id="doi-settings"{% if not adapter.doi %} class="hidden"{% endif %}>
+    {{ forms.autosuggestField({
+        label: "Mail Template ID"|t('newsletter'),
+        instructions: "Template to be used during the Double Opt-in process (DOI)."|t('newsletter'),
+        required: true,
+        id: 'doiTemplateId',
+        name: 'doiTemplateId',
+        suggestEnvVars: true,
+        value: adapter.doiTemplateId,
+        errors: adapter.getErrors('doiTemplateId')
+    }) }}
+
+    {{ forms.autosuggestField({
+        label: "Redirection URL"|t('newsletter'),
+        instructions: "URL of the web page that user will be redirected to after clicking on the double opt in URL."|t('newsletter'),
+        id: 'doiRedirectionUrl',
+        name: 'doiRedirectionUrl',
+        required: true,
+        suggestEnvVars: true,
+        suggestAliases: true,
+        value: adapter.doiRedirectionUrl,
+        errors: adapter.getErrors('doiRedirectionUrl')
+    }) }}
+</div>

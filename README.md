@@ -16,7 +16,7 @@ This plugin is GDPR compliant and requires the user to give its consent when sub
 
 ## Requirements
 
-This plugin requires Craft CMS 3.5.0 or later and PHP 7.2.5 or later.
+This plugin requires Craft CMS 3.7.29 or later and PHP 7.2.5 or later.
 
 > In order to support automatic Google reCAPTCHA verification, you will need to install `simplonprod/craft-google-recaptcha` plugin.
 
@@ -55,11 +55,16 @@ You can provide a [contact list ID](https://app.mailjet.com/contacts) in order t
 ##### Sendinblue settings
 
 * **API Key** (`apiKey`)
-* **List ID** (optional) (`listId`)
+* **List ID** (optional, required if `doi` is set to `true`) (`listId`)
+* **Activate Double Opt-in (DOI)** (optional) (`doi`)
+* **DOI template ID** (required if `doi` is set to `true`) (`doiTemplateId`)
+* **DOI Redirection URL** (required if `doi` is set to `true`) (`doiRedirectionUrl`)
 
 You can find these informations in your [Sendinblue account](https://account.sendinblue.com/advanced/api).
 
 You can provide a [contact list ID](https://my.sendinblue.com/lists) in order to subscribe the enduser to a specific one. 
+
+You can also enable Sendinblue Double Opt-in feature. You will to select a Sendinblue template as described [here](https://help.sendinblue.com/hc/en-us/articles/360019540880-Create-a-double-opt-in-DOI-confirmation-template-for-Sendinblue-form).
 
 > If no list ID is provided, user will only be created as a contact.
 

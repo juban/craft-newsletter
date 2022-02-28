@@ -11,12 +11,7 @@ additional_fqdns: []
 mariadb_version: "10.4"
 mysql_version: ""
 provider: default
-webimage_extra_packages: [gconf-service, libasound2, libatk1.0-0, libcairo2, libgconf-2-4,
-  libgdk-pixbuf2.0-0, libgtk-3-0, libnspr4, libpango-1.0-0, libpangocairo-1.0-0, libx11-xcb1,
-  libxcomposite1, libxcursor1, libxdamage1, libxfixes3, libxi6, libxrandr2, libxrender1,
-  libxss1, libxtst6, fonts-liberation, libappindicator1, libnss3, libappindicator3-1,
-  libdbusmenu-gtk3-4, libgbm1, libindicator3-7, libwayland-server0, xdg-utils, jpegoptim,
-  optipng, gifsicle, webp]
+webimage_extra_packages: []
 use_dns_when_possible: true
 composer_version: "2"
 
