@@ -55,10 +55,10 @@ You can provide a [contact list ID](https://app.mailjet.com/contacts) in order t
 ##### Sendinblue settings
 
 * **API Key** (`apiKey`)
-* **List ID** (optional, required if `doi` is set to `true`) (`listId`)
+* **List ID** (optional, required if DOI is on) (`listId`)
 * **Activate Double Opt-in (DOI)** (optional) (`doi`)
-* **DOI template ID** (required if `doi` is set to `true`) (`doiTemplateId`)
-* **DOI Redirection URL** (required if `doi` is set to `true`) (`doiRedirectionUrl`)
+* **Mail Template ID** (required if DOI is on) (`doiTemplateId`)
+* **Redirection URL** (required if DOI is on) (`doiRedirectionUrl`)
 
 You can find these informations in your [Sendinblue account](https://account.sendinblue.com/advanced/api).
 
