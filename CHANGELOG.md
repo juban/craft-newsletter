@@ -1,5 +1,9 @@
 # Release Notes for Newsletter
 
+## 1.5.1 - 2022-03-01
+### Fixed
+- Fixes a bug that could produce an error when saving the configuration from the control panel if a service was already configured.
+
 ## 1.5.0 - 2022-02-28
 ### Added
 - Sendinblue Double Opt-in support (thx to @kringkaste)

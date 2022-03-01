@@ -231,13 +231,17 @@ class Newsletter extends Plugin
         $allAdapterTypes = self::getAdaptersTypes();
         $allAdapters = [];
         $adapterTypeOptions = [];
-        $adapter = $this->adapter;
+        $adapter = null;
 
         if (Craft::$app->request->post('settings')) {
             $postSettings = Craft::$app->request->post('settings');
             $adapterSettings = $postSettings['adapterSettings'][$postSettings['adapterType']] ?? [];
             $adapter = self::createAdapter($postSettings['adapterType'], $adapterSettings);
             $adapter->validate();
+        }
+
+        if($adapter === null) {
+            $adapter = $this->adapter;
         }
 
         // Create every available adapter
