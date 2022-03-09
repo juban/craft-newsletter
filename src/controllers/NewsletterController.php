@@ -44,7 +44,7 @@ class NewsletterController extends Controller
             }
 
             Craft::$app->getUrlManager()->setRouteParams([
-                'newsletterForm' => $newsletterForm
+                'newsletterForm' => $newsletterForm,
             ]);
 
             return null;

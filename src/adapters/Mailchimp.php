@@ -8,9 +8,9 @@ use craft\behaviors\EnvAttributeParserBehavior;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use MailchimpMarketing\Api\ListsApi;
+use MailchimpMarketing\ApiClient;
 use yii\helpers\Json;
 use yii\helpers\VarDumper;
-use MailchimpMarketing\ApiClient;
 
 class Mailchimp extends BaseNewsletterAdapter
 {
@@ -41,7 +41,7 @@ class Mailchimp extends BaseNewsletterAdapter
             'attributes' => [
                 'apiKey',
                 'serverPrefix',
-                'listId'
+                'listId',
             ],
         ];
         return $behaviors;
@@ -53,7 +53,7 @@ class Mailchimp extends BaseNewsletterAdapter
     public function getSettingsHtml()
     {
         return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Mailchimp/settings', [
-            'adapter' => $this
+            'adapter' => $this,
         ]);
     }
 

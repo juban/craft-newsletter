@@ -41,7 +41,6 @@ use yii\base\Event;
  */
 class Newsletter extends Plugin
 {
-
     const EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES = 'registerNewsletterAdapterTypes';
 
     // Static Properties
@@ -94,7 +93,7 @@ class Newsletter extends Plugin
         $this->_registerRecaptchaVerification();
 
         // Register adapter component
-        $this->set('adapter', function () {
+        $this->set('adapter', function() {
             if ($this->settings->adapterType === null) {
                 $adapterTypes = self::getAdaptersTypes();
                 $this->settings->adapterType = $adapterTypes[0];
@@ -122,7 +121,7 @@ class Newsletter extends Plugin
         Event::on(
             Plugins::class,
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
+            function(PluginEvent $event) {
                 if ($event->plugin === $this && Craft::$app->getRequest()->getIsCpRequest()) {
                     // Redirect to settings page
                     Craft::$app->getResponse()->redirect(
@@ -143,7 +142,7 @@ class Newsletter extends Plugin
             Event::on(
                 NewsletterForm::class,
                 NewsletterForm::EVENT_AFTER_VALIDATE,
-                static function (Event $event) {
+                static function(Event $event) {
                     $form = $event->sender;
                     if (!GoogleRecaptcha::$plugin->recaptcha->verify()) {
                         $form->addError('recaptcha', Craft::t('newsletter', 'Please prove you are not a robot.'));
@@ -162,11 +161,11 @@ class Newsletter extends Plugin
         $adaptersTypes = [
             Mailjet::class,
             Sendinblue::class,
-            Mailchimp::class
+            Mailchimp::class,
         ];
 
         $event = new RegisterComponentTypesEvent([
-            'types' => $adaptersTypes
+            'types' => $adaptersTypes,
         ]);
         Event::trigger(static::class, self::EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES, $event);
 
@@ -186,7 +185,7 @@ class Newsletter extends Plugin
     public static function createAdapter(string $type, array $settings = null): \craft\base\ComponentInterface
     {
         return Component::createComponent([
-            'type'     => $type,
+            'type' => $type,
             'settings' => $settings,
         ], NewsletterAdapterInterface::class);
     }
@@ -240,7 +239,7 @@ class Newsletter extends Plugin
             $adapter->validate();
         }
 
-        if($adapter === null) {
+        if ($adapter === null) {
             $adapter = $this->adapter;
         }
 
@@ -250,7 +249,7 @@ class Newsletter extends Plugin
             $allAdapters[] = self::createAdapter($adapterType);
             $adapterTypeOptions[] = [
                 'value' => $adapterType,
-                'label' => $adapterType::displayName()
+                'label' => $adapterType::displayName(),
             ];
         }
 
@@ -267,11 +266,11 @@ class Newsletter extends Plugin
         return Craft::$app->view->renderTemplate(
             'newsletter/settings',
             [
-                'settings'           => $this->getSettings(),
-                'allAdapters'        => $allAdapters,
+                'settings' => $this->getSettings(),
+                'allAdapters' => $allAdapters,
                 'adapterTypeOptions' => $adapterTypeOptions,
-                'adapter'            => $adapter,
-                'configPath'         => $configPath ?? null
+                'adapter' => $adapter,
+                'configPath' => $configPath ?? null,
             ]
         );
     }

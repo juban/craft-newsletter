@@ -6,7 +6,6 @@
 
 namespace simplonprod\newsletter\adapters;
 
-
 use Craft;
 use craft\behaviors\EnvAttributeParserBehavior;
 use Mailjet\Client;
@@ -20,7 +19,6 @@ use yii\helpers\VarDumper;
  **/
 class Mailjet extends BaseNewsletterAdapter
 {
-
     public $apiKey;
     public $apiSecret;
     public $listId;
@@ -43,11 +41,11 @@ class Mailjet extends BaseNewsletterAdapter
     {
         $behaviors = parent::behaviors();
         $behaviors['parser'] = [
-            'class'      => EnvAttributeParserBehavior::class,
+            'class' => EnvAttributeParserBehavior::class,
             'attributes' => [
                 'apiKey',
                 'apiSecret',
-                'listId'
+                'listId',
             ],
         ];
         return $behaviors;
@@ -59,9 +57,9 @@ class Mailjet extends BaseNewsletterAdapter
     public function attributeLabels(): array
     {
         return [
-            'apiKey'    => Craft::t('newsletter', 'API Key'),
+            'apiKey' => Craft::t('newsletter', 'API Key'),
             'apiSecret' => Craft::t('newsletter', 'API Secret'),
-            'listId'    => Craft::t('newsletter', 'Contact List ID')
+            'listId' => Craft::t('newsletter', 'Contact List ID'),
         ];
     }
 
@@ -71,7 +69,7 @@ class Mailjet extends BaseNewsletterAdapter
     public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Mailjet/settings', [
-            'adapter' => $this
+            'adapter' => $this,
         ]);
     }
 
@@ -123,7 +121,7 @@ class Mailjet extends BaseNewsletterAdapter
     {
         $body = [
             'IsExcludedFromCampaigns' => "false",
-            'Email'                   => $email
+            'Email' => $email,
         ];
 
         $response = $client->post(Resources::$Contact, ['body' => $body]);
@@ -146,7 +144,7 @@ class Mailjet extends BaseNewsletterAdapter
             404 => 'Mailjet resource was not found (404).',
             405 => 'Mailjet method requested on the resource does not exist (405).',
             429 => 'Mailjet maximum number of calls allowed per minute was reached (429).',
-            500 => 'Mailjet internal server error (500).'
+            500 => 'Mailjet internal server error (500).',
         ];
         $errorMessage = Craft::t('newsletter', 'The newsletter service is not available at that time. Please, try again later.');
         if (array_key_exists($response->getStatus(), $errorLogMessages)) {
@@ -170,8 +168,8 @@ class Mailjet extends BaseNewsletterAdapter
         // Register contact to list
         $body = [
             'Properties' => "object",
-            'Action'     => "addnoforce",
-            'Email'      => $email
+            'Action' => "addnoforce",
+            'Email' => $email,
         ];
         $response = $client->post(Resources::$ContactslistManagecontact, ['id' => Craft::parseEnv($this->listId), 'body' => $body]);
         if (!$response->success()) {

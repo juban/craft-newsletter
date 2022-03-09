@@ -23,11 +23,11 @@
  */
 
 return [
-    "adapterType"         => \simplonprod\newsletter\adapters\Mailjet::class,
+    "adapterType" => \simplonprod\newsletter\adapters\Mailjet::class,
     "adapterTypeSettings" => [
-        'apiKey'    => '',
+        'apiKey' => '',
         'apiSecret' => '',
-        'listId'    => ''
+        'listId' => '',
     ],
-    "recaptchaEnabled"    => true
+    "recaptchaEnabled" => true,
 ];

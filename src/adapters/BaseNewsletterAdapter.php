@@ -6,7 +6,6 @@
 
 namespace simplonprod\newsletter\adapters;
 
-
 use craft\base\ConfigurableComponent;
 
 /**

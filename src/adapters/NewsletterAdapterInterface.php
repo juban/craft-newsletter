@@ -6,12 +6,10 @@
 
 namespace simplonprod\newsletter\adapters;
 
-
 use craft\base\ConfigurableComponentInterface;
 
 interface NewsletterAdapterInterface extends ConfigurableComponentInterface
 {
-
     /**
      * Try to subscribe the given email into the newsletter mailing list service
      * @param string $email
@@ -24,5 +22,4 @@ interface NewsletterAdapterInterface extends ConfigurableComponentInterface
      * @return null|string
      */
     public function getSubscriptionError();
-
 }

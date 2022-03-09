@@ -16,7 +16,6 @@ use Craft;
  **/
 class Dummy extends BaseNewsletterAdapter
 {
-
     public $someAttribute;
 
     /**
@@ -33,7 +32,7 @@ class Dummy extends BaseNewsletterAdapter
     public function attributeLabels(): array
     {
         return [
-            'someAttribute' => Craft::t('newsletter', 'Some attribute')
+            'someAttribute' => Craft::t('newsletter', 'Some attribute'),
         ];
     }
 
@@ -43,7 +42,7 @@ class Dummy extends BaseNewsletterAdapter
     public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Dummy/settings', [
-            'adapter' => $this
+            'adapter' => $this,
         ]);
     }
 

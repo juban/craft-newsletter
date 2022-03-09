@@ -79,7 +79,7 @@ class Sendinblue extends BaseNewsletterAdapter
     public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Sendinblue/settings', [
-            'adapter' => $this
+            'adapter' => $this,
         ]);
     }
 
@@ -192,7 +192,7 @@ class Sendinblue extends BaseNewsletterAdapter
             405 => 'Sendinblue verb is not allowed for this endpoint (405).',
             406 => 'Sendinblue empty or invalid json value (406).',
             429 => 'Sendinblue rate limit is exceeded. (429).',
-            500 => 'Sendinblue internal server error (500).'
+            500 => 'Sendinblue internal server error (500).',
         ];
         $errorMessage = Craft::t('newsletter', 'The newsletter service is not available at that time. Please, try again later.');
         if (array_key_exists($apiException->getCode(), $errorLogMessages)) {
