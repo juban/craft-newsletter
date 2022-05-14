@@ -1,23 +1,7 @@
+includes:
+    - vendor/craftcms/phpstan/phpstan.neon
+
 parameters:
-  scanFiles:
-    - %currentWorkingDirectory%/vendor/yiisoft/yii2/Yii.php
-    - %currentWorkingDirectory%/vendor/craftcms/cms/src/Craft.php
-  scanDirectories:
-    - %currentWorkingDirectory%/tests/_craft/storage/runtime/compiled_classes/
-  inferPrivatePropertyTypeFromConstructor: true
-  stubFiles:
-    - vendor/studio-stomp/phpstan-craftcms/stubs/BaseYii.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/Asset.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/AssetQuery.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/Category.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/CategoryQuery.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/Entry.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/EntryQuery.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/GlobalSet.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/GlobalSetQuery.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/MatrixBlock.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/MatrixBlockQuery.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/Tag.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/TagQuery.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/User.stub
-    - vendor/studio-stomp/phpstan-craftcms/stubs/UserQuery.stub
+    level: 0
+    paths:
+        - src
