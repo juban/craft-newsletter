@@ -9,7 +9,7 @@ stages:
 
 build:
   stage: build
-  image: $CI_REGISTRY/simplonprod/devops/docker-images/php/7.4
+  image: $CI_REGISTRY/simplonprod/devops/docker-images/php/8.0
   script:
     - composer2 config -g cache-dir "$(pwd)/.composer-cache"
     - composer2 install
@@ -28,9 +28,9 @@ build:
 
 test:
   stage: test
-  image: $CI_REGISTRY/simplonprod/devops/docker-images/php/7.4-xdebug
+  image: $CI_REGISTRY/simplonprod/devops/docker-images/php/8.0-xdebug
   services:
-    - mysql:5.6
+    - mysql:5.7
   variables:
     # Configure mysql environment variables (https://hub.docker.com/_/mysql/)
     MYSQL_DATABASE: "db"
