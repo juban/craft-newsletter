@@ -6,7 +6,6 @@
 
 namespace simplonprod\newsletter\controllers;
 
-use Craft;
 use craft\web\Controller;
 use simplonprod\newsletter\models\NewsletterForm;
 use yii\web\BadRequestHttpException;
@@ -36,28 +35,23 @@ class NewsletterController extends Controller
 
         // Subscribe failed, send the form back
         if (!$newsletterForm->subscribe()) {
-            if ($this->request->getAcceptsJson()) {
-                return $this->asJson([
+            return $this->asModelFailure(
+                $newsletterForm,
+                null,
+                'newsletterForm',
+                data: [
                     'success' => false,
-                    'errors' => $newsletterForm->getErrors(),
-                ]);
-            }
-
-            Craft::$app->getUrlManager()->setRouteParams([
-                'variables' => [
-                    'newsletterForm' => $newsletterForm,
-                ],
-            ]);
-
-            return null;
+                ]
+            );
         }
 
-        if ($this->request->getAcceptsJson()) {
-            return $this->asJson([
+        // Subscribe was successful
+        return $this->asModelSuccess(
+            $newsletterForm,
+            null,
+            data: [
                 'success' => true,
-            ]);
-        }
-
-        return $this->redirectToPostedUrl();
+            ]
+        );
     }
 }

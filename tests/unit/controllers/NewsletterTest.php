@@ -92,7 +92,7 @@ class NewsletterTest extends BaseUnitTest
         ]);
 
         $this->assertInstanceOf("\craft\web\Response", $result);
-        $this->assertEquals(200, $result->statusCode);
+        $this->assertEquals(400, $result->statusCode);
         $this->assertEquals(\yii\web\Response::FORMAT_JSON, $result->format);
         $this->assertArrayHasKey('success', $result->data);
         $this->assertFalse($result->data['success']);
