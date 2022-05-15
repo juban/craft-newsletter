@@ -19,7 +19,7 @@ use yii\web\Response;
  **/
 class NewsletterController extends Controller
 {
-    protected $allowAnonymous = true;
+    protected array|int|bool $allowAnonymous = true;
 
     /**
      * @return Response|null
@@ -44,7 +44,9 @@ class NewsletterController extends Controller
             }
 
             Craft::$app->getUrlManager()->setRouteParams([
-                'newsletterForm' => $newsletterForm,
+                'variables' => [
+                    'newsletterForm' => $newsletterForm,
+                ],
             ]);
 
             return null;

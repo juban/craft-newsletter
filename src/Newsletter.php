@@ -41,7 +41,7 @@ use yii\base\Event;
  */
 class Newsletter extends Plugin
 {
-    const EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES = 'registerNewsletterAdapterTypes';
+    public const EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES = 'registerNewsletterAdapterTypes';
 
     // Static Properties
     // =========================================================================
@@ -62,21 +62,21 @@ class Newsletter extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '1.0.0';
+    public string $schemaVersion = '1.0.0';
 
     /**
      * Set to `true` if the plugin should have a settings view in the control panel.
      *
      * @var bool
      */
-    public $hasCpSettings = true;
+    public bool $hasCpSettings = true;
 
     /**
      * Set to `true` if the plugin should have its own section (main nav item) in the control panel.
      *
      * @var bool
      */
-    public $hasCpSection = false;
+    public bool $hasCpSection = false;
 
     /**
      * Initializes the plugin.
@@ -214,7 +214,7 @@ class Newsletter extends Plugin
      *
      * @return Settings|null
      */
-    protected function createSettingsModel(): ?Settings
+    protected function createSettingsModel(): ?\craft\base\Model
     {
         return new Settings();
     }
@@ -225,7 +225,7 @@ class Newsletter extends Plugin
      *
      * @return string The rendered settings HTML
      */
-    protected function settingsHtml(): string
+    protected function settingsHtml(): ?string
     {
         $allAdapterTypes = self::getAdaptersTypes();
         $allAdapters = [];

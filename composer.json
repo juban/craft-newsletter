@@ -2,7 +2,7 @@
     "name": "simplonprod/craft-newsletter",
     "description": "Craft CMS Newsletter plugin",
     "type": "craft-plugin",
-    "version": "1.5.1",
+    "version": "2.0.0",
     "keywords": [
         "craft",
         "cms",
@@ -22,8 +22,8 @@
         }
     ],
     "require": {
-        "php": ">=7.2.5",
-        "craftcms/cms": "^3.7.29",
+        "php": "^8.0.2",
+        "craftcms/cms": "^4.0",
         "mailjet/mailjet-apiv3-php": "^1.5",
         "sendinblue/api-v3-sdk": "^v7.4",
         "mailchimp/marketing": "^3.0"
@@ -36,7 +36,7 @@
         "codeception/module-db": "^1.1",
         "craftcms/ecs": "dev-main",
         "craftcms/phpstan": "dev-main",
-        "simplonprod/craft-google-recaptcha": "^1.0"
+        "simplonprod/craft-google-recaptcha": "^2.0"
     },
     "autoload": {
         "psr-4": {

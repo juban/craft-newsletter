@@ -8,6 +8,7 @@ namespace simplonprod\newsletter\adapters;
 
 use Craft;
 use craft\behaviors\EnvAttributeParserBehavior;
+use craft\helpers\App;
 use Mailjet\Client;
 use Mailjet\Resources;
 use yii\helpers\VarDumper;
@@ -95,7 +96,7 @@ class Mailjet extends BaseNewsletterAdapter
     public function getClient(): Client
     {
         if (is_null($this->_client)) {
-            $this->_client = new Client(Craft::parseEnv($this->apiKey), Craft::parseEnv($this->apiSecret), true, ['version' => 'v3']);
+            $this->_client = new Client(App::parseEnv($this->apiKey), App::parseEnv($this->apiSecret), true, ['version' => 'v3']);
         }
         return $this->_client;
     }
@@ -171,7 +172,7 @@ class Mailjet extends BaseNewsletterAdapter
             'Action' => "addnoforce",
             'Email' => $email,
         ];
-        $response = $client->post(Resources::$ContactslistManagecontact, ['id' => Craft::parseEnv($this->listId), 'body' => $body]);
+        $response = $client->post(Resources::$ContactslistManagecontact, ['id' => App::parseEnv($this->listId), 'body' => $body]);
         if (!$response->success()) {
             $this->_errorMessage = $this->_getErrorMessageFromRessource($response);
         }

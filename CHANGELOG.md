@@ -1,5 +1,9 @@
 # Release Notes for Newsletter
 
+## 2.0.0 - 2022-05-15
+### Added
+- Added Craft 4 compatibility
+
 ## 1.5.1 - 2022-03-01
 ### Fixed
 - Fixes a bug that could produce an error when saving the configuration from the control panel if a service was already configured.

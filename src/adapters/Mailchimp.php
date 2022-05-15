@@ -5,6 +5,7 @@ namespace simplonprod\newsletter\adapters;
 
 use Craft;
 use craft\behaviors\EnvAttributeParserBehavior;
+use craft\helpers\App;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use MailchimpMarketing\Api\ListsApi;
@@ -33,7 +34,7 @@ class Mailchimp extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         $behaviors = parent::behaviors();
         $behaviors['parser'] = [
@@ -50,7 +51,7 @@ class Mailchimp extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Mailchimp/settings', [
             'adapter' => $this,
@@ -63,8 +64,8 @@ class Mailchimp extends BaseNewsletterAdapter
             $mailchimp = new ApiClient();
 
             $mailchimp->setConfig([
-                'apiKey' => Craft::parseEnv($this->apiKey),
-                'server' => Craft::parseEnv($this->serverPrefix),
+                'apiKey' => App::parseEnv($this->apiKey),
+                'server' => App::parseEnv($this->serverPrefix),
             ]);
 
             $this->_client = $mailchimp;
@@ -90,7 +91,7 @@ class Mailchimp extends BaseNewsletterAdapter
     {
         $client = $this->getClient();
         $listsApi = $this->getListApi($client);
-        $parsedListId = Craft::parseEnv($this->listId);
+        $parsedListId = App::parseEnv($this->listId);
 
         if (!$this->_contactExist($email, $listsApi, $parsedListId)) {
             return $this->_registerContact($email, $listsApi, $parsedListId);
