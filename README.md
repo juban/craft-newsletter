@@ -16,7 +16,7 @@ This plugin is GDPR compliant and requires the user to give its consent when sub
 
 ## Requirements
 
-This plugin requires Craft CMS 3.7.29 or later and PHP 7.2.5 or later.
+This plugin requires Craft CMS 4.0.0 or later and PHP 8.0.2 or later.
 
 > In order to support automatic Google reCAPTCHA verification, you will need to install `simplonprod/craft-google-recaptcha` plugin.
 
@@ -114,11 +114,15 @@ You can use the following template as a starting point for your registration for
         </div>
     {% endif %}
     
-    <form action="" method="post">
+    <form action="" method="post" accept-charset="UTF-8">
         {{ csrfInput() }}
-        {# subscription process is handled by the newsletter plugin controller #}
+        
+        {# Subscription process is handled by the newsletter plugin controller #}
         {{ actionInput('newsletter/newsletter/subscribe') }}
-
+        
+        {# User will be redirected to the redirect input url upon successful subscription #}
+        {{ redirectInput('thank-you') }}
+        
         <label for="newsletter-consent">
         	<input type="checkbox" value="check" name="consent" id="newsletter-consent" required {% if newsletterForm.hasErrors('consent') %}aria-invalid="true" aria-describedby="consent-error"{% endif %}>
             {{'I agree to receive your emails and confirm that I have read your privacy policy.'|t}}
