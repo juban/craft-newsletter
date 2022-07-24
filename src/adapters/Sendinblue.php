@@ -1,7 +1,7 @@
 <?php
 
 
-namespace simplonprod\newsletter\adapters;
+namespace juban\newsletter\adapters;
 
 use Craft;
 use craft\behaviors\EnvAttributeParserBehavior;

@@ -3,9 +3,6 @@
  * Newsletter plugin for Craft CMS 3.x
  *
  * Craft CMS Newsletter plugin
- *
- * @link      https://www.simplonprod.co
- * @copyright Copyright (c) 2021 Simplon.Prod
  */
 
 /**
@@ -23,6 +20,6 @@
  */
 
 return [
-    "adapterType"         => \simplonprod\newsletter\adapters\Dummy::class,
+    "adapterType"         => \juban\newsletter\adapters\Dummy::class,
     "adapterTypeSettings" => ['someAttribute' => true]
 ];

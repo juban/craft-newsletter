@@ -1,23 +1,19 @@
 <?php
-/**
- * @link https://www.simplonprod.co
- * @copyright Copyright (c) 2021 Simplon.Prod
- */
 
-namespace simplonprod\newslettertests\unit\controllers;
+namespace juban\newslettertests\unit\controllers;
 
 use Codeception\Stub;
 use Codeception\Stub\Expected;
 use Craft;
 use craft\web\Response;
-use simplonprod\newsletter\Newsletter;
-use simplonprod\newslettertests\unit\BaseUnitTest;
+use juban\newsletter\Newsletter;
+use juban\newslettertests\unit\BaseUnitTest;
 use Yii;
 
 /**
  * RegisterTest class
  *
- * @author albanjubert
+ * @author juban
  **/
 class NewsletterTest extends BaseUnitTest
 {

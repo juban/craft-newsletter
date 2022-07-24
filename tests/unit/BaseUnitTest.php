@@ -1,19 +1,15 @@
 <?php
-/**
- * @link https://www.simplonprod.co
- * @copyright Copyright (c) 2021 Simplon.Prod
- */
 
-namespace simplonprod\newslettertests\unit;
+namespace juban\newslettertests\unit;
 
 use Codeception\Test\Unit;
-use simplonprod\newsletter\Newsletter;
+use juban\newsletter\Newsletter;
 use yii\base\InvalidRouteException;
 
 /**
  * BaseUnitTest class
  *
- * @author albanjubert
+ * @author juban
  **/
 class BaseUnitTest extends Unit
 {

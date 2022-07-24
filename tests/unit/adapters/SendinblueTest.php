@@ -1,12 +1,12 @@
 <?php
 
-namespace simplonprod\newslettertests\unit\adapters;
+namespace juban\newslettertests\unit\adapters;
 
 use Codeception\Stub\Expected;
 use SendinBlue\Client\Api\ContactsApi;
 use SendinBlue\Client\ApiException;
 use SendinBlue\Client\Model\GetExtendedContactDetails;
-use simplonprod\newsletter\adapters\Sendinblue;
+use juban\newsletter\adapters\Sendinblue;
 
 
 class SendinblueTest extends \Codeception\Test\Unit

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace simplonprod\newslettertests\unit\adapters;
+namespace juban\newslettertests\unit\adapters;
 
 use Codeception\Stub\Expected;
 use GuzzleHttp\Exception\ClientException;
@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use MailchimpMarketing\Api\ListsApi;
 use MailchimpMarketing\ApiClient;
-use simplonprod\newsletter\adapters\Mailchimp;
+use juban\newsletter\adapters\Mailchimp;
 
 
 class MailchimpTest extends \Codeception\Test\Unit

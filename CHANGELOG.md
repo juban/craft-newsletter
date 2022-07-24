@@ -1,5 +1,14 @@
 # Release Notes for Newsletter
 
+## 2.1.0 - 2022-07-23
+
+> {note} The plugin’s package name has changed to `jub/craft-newsletter`. You can update the plugin by running `composer require jub/craft-newsletter && composer remove simplonprod/craft-newsletter`.
+
+# Changed
+- Migrate plugin to `jub/craft-newsletter`
+- Updated plugin logo
+- Update NewsletterController.php to use Craft 4 asModelFailure and asModelSuccess unified methods
+
 ## 2.0.0 - 2022-05-15
 ### Added
 - Added Craft 4 compatibility

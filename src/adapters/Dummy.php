@@ -1,10 +1,6 @@
 <?php
-/**
- * @link https://www.simplonprod.co
- * @copyright Copyright (c) 2021 Simplon.Prod
- */
 
-namespace simplonprod\newsletter\adapters;
+namespace juban\newsletter\adapters;
 
 use Craft;
 
@@ -12,7 +8,7 @@ use Craft;
  * Dummy class
  * This class is intended as a base for concret adapters
  *
- * @author albanjubert
+ * @author juban
  **/
 class Dummy extends BaseNewsletterAdapter
 {

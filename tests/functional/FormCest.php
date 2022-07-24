@@ -1,6 +1,6 @@
 <?php
 
-namespace simplonprod\newslettertests\functional;
+namespace juban\newslettertests\functional;
 
 use FunctionalTester;
 

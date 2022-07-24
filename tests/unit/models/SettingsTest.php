@@ -1,10 +1,10 @@
 <?php
 
-namespace simplonprod\newslettertests\unit\models;
+namespace juban\newslettertests\unit\models;
 
-use simplonprod\newsletter\adapters\Dummy;
-use simplonprod\newsletter\models\Settings;
-use simplonprod\newslettertests\unit\BaseUnitTest;
+use juban\newsletter\adapters\Dummy;
+use juban\newsletter\models\Settings;
+use juban\newslettertests\unit\BaseUnitTest;
 
 class SettingsTest extends BaseUnitTest
 {

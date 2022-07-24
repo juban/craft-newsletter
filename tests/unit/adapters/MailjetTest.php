@@ -1,12 +1,12 @@
 <?php
 
-namespace simplonprod\newslettertests\unit\adapters;
+namespace juban\newslettertests\unit\adapters;
 
 use Mailjet\Client;
 use Mailjet\Resources;
 use Mailjet\Response;
-use simplonprod\newsletter\adapters\Mailjet;
-use simplonprod\newslettertests\unit\BaseUnitTest;
+use juban\newsletter\adapters\Mailjet;
+use juban\newslettertests\unit\BaseUnitTest;
 
 class MailjetTest extends BaseUnitTest
 {

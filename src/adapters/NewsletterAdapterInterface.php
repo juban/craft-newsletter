@@ -1,10 +1,6 @@
 <?php
-/**
- * @link https://www.simplonprod.co
- * @copyright Copyright (c) 2021 Simplon.Prod
- */
 
-namespace simplonprod\newsletter\adapters;
+namespace juban\newsletter\adapters;
 
 use craft\base\ConfigurableComponentInterface;
 

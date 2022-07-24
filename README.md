@@ -18,12 +18,12 @@ This plugin is GDPR compliant and requires the user to give its consent when sub
 
 This plugin requires Craft CMS 4.0.0 or later and PHP 8.0.2 or later.
 
-> In order to support automatic Google reCAPTCHA verification, you will need to install `simplonprod/craft-google-recaptcha` plugin.
+> In order to support automatic Google reCAPTCHA verification, you will need to install `jub/craft-google-recaptcha` plugin.
 
 
 ## Installation
 
-1. Install with composer via `composer require simplonprod/craft-newsletter` from your project directory.
+1. Install with composer via `composer require jub/craft-newsletter` from your project directory.
 2. Install the plugin in the Craft Control Panel under Settings → Plugins, or from the command line via `./craft install/plugin newsletter`.
 
 ## Configuration
@@ -80,7 +80,7 @@ You can create a `newsletter.php` file in the `config` folder of your project an
 
 ```php
 return [
-    "adapterType"         => \simplonprod\newsletter\adapters\Mailjet::class,
+    "adapterType"         => \juban\newsletter\adapters\Mailjet::class,
     "adapterTypeSettings" => [
         'apiKey'    => '',
         'apiSecret' => '',
@@ -101,11 +101,11 @@ You can use the following template as a starting point for your registration for
 
 ```twig
 {# @var craft \craft\web\twig\variables\CraftVariable #}
-{# @var newsletterForm \simplonprod\newsletter\models\NewsletterForm #}
+{# @var newsletterForm \juban\newsletter\models\NewsletterForm #}
 
 {% if craft.app.plugins.plugin('newsletter') is not null %}
     {# If there were any validation errors, a `newsletterForm` variable will be passed to the template, which contains the posted values and validation errors. If that’s not set, we’ll default to a new newsletterForm. #}
-    {% set newsletterForm = newsletterForm ?? create('simplonprod\\newsletter\\models\\NewsletterForm') %}
+    {% set newsletterForm = newsletterForm ?? create('juban\\newsletter\\models\\NewsletterForm') %}
 
     {# success notification #}
     {% if success is defined and success %}
@@ -185,7 +185,7 @@ You can provide your own validations on frontend form submission in a project mo
 
 ```php
 use yii\base\Event;
-use simplonprod\googlerecaptcha\GoogleRecaptcha;
+use juban\googlerecaptcha\GoogleRecaptcha;
 
 Event::on(
 	NewsletterForm::class,
@@ -204,12 +204,12 @@ Event::on(
 
 To add a new adapter for unsupported services:
 
-Create an adapter class that extends the `simplonprod\newsletter\adapters\BaseNewsletterAdapter` class.
+Create an adapter class that extends the `juban\newsletter\adapters\BaseNewsletterAdapter` class.
 
 Some small example:
 
 ```php
-namespace simplonprod\newsletter\adapters;
+namespace juban\newsletter\adapters;
 
 use Craft;
 
@@ -319,7 +319,7 @@ Last, in a module or a plugin, register the adapter as follow:
 
 ```php
 use craft\events\RegisterComponentTypesEvent;
-use simplonprod\newsletter\Newsletter;
+use juban\newsletter\Newsletter;
 
 Event::on(
     Newsletter::class,
@@ -339,5 +339,3 @@ Event::on(
 ---
 
 <small>Base plugin icon makes use of [Font Awesome Free](https://fontawesome.com)</small>
-
-<small>Created by [Simplon.Prod](https://www.simplonprod.co/).</small>

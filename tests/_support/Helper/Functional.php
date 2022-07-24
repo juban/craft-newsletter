@@ -3,9 +3,6 @@
  * Newsletter plugin for Craft CMS 3.x
  *
  * Craft CMS Newsletter plugin
- *
- * @link      https://www.simplonprod.co
- * @copyright Copyright (c) 2021 Simplon.Prod
  */
 
 namespace Helper;

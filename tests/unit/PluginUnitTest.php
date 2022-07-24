@@ -1,28 +1,17 @@
 <?php
-/**
- * Newsletter plugin for Craft CMS 3.x
- *
- * Craft CMS Newsletter plugin
- *
- * @link      https://www.simplonprod.co
- * @copyright Copyright (c) 2021 Simplon.Prod
- */
 
-namespace simplonprod\newslettertests\unit;
+namespace juban\newslettertests\unit;
 
 use Craft;
-use simplonprod\newsletter\adapters\BaseNewsletterAdapter;
-use simplonprod\newsletter\adapters\Dummy;
-use simplonprod\newsletter\Newsletter;
+use juban\newsletter\adapters\BaseNewsletterAdapter;
+use juban\newsletter\adapters\Dummy;
+use juban\newsletter\Newsletter;
 use UnitTester;
 
 /**
- * ExampleUnitTest
+ * PluginUnitTest class
  *
- *
- * @author    Simplon.Prod
- * @package   Newsletter
- * @since     1.0.0
+ * @author juban
  */
 class PluginUnitTest extends BaseUnitTest
 {

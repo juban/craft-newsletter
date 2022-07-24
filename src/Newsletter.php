@@ -1,6 +1,6 @@
 <?php
 
-namespace simplonprod\newsletter;
+namespace juban\newsletter;
 
 use Craft;
 use craft\base\Plugin;
@@ -11,13 +11,13 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\Component;
 use craft\helpers\UrlHelper;
 use craft\services\Plugins;
-use simplonprod\googlerecaptcha\GoogleRecaptcha;
-use simplonprod\newsletter\adapters\Mailchimp;
-use simplonprod\newsletter\adapters\Mailjet;
-use simplonprod\newsletter\adapters\NewsletterAdapterInterface;
-use simplonprod\newsletter\adapters\Sendinblue;
-use simplonprod\newsletter\models\NewsletterForm;
-use simplonprod\newsletter\models\Settings;
+use juban\googlerecaptcha\GoogleRecaptcha;
+use juban\newsletter\adapters\Mailchimp;
+use juban\newsletter\adapters\Mailjet;
+use juban\newsletter\adapters\NewsletterAdapterInterface;
+use juban\newsletter\adapters\Sendinblue;
+use juban\newsletter\models\NewsletterForm;
+use juban\newsletter\models\Settings;
 use yii\base\Event;
 
 /**
@@ -32,7 +32,7 @@ use yii\base\Event;
  *
  * @property NewsletterAdapterInterface $adapter
  *
- * @author    Simplon.Prod
+ * @author    juban
  * @package   Newsletter
  * @since     1.0.0
  *
@@ -94,8 +94,12 @@ class Newsletter extends Plugin
 
         // Register adapter component
         $this->set('adapter', function() {
+            $adapterTypes = self::getAdaptersTypes();
+            // Backward compatibility with legacy adapters
+            if (str_starts_with($this->settings->adapterType, "simplonprod")) {
+                $this->settings->adapterType = str_replace('simplonprod', 'juban', $this->settings->adapterType);
+            }
             if ($this->settings->adapterType === null) {
-                $adapterTypes = self::getAdaptersTypes();
                 $this->settings->adapterType = $adapterTypes[0];
                 $this->settings->adapterTypeSettings = [];
             }

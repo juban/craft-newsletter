@@ -1,10 +1,6 @@
 <?php
-/**
- * @link https://www.simplonprod.co
- * @copyright Copyright (c) 2021 Simplon.Prod
- */
 
-namespace simplonprod\newsletter\adapters;
+namespace juban\newsletter\adapters;
 
 use Craft;
 use craft\behaviors\EnvAttributeParserBehavior;
@@ -16,7 +12,7 @@ use yii\helpers\VarDumper;
 /**
  * Mailjet class
  *
- * @author albanjubert
+ * @author juban
  **/
 class Mailjet extends BaseNewsletterAdapter
 {

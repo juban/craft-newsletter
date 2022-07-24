@@ -1,8 +1,8 @@
 {
-    "name": "simplonprod/craft-newsletter",
+    "name": "jub/craft-newsletter",
     "description": "Craft CMS Newsletter plugin",
     "type": "craft-plugin",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "keywords": [
         "craft",
         "cms",
@@ -11,14 +11,14 @@
         "newsletter"
     ],
     "support": {
-        "docs": "https://github.com/Simplon-Prod/craft-newsletter/blob/master/README.md",
-        "issues": "https://github.com/Simplon-Prod/craft-newsletter/issues"
+        "docs": "https://github.com/juban/craft-newsletter/blob/master/README.md",
+        "issues": "https://github.com/juban/craft-newsletter/issues"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": "Simplon.Prod",
-            "homepage": "https://www.simplonprod.co"
+            "name": "juban",
+            "homepage": "https://github.com/juban"
         }
     ],
     "require": {
@@ -36,21 +36,21 @@
         "codeception/module-db": "^1.1",
         "craftcms/ecs": "dev-main",
         "craftcms/phpstan": "dev-main",
-        "simplonprod/craft-google-recaptcha": "^2.0"
+        "jub/craft-google-recaptcha": "^2.1"
     },
     "autoload": {
         "psr-4": {
-            "simplonprod\\newsletter\\": "src/"
+            "juban\\newsletter\\": "src/"
         }
     },
     "extra": {
         "name": "Newsletter",
         "handle": "newsletter",
-        "developer": "Simplon.Prod",
-        "developerUrl": "https://www.simplonprod.co",
-        "documentationUrl": "https://github.com/Simplon-Prod/craft-newsletter/blob/master/README.md",
-        "changelogUrl": "https://raw.githubusercontent.com/Simplon-Prod/craft-newsletter/master/CHANGELOG.md",
-        "class": "simplonprod\\newsletter\\Newsletter"
+        "developer": "juban",
+        "developerUrl": "https://github.com/juban",
+        "documentationUrl": "https://github.com/juban/craft-newsletter/blob/master/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/juban/craft-newsletter/master/CHANGELOG.md",
+        "class": "juban\\newsletter\\Newsletter"
     },
     "config": {
         "allow-plugins": {

@@ -1,10 +1,6 @@
 <?php
-/**
- * @link https://www.simplonprod.co
- * @copyright Copyright (c) 2021 Simplon.Prod
- */
 
-namespace simplonprod\newsletter\models;
+namespace juban\newsletter\models;
 
 use Craft;
 use craft\base\Model;
@@ -13,7 +9,7 @@ use craft\behaviors\EnvAttributeParserBehavior;
 /**
  * NewsletterSettings class
  *
- * @author albanjubert
+ * @author juban
  **/
 class Settings extends Model
 {

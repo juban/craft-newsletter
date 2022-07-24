@@ -1,20 +1,16 @@
 <?php
-/**
- * @link https://www.simplonprod.co
- * @copyright Copyright (c) 2020 Simplon.Prod
- */
 
-namespace simplonprod\newsletter\controllers;
+namespace juban\newsletter\controllers;
 
 use craft\web\Controller;
-use simplonprod\newsletter\models\NewsletterForm;
+use juban\newsletter\models\NewsletterForm;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 /**
  * NewsletterController class
  *
- * @author albanjubert
+ * @author juban
  **/
 class NewsletterController extends Controller
 {

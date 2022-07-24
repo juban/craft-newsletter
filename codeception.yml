@@ -32,7 +32,7 @@ modules:
       migrations: []
       plugins:
         newsletter:
-          class: '\simplonprod\newsletter\Newsletter'
+          class: '\juban\newsletter\Newsletter'
           handle: newsletter
       cleanup: true
       transaction: true

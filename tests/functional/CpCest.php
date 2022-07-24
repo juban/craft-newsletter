@@ -1,11 +1,11 @@
 <?php
 
-namespace simplonprod\newslettertests\functional;
+namespace juban\newslettertests\functional;
 
 use Craft;
 use craft\elements\User;
 use FunctionalTester;
-use simplonprod\newsletter\adapters\Mailjet;
+use juban\newsletter\adapters\Mailjet;
 
 class CpCest
 {
@@ -57,6 +57,6 @@ class CpCest
         ]);
         $I->seeResponseCodeIs(200);
         $I->see('Plugin settings saved');
-        $I->seeInDatabase('projectconfig', ['path' => 'plugins.newsletter.settings.adapterType', 'value' => '"simplonprod\\\\newsletter\\\\adapters\\\\Mailjet"']);
+        $I->seeInDatabase('projectconfig', ['path' => 'plugins.newsletter.settings.adapterType', 'value' => '"juban\\\\newsletter\\\\adapters\\\\Mailjet"']);
     }
 }
