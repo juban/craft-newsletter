@@ -4,7 +4,7 @@
 
 > {note} The plugin’s package name has changed to `jub/craft-newsletter`. You can update the plugin by running `composer require jub/craft-newsletter && composer remove simplonprod/craft-newsletter`.
 
-# Changed
+### Changed
 - Migrate plugin to `jub/craft-newsletter`
 - Updated plugin logo
 - Update NewsletterController.php to use Craft 4 asModelFailure and asModelSuccess unified methods
