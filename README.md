@@ -1,5 +1,10 @@
 # Newsletter Plugin for Craft CMS
 
+[![Stable Version](https://img.shields.io/packagist/v/jub/craft-newsletter?label=stable)]((https://packagist.org/packages/putyourlightson/craft-campaign))
+[![Total Downloads](https://img.shields.io/packagist/dt/jub/craft-newsletter)](https://packagist.org/packages/putyourlightson/craft-campaign)
+![Tests status](https://github.com/juban/craft-newsletter/actions/workflows/ci.yml/badge.svg?branch=master)
+
+
 ![](logo.png)
 
 Newsletter for Craft CMS plugin makes it possible to let end users subscribe with various emailing services from a frontend form.
