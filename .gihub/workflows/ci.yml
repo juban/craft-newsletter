@@ -1,0 +1,29 @@
+name: Tests
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ecs:
+    name: ECS
+    uses: juban/.github/.github/workflows/ecs.yml@main
+    with:
+      php_version: '8.0'
+  phpstan:
+    name: PHPStan
+    uses: juban/.github/.github/workflows/phpstan.yml@main
+    with:
+      php_version: '8.0'
+  codecept:
+    name: Codeception
+    needs: [ ecs, phpstan ]
+    uses: juban/.github/.github/workflows/codecept.yml@main
+    with:
+      php_version: '8.0'

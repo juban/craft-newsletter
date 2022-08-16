@@ -1,11 +1,11 @@
 # Set in accordance to your environment
 
 DB_DRIVER="mysql"
-DB_SERVER="mysql"
-DB_USER="db"
-DB_PASSWORD="db"
+DB_SERVER="127.0.0.1"
+DB_USER="root"
+DB_PASSWORD="root"
 DB_DATABASE="db"
 DB_SCHEMA=""
 DB_TABLE_PREFIX=""
 DB_PORT="3306"
-SECURITY_KEY="abcde12345"
+CRAFT_SECURITY_KEY="abcde12345"

@@ -56,7 +56,7 @@ class CpCest
             ]
         ]);
         $I->seeResponseCodeIs(200);
-        $I->see('Plugin settings saved');
+        $I->seeCurrentUrlMatches('/admin\/settings$/');
         $I->seeInDatabase('projectconfig', ['path' => 'plugins.newsletter.settings.adapterType', 'value' => '"juban\\\\newsletter\\\\adapters\\\\Mailjet"']);
     }
 }
