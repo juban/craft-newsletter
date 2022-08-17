@@ -137,16 +137,18 @@ class Sendinblue extends BaseNewsletterAdapter
     {
         try {
             if (App::parseBooleanEnv($this->doi)) {
-                $contact = new CreateDoiContact();
-                $contact['email'] = $email;
-                $contact['includeListIds'] = [$listId];
-                $contact['templateId'] = (int)App::parseEnv($this->doiTemplateId);
-                $contact['redirectionUrl'] = App::parseEnv($this->doiRedirectionUrl);
+                $contact = new CreateDoiContact([
+                    'email' => $email,
+                    'includeListIds' => [$listId],
+                    'templateId' => (int)App::parseEnv($this->doiTemplateId),
+                    'redirectionUrl' => App::parseEnv($this->doiRedirectionUrl)
+                ]);
                 $clientContactApi->createDoiContact($contact);
             } else {
-                $contact = new CreateContact();
-                $contact['email'] = $email;
-                $contact['listIds'] = [$listId];
+                $contact = new CreateContact([
+                    'email' => $email,
+                    'listIds' => [$listId]
+                ]);
                 $clientContactApi->createContact($contact);
             }
             return true;
@@ -159,8 +161,7 @@ class Sendinblue extends BaseNewsletterAdapter
     private function _registerContact(string $email, ContactsApi $clientContactApi): bool
     {
         try {
-            $contact = new CreateContact();
-            $contact['email'] = $email;
+            $contact = new CreateContact(['email' => $email]);
             $clientContactApi->createContact($contact);
             return true;
         } catch (ApiException $apiException) {
@@ -172,8 +173,7 @@ class Sendinblue extends BaseNewsletterAdapter
     private function _addContactToList(string $email, int $listId, ContactsApi $clientContactApi): bool
     {
         try {
-            $contact = new UpdateContact();
-            $contact['listIds'] = [$listId];
+            $contact = new UpdateContact(['listIds' => [$listId]]);
             $clientContactApi->updateContact($email, $contact);
             return true;
         } catch (ApiException $apiException) {
