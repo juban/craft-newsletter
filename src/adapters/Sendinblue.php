@@ -141,13 +141,13 @@ class Sendinblue extends BaseNewsletterAdapter
                     'email' => $email,
                     'includeListIds' => [$listId],
                     'templateId' => (int)App::parseEnv($this->doiTemplateId),
-                    'redirectionUrl' => App::parseEnv($this->doiRedirectionUrl)
+                    'redirectionUrl' => App::parseEnv($this->doiRedirectionUrl),
                 ]);
                 $clientContactApi->createDoiContact($contact);
             } else {
                 $contact = new CreateContact([
                     'email' => $email,
-                    'listIds' => [$listId]
+                    'listIds' => [$listId],
                 ]);
                 $clientContactApi->createContact($contact);
             }
