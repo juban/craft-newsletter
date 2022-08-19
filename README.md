@@ -1,7 +1,7 @@
 # Newsletter Plugin for Craft CMS
 
-[![Stable Version](https://img.shields.io/packagist/v/jub/craft-newsletter?label=stable)]((https://packagist.org/packages/putyourlightson/craft-campaign))
-[![Total Downloads](https://img.shields.io/packagist/dt/jub/craft-newsletter)](https://packagist.org/packages/putyourlightson/craft-campaign)
+[![Stable Version](https://img.shields.io/packagist/v/jub/craft-newsletter?label=stable)]((https://packagist.org/packages/jub/craft-newsletter))
+[![Total Downloads](https://img.shields.io/packagist/dt/jub/craft-newsletter)](https://packagist.org/packages/jub/craft-newsletter)
 ![Tests status](https://github.com/juban/craft-newsletter/actions/workflows/ci.yml/badge.svg?branch=master)
 
 
