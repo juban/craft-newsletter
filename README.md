@@ -13,7 +13,7 @@ It currently supports the following services:
 
 * Mailchimp
 * Mailjet
-* Sendinblue
+* Brevo (ex Sendinblue)
 
 This plugin is GDPR compliant and requires the user to give its consent when subscribing to the newsletter.
 
@@ -57,7 +57,7 @@ You can provide a [contact list ID](https://app.mailjet.com/contacts) in order t
 
 > If no list ID is provided, user will only be created as a contact.
 
-##### Sendinblue settings
+##### Brevo (ex Sendinblue) settings
 
 * **API Key** (`apiKey`)
 * **List ID** (optional, required if DOI is on) (`listId`)
@@ -65,11 +65,11 @@ You can provide a [contact list ID](https://app.mailjet.com/contacts) in order t
 * **Mail Template ID** (required if DOI is on) (`doiTemplateId`)
 * **Redirection URL** (required if DOI is on) (`doiRedirectionUrl`)
 
-You can find these informations in your [Sendinblue account](https://account.sendinblue.com/advanced/api).
+You can find these informations in your [Brevo account](https://app.brevo.com/settings/keys/api).
 
-You can provide a [contact list ID](https://my.sendinblue.com/lists) in order to subscribe the enduser to a specific one. 
+You can provide a [contact list ID](https://app.brevo.com/contact/list-listing) in order to subscribe the enduser to a specific one. 
 
-You can also enable Sendinblue Double Opt-in feature. You will need a Sendinblue template as described [here](https://help.sendinblue.com/hc/en-us/articles/360019540880-Create-a-double-opt-in-DOI-confirmation-template-for-Sendinblue-form).
+You can also enable Brevo Double Opt-in feature. You will need a Sendinblue template as described [here](https://help.brevo.com/hc/en-us/articles/360019540880-Create-a-double-opt-in-DOI-confirmation-template-for-Sendinblue-form).
 
 > If no list ID is provided, user will only be created as a contact.
 

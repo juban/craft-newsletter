@@ -7,12 +7,12 @@ use Craft;
 use craft\behaviors\EnvAttributeParserBehavior;
 use craft\helpers\App;
 use GuzzleHttp\Client;
-use SendinBlue\Client\Api\ContactsApi;
-use SendinBlue\Client\ApiException;
-use SendinBlue\Client\Configuration;
-use SendinBlue\Client\Model\CreateContact;
-use SendinBlue\Client\Model\CreateDoiContact;
-use SendinBlue\Client\Model\UpdateContact;
+use Brevo\Client\Api\ContactsApi;
+use Brevo\Client\ApiException;
+use Brevo\Client\Configuration;
+use Brevo\Client\Model\CreateContact;
+use Brevo\Client\Model\CreateDoiContact;
+use Brevo\Client\Model\UpdateContact;
 use yii\helpers\VarDumper;
 
 /**
@@ -21,7 +21,7 @@ use yii\helpers\VarDumper;
  * @property-read mixed $settingsHtml
  * @property-read null|string $subscriptionError
  */
-class Sendinblue extends BaseNewsletterAdapter
+class Brevo extends BaseNewsletterAdapter
 {
     public $apiKey;
     public $listId;
@@ -37,7 +37,7 @@ class Sendinblue extends BaseNewsletterAdapter
      */
     public static function displayName(): string
     {
-        return 'Sendinblue';
+        return 'Brevo (ex. Sendinblue)';
     }
 
     /**
@@ -78,7 +78,7 @@ class Sendinblue extends BaseNewsletterAdapter
      */
     public function getSettingsHtml(): ?string
     {
-        return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Sendinblue/settings', [
+        return Craft::$app->getView()->renderTemplate('newsletter/newsletterAdapters/Brevo/settings', [
             'adapter' => $this,
         ]);
     }
@@ -185,20 +185,20 @@ class Sendinblue extends BaseNewsletterAdapter
     private function _getErrorMessage(ApiException $apiException): string
     {
         $errorLogMessages = [
-            400 => 'Sendinblue request is invalid. Check the error code in JSON (400).',
-            401 => 'Sendinblue authentication error (401). Make sure the provided api-key is correct.',
-            403 => 'Sendinblue resource access error (403).',
-            404 => 'Sendinblue resource was not found (404).',
-            405 => 'Sendinblue verb is not allowed for this endpoint (405).',
-            406 => 'Sendinblue empty or invalid json value (406).',
-            429 => 'Sendinblue rate limit is exceeded. (429).',
-            500 => 'Sendinblue internal server error (500).',
+            400 => 'Brevo request is invalid. Check the error code in JSON (400).',
+            401 => 'Brevo authentication error (401). Make sure the provided api-key is correct.',
+            403 => 'Brevo resource access error (403).',
+            404 => 'Brevo resource was not found (404).',
+            405 => 'Brevo verb is not allowed for this endpoint (405).',
+            406 => 'Brevo empty or invalid json value (406).',
+            429 => 'Brevo rate limit is exceeded. (429).',
+            500 => 'Brevo internal server error (500).',
         ];
         $errorMessage = Craft::t('newsletter', 'The newsletter service is not available at that time. Please, try again later.');
         if (array_key_exists($apiException->getCode(), $errorLogMessages)) {
             Craft::error($errorLogMessages[$apiException->getCode()] . " " . VarDumper::dumpAsString($apiException), __METHOD__);
         } else {
-            Craft::error("Sendinblue unknown error ({$apiException->getCode()}). " . VarDumper::dumpAsString($apiException->getResponseBody()), __METHOD__);
+            Craft::error("Brevo unknown error ({$apiException->getCode()}). " . VarDumper::dumpAsString($apiException->getResponseBody()), __METHOD__);
         }
         return $errorMessage;
     }

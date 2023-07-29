@@ -2,7 +2,7 @@
     "name": "jub/craft-newsletter",
     "description": "Craft CMS Newsletter plugin",
     "type": "craft-plugin",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "keywords": [
         "craft",
         "cms",
@@ -25,8 +25,8 @@
         "php": "^8.0.2",
         "craftcms/cms": "^4.0",
         "mailjet/mailjet-apiv3-php": "^1.5",
-        "sendinblue/api-v3-sdk": "^v7.4",
-        "mailchimp/marketing": "^3.0"
+        "mailchimp/marketing": "^3.0",
+        "getbrevo/brevo-php": "^1.0"
     },
     "require-dev": {
         "codeception/codeception": "^4.0.0",
@@ -56,6 +56,10 @@
         "allow-plugins": {
             "yiisoft/yii2-composer": true,
             "craftcms/plugin-installer": true
+        },
+        "preferred-install": {
+            "craftcms/cms": "source",
+            "*" : "dist"
         }
     },
     "minimum-stability": "dev",

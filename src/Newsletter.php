@@ -15,7 +15,7 @@ use juban\googlerecaptcha\GoogleRecaptcha;
 use juban\newsletter\adapters\Mailchimp;
 use juban\newsletter\adapters\Mailjet;
 use juban\newsletter\adapters\NewsletterAdapterInterface;
-use juban\newsletter\adapters\Sendinblue;
+use juban\newsletter\adapters\Brevo;
 use juban\newsletter\models\NewsletterForm;
 use juban\newsletter\models\Settings;
 use yii\base\Event;
@@ -164,7 +164,7 @@ class Newsletter extends Plugin
     {
         $adaptersTypes = [
             Mailjet::class,
-            Sendinblue::class,
+            Brevo::class,
             Mailchimp::class,
         ];
 

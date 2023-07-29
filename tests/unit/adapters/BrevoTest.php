@@ -3,27 +3,27 @@
 namespace juban\newslettertests\unit\adapters;
 
 use Codeception\Stub\Expected;
-use SendinBlue\Client\Api\ContactsApi;
-use SendinBlue\Client\ApiException;
-use SendinBlue\Client\Model\GetExtendedContactDetails;
-use juban\newsletter\adapters\Sendinblue;
+use Brevo\Client\Api\ContactsApi;
+use Brevo\Client\ApiException;
+use Brevo\Client\Model\GetExtendedContactDetails;
+use juban\newsletter\adapters\Brevo;
 
 
-class SendinblueTest extends \Codeception\Test\Unit
+class BrevoTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
      */
     protected $tester;
 
-    private $sendinblue;
+    private $brevo;
 
     public function testGetClientContactApi(): void
     {
         $contactApi = $this->make(ContactsApi::class);
-        $this->sendinblue->setClientContactApi($contactApi);
+        $this->brevo->setClientContactApi($contactApi);
 
-        self::assertInstanceOf(ContactsApi::class, $this->sendinblue->clientContactApi);
+        self::assertInstanceOf(ContactsApi::class, $this->brevo->clientContactApi);
     }
 
     public function testUserAlreadyExistedCantSubscribeTwice(): void
@@ -34,8 +34,8 @@ class SendinblueTest extends \Codeception\Test\Unit
             'getContactInfo' => new GetExtendedContactDetails(),
             'createContact'  => Expected::never(),
         ]);
-        $this->sendinblue->setClientContactApi($contactApi);
-        $isSubscribe = $this->sendinblue->subscribe($email);
+        $this->brevo->setClientContactApi($contactApi);
+        $isSubscribe = $this->brevo->subscribe($email);
 
         self::assertTrue($isSubscribe);
     }
@@ -54,8 +54,8 @@ class SendinblueTest extends \Codeception\Test\Unit
             }
         ]);
 
-        $this->sendinblue->setClientContactApi($contactApi);
-        $isSubscribe = $this->sendinblue->subscribe($email);
+        $this->brevo->setClientContactApi($contactApi);
+        $isSubscribe = $this->brevo->subscribe($email);
 
         self::assertTrue($isSubscribe);
     }
@@ -63,7 +63,7 @@ class SendinblueTest extends \Codeception\Test\Unit
     public function testUserCanSubscribeToTheList(): void
     {
         $email = "mozelle.remy@gmail12345.com";
-        $this->sendinblue->listId = 22;
+        $this->brevo->listId = 22;
 
         $contactApi = $this->make(ContactsApi::class, [
             'getContactInfo' => function () {
@@ -76,8 +76,8 @@ class SendinblueTest extends \Codeception\Test\Unit
             },
         ]);
 
-        $this->sendinblue->setClientContactApi($contactApi);
-        $isSubscribe = $this->sendinblue->subscribe($email);
+        $this->brevo->setClientContactApi($contactApi);
+        $isSubscribe = $this->brevo->subscribe($email);
 
         self::assertTrue($isSubscribe);
     }
@@ -85,10 +85,10 @@ class SendinblueTest extends \Codeception\Test\Unit
     public function testUserCanSubscribeToTheListWithDoi(): void
     {
         $email = "mozelle.remy@gmail12345.com";
-        $this->sendinblue->doi = true;
-        $this->sendinblue->doiTemplateId = 156;
-        $this->sendinblue->listId = 35;
-        $this->sendinblue->doiRedirectionUrl = 'https://www.somedomain.com/return-url';
+        $this->brevo->doi = true;
+        $this->brevo->doiTemplateId = 156;
+        $this->brevo->listId = 35;
+        $this->brevo->doiRedirectionUrl = 'https://www.somedomain.com/return-url';
 
         $contactApi = $this->make(ContactsApi::class, [
             'getContactInfo'   => function () {
@@ -104,8 +104,8 @@ class SendinblueTest extends \Codeception\Test\Unit
             },
         ]);
 
-        $this->sendinblue->setClientContactApi($contactApi);
-        $isSubscribe = $this->sendinblue->subscribe($email);
+        $this->brevo->setClientContactApi($contactApi);
+        $isSubscribe = $this->brevo->subscribe($email);
 
         self::assertTrue($isSubscribe);
     }
@@ -113,7 +113,7 @@ class SendinblueTest extends \Codeception\Test\Unit
     public function testExistingUserCanSubscribeToList(): void
     {
         $email = "mozelle.remy@gmail12345.com";
-        $this->sendinblue->listId = 75;
+        $this->brevo->listId = 75;
 
         $contactApi = $this->make(ContactsApi::class, [
             'getContactInfo' => function () {
@@ -125,8 +125,8 @@ class SendinblueTest extends \Codeception\Test\Unit
             },
         ]);
 
-        $this->sendinblue->setClientContactApi($contactApi);
-        $isSubscribe = $this->sendinblue->subscribe($email);
+        $this->brevo->setClientContactApi($contactApi);
+        $isSubscribe = $this->brevo->subscribe($email);
 
         self::assertTrue($isSubscribe);
     }
@@ -144,11 +144,11 @@ class SendinblueTest extends \Codeception\Test\Unit
             }
         ]);
 
-        $this->sendinblue->setClientContactApi($contactApi);
-        $isSubscribe = $this->sendinblue->subscribe($email);
+        $this->brevo->setClientContactApi($contactApi);
+        $isSubscribe = $this->brevo->subscribe($email);
 
         self::assertFalse($isSubscribe);
-        self::assertEquals('The newsletter service is not available at that time. Please, try again later.', $this->sendinblue->getSubscriptionError());
+        self::assertEquals('The newsletter service is not available at that time. Please, try again later.', $this->brevo->getSubscriptionError());
     }
 
     public function testFailedSubscriptionWithHandledStatusServerError(): void
@@ -164,17 +164,17 @@ class SendinblueTest extends \Codeception\Test\Unit
             }
         ]);
 
-        $this->sendinblue->setClientContactApi($contactApi);
-        $isSubscribe = $this->sendinblue->subscribe($email);
+        $this->brevo->setClientContactApi($contactApi);
+        $isSubscribe = $this->brevo->subscribe($email);
 
         self::assertFalse($isSubscribe);
-        self::assertEquals('The newsletter service is not available at that time. Please, try again later.', $this->sendinblue->getSubscriptionError());
+        self::assertEquals('The newsletter service is not available at that time. Please, try again later.', $this->brevo->getSubscriptionError());
     }
 
     protected function _before()
     {
-        $this->sendinblue = new Sendinblue();
-        $this->sendinblue->apiKey = 'randomKey';
+        $this->brevo = new Brevo();
+        $this->brevo->apiKey = 'randomKey';
     }
 
     protected function _after()
