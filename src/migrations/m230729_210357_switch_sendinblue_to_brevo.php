@@ -20,7 +20,7 @@ class m230729_210357_switch_sendinblue_to_brevo extends Migration
         $adapter = $projectConfig->get('plugins.newsletter.settings.adapterType', true);
 
         if (version_compare($schemaVersion, '1.1.0', '<') && $adapter === 'juban\\newsletter\\adapters\\Sendinblue') {
-            $projectConfig->set('plugins.newsletter.settings.adapterType', 'juban\\newsletter\\adapters\\Brevo);
+            $projectConfig->set('plugins.newsletter.settings.adapterType', 'juban\\newsletter\\adapters\\Brevo');
         }
 
         return true;
