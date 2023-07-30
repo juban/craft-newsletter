@@ -1,6 +1,6 @@
 <?php
 
-namespace craft\contentmigrations;
+namespace juban\newsletter\migrations;
 
 use Craft;
 use craft\db\Migration;
