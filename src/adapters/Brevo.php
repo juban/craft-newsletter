@@ -3,16 +3,16 @@
 
 namespace juban\newsletter\adapters;
 
-use Craft;
-use craft\behaviors\EnvAttributeParserBehavior;
-use craft\helpers\App;
-use GuzzleHttp\Client;
 use Brevo\Client\Api\ContactsApi;
 use Brevo\Client\ApiException;
 use Brevo\Client\Configuration;
 use Brevo\Client\Model\CreateContact;
 use Brevo\Client\Model\CreateDoiContact;
 use Brevo\Client\Model\UpdateContact;
+use Craft;
+use craft\behaviors\EnvAttributeParserBehavior;
+use craft\helpers\App;
+use GuzzleHttp\Client;
 use yii\helpers\VarDumper;
 
 /**
