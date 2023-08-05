@@ -6,6 +6,11 @@
 
 - Switch from Sendinblue to Brevo PHP SDK and update adapter accordingly
 
+> {note} Previous Sendinblue adapter class has been renamed from `juban\newsletter\adapters\Sendinblue`
+> to `juban\newsletter\adapters\Brevo`.
+> 
+> Plugin configuration automatic update will occur during migrations to ensure adapter portability.
+
 ## 2.1.0 - 2022-07-23
 
 > {note} The plugin’s package name has changed to `jub/craft-newsletter`. You can update the plugin by
