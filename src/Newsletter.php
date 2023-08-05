@@ -203,9 +203,8 @@ class Newsletter extends Plugin
                 $adapter = self::createAdapter($postSettings['adapterType'], $adapterSettings);
                 if (!$adapter->validate()) {
                     return false;
-                } else {
-                    $this->settings->adapterTypeSettings = $adapter->getAttributes();
                 }
+                $this->settings->adapterTypeSettings = $adapter->getAttributes();
             } else {
                 return false;
             }
