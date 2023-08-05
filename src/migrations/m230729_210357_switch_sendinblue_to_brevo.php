@@ -16,10 +16,9 @@ class m230729_210357_switch_sendinblue_to_brevo extends Migration
     public function safeUp(): bool
     {
         $projectConfig = Craft::$app->getProjectConfig();
-        $schemaVersion = $projectConfig->get('plugins.newsletter.schemaVersion', true);
         $adapter = $projectConfig->get('plugins.newsletter.settings.adapterType', true);
 
-        if (version_compare($schemaVersion, '1.1.0', '<') && $adapter === 'juban\newsletter\adapters\Sendinblue') {
+        if ($adapter === 'juban\newsletter\adapters\Sendinblue') {
             $projectConfig->set('plugins.newsletter.settings.adapterType', 'juban\newsletter\adapters\Brevo');
         }
 
