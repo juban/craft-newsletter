@@ -73,7 +73,7 @@ class Mailjet extends BaseNewsletterAdapter
     /**
      * @inheritdoc
      */
-    public function subscribe(string $email): bool
+    public function subscribe(string $email, array $attributes = null): bool
     {
         $this->_errorMessage = null;
         $client = $this->getClient();
