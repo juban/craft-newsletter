@@ -86,7 +86,7 @@ class Mailchimp extends BaseNewsletterAdapter
         $this->_listApi = $listsApi;
     }
 
-    public function subscribe(string $email): bool
+    public function subscribe(string $email, array $attributes = null): bool
     {
         $client = $this->getClient();
         $listsApi = $this->getListApi($client);
