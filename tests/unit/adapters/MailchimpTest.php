@@ -3,14 +3,13 @@
 
 namespace juban\newslettertests\unit\adapters;
 
-use Codeception\Stub\Expected;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use juban\newsletter\adapters\Mailchimp;
 use MailchimpMarketing\Api\ListsApi;
 use MailchimpMarketing\ApiClient;
-use juban\newsletter\adapters\Mailchimp;
 
 
 class MailchimpTest extends \Codeception\Test\Unit
@@ -24,18 +23,6 @@ class MailchimpTest extends \Codeception\Test\Unit
 
     private $mailchimp;
 
-    protected function _before()
-    {
-        $this->mailchimp = new Mailchimp();
-        $this->mailchimp->apiKey = 'apikey';
-        $this->mailchimp->serverPrefix = 'serverPrefix';
-        $this->mailchimp->listId = '123abc';
-    }
-
-    protected function _after()
-    {
-    }
-
     public function testGetClient(): void
     {
         $client = $this->mailchimp->getClient();
@@ -46,7 +33,7 @@ class MailchimpTest extends \Codeception\Test\Unit
     public function testUserCanSubscribe(): void
     {
         $email = "mozelle.remy@gmail12345.com";
-        $dummyResponse = new Response(404,[],'{}');
+        $dummyResponse = new Response(404, [], '{}');
         $dummyRequest = new Request('get', '');
         $clientException = new ClientException('', $dummyRequest, $dummyResponse);
         $client = $this->make(ApiClient::class);
@@ -61,11 +48,18 @@ class MailchimpTest extends \Codeception\Test\Unit
 
         $listApiClientMock
             ->expects($this->once())
-            ->method('addListMember')
-            ->with('123abc', [
-                "email_address" => $email,
-                "status" => "subscribed",
-            ])
+            ->method('setListMember')
+            ->with(
+                '123abc',
+                $email,
+                [
+                    "email_address" => $email,
+                    "status_if_new" => "subscribed",
+                    "status" => "subscribed",
+                    "double_optin" => true,
+                    "merge_fields" => []
+                ]
+            )
             ->willReturn(true);
 
         $this->mailchimp->setApiClient($client);
@@ -75,9 +69,9 @@ class MailchimpTest extends \Codeception\Test\Unit
         self::assertTrue($isSubscribe);
     }
 
-    public function testUserCantSubscribeIfUserAlreadyExist(): void
+    public function testUserCanSubscribeIfUserAlreadyExist(): void
     {
-        $dummyResponse = new Response(404,[],'{}');
+        $dummyResponse = new Response(404, [], '{}');
         $dummyRequest = new Request('get', '');
         $clientException = new ClientException('', $dummyRequest, $dummyResponse);
         $email = "mozelle.remy@gmail12345.com";
@@ -89,27 +83,34 @@ class MailchimpTest extends \Codeception\Test\Unit
             ->expects($this->once())
             ->method('getListMember')
             ->with('123abc', md5($email))
-            ->willThrowException($clientException);
+            ->willReturn(true);
 
         $listApiClientMock
-            ->expects($this->once())
-            ->method('addListMember')
-            ->with('123abc', [
-                "email_address" => $email,
-                "status" => "subscribed",
-            ])
+            ->expects($this->never())
+            ->method('setListMember')
+            ->with(
+                '123abc',
+                $email,
+                [
+                    "email_address" => $email,
+                    "status_if_new" => "subscribed",
+                    "status" => "subscribed",
+                    "double_optin" => true,
+                    "merge_fields" => []
+                ]
+            )
             ->willThrowException($clientException);
 
         $this->mailchimp->setApiClient($client);
         $this->mailchimp->setListApi($listApiClientMock);
 
         $isSubscribe = $this->mailchimp->subscribe($email);
-        self::assertFalse($isSubscribe);
+        self::assertTrue($isSubscribe);
     }
 
     public function testFailedSubscriptionWithHandledStatusBadRequest(): void
     {
-        $dummyResponse = new Response(400,[],'{}');
+        $dummyResponse = new Response(400, [], '{}');
         $dummyRequest = new Request('get', '');
         $clientException = new ClientException('', $dummyRequest, $dummyResponse);
 
@@ -123,11 +124,18 @@ class MailchimpTest extends \Codeception\Test\Unit
 
         $listApiClientMock
             ->expects($this->once())
-            ->method('addListMember')
-            ->with('123abc', [
-                "email_address" => $email,
-                "status" => "subscribed",
-            ])
+            ->method('setListMember')
+            ->with(
+                '123abc',
+                $email,
+                [
+                    "email_address" => $email,
+                    "status_if_new" => "subscribed",
+                    "status" => "subscribed",
+                    "double_optin" => true,
+                    "merge_fields" => []
+                ]
+            )
             ->willThrowException($clientException);
 
         $client = $this->make(ApiClient::class);
@@ -138,13 +146,15 @@ class MailchimpTest extends \Codeception\Test\Unit
         $isSubscribe = $this->mailchimp->subscribe($email);
 
         self::assertFalse($isSubscribe);
-        self::assertEquals('The newsletter service is not available at that time. Please, try again later.',
-            $this->mailchimp->getSubscriptionError());
+        self::assertEquals(
+            'The newsletter service is not available at that time. Please, try again later.',
+            $this->mailchimp->getSubscriptionError()
+        );
     }
 
     public function testFailedSubscriptionWithHandledStatusServerError(): void
     {
-        $dummyResponse = new Response(503,[],'{}');
+        $dummyResponse = new Response(503, [], '{}');
         $dummyRequest = new Request('get', '');
         $clientException = new ClientException('', $dummyRequest, $dummyResponse);
 
@@ -158,11 +168,18 @@ class MailchimpTest extends \Codeception\Test\Unit
 
         $listApiClientMock
             ->expects($this->once())
-            ->method('addListMember')
-            ->with('123abc', [
-                "email_address" => $email,
-                "status" => "subscribed",
-            ])
+            ->method('setListMember')
+            ->with(
+                '123abc',
+                $email,
+                [
+                    "email_address" => $email,
+                    "status_if_new" => "subscribed",
+                    "status" => "subscribed",
+                    "double_optin" => true,
+                    "merge_fields" => []
+                ]
+            )
             ->willThrowException($clientException);
 
         $client = $this->make(ApiClient::class);
@@ -173,8 +190,10 @@ class MailchimpTest extends \Codeception\Test\Unit
         $isSubscribe = $this->mailchimp->subscribe($email);
 
         self::assertFalse($isSubscribe);
-        self::assertEquals('The newsletter service is not available at that time. Please, try again later.',
-            $this->mailchimp->getSubscriptionError());
+        self::assertEquals(
+            'The newsletter service is not available at that time. Please, try again later.',
+            $this->mailchimp->getSubscriptionError()
+        );
     }
 
     public function testFailedSubscriptionWithThrowConnectException(): void
@@ -193,11 +212,18 @@ class MailchimpTest extends \Codeception\Test\Unit
 
         $listApiClientMock
             ->expects($this->once())
-            ->method('addListMember')
-            ->with('123abc', [
-                "email_address" => $email,
-                "status" => "subscribed",
-            ])
+            ->method('setListMember')
+            ->with(
+                '123abc',
+                $email,
+                [
+                    "email_address" => $email,
+                    "status_if_new" => "subscribed",
+                    "status" => "subscribed",
+                    "double_optin" => true,
+                    "merge_fields" => []
+                ]
+            )
             ->willThrowException($connectException);
 
         $client = $this->make(ApiClient::class);
@@ -208,7 +234,21 @@ class MailchimpTest extends \Codeception\Test\Unit
         $isSubscribe = $this->mailchimp->subscribe($email);
 
         self::assertFalse($isSubscribe);
-        self::assertEquals('The newsletter service is not available at that time. Please, try again later.',
-            $this->mailchimp->getSubscriptionError());
+        self::assertEquals(
+            'The newsletter service is not available at that time. Please, try again later.',
+            $this->mailchimp->getSubscriptionError()
+        );
+    }
+
+    protected function _before()
+    {
+        $this->mailchimp = new Mailchimp();
+        $this->mailchimp->apiKey = 'apikey';
+        $this->mailchimp->serverPrefix = 'serverPrefix';
+        $this->mailchimp->listId = '123abc';
+    }
+
+    protected function _after()
+    {
     }
 }

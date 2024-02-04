@@ -83,21 +83,21 @@ class Brevo extends BaseNewsletterAdapter
         ]);
     }
 
-    public function subscribe(string $email, array $attributes = null): bool
+    public function subscribe(string $email, array $additionalFields = null): bool
     {
         $clientContactApi = $this->getClientContactApi();
         $listId = (int)App::parseEnv($this->listId);
 
         if (!$this->_contactExist($email, $clientContactApi)) {
             if ($listId !== 0) {
-                return $this->_registerContactToList($email, $attributes, $listId, $clientContactApi);
+                return $this->_registerContactToList($email, $listId, $clientContactApi, $additionalFields);
             }
 
-            return $this->_registerContact($email, $attributes, $clientContactApi);
+            return $this->_registerContact($email, $clientContactApi, $additionalFields);
         }
 
         if ($listId !== 0) {
-            return $this->_addContactToList($email, $attributes, $listId, $clientContactApi);
+            return $this->_addContactToList($email, $listId, $clientContactApi, $additionalFields);
         }
 
         return true;
@@ -133,7 +133,12 @@ class Brevo extends BaseNewsletterAdapter
         }
     }
 
-    private function _registerContactToList(string $email, array $attributes = null, int $listId, ContactsApi $clientContactApi): bool
+    private function _registerContactToList(
+        string $email,
+        int $listId,
+        ContactsApi $clientContactApi,
+        array $attributes = null
+    ): bool
     {
         try {
             if (App::parseBooleanEnv($this->doi)) {
@@ -160,7 +165,7 @@ class Brevo extends BaseNewsletterAdapter
         }
     }
 
-    private function _registerContact(string $email, array $attributes, ContactsApi $clientContactApi): bool
+    private function _registerContact(string $email, ContactsApi $clientContactApi, array $attributes = null): bool
     {
         try {
             $contact = new CreateContact(['email' => $email, 'attributes' => $attributes]);
@@ -172,10 +177,10 @@ class Brevo extends BaseNewsletterAdapter
         }
     }
 
-    private function _addContactToList(string $email, array $attributes, int $listId, ContactsApi $clientContactApi): bool
+    private function _addContactToList(string $email, int $listId, ContactsApi $clientContactApi, array $attributes = null): bool
     {
         try {
-            $contact = new UpdateContact(['attributes' => $attributes, 'listIds' => [$listId]]);
+            $contact = new UpdateContact(['listIds' => [$listId], 'attributes' => $attributes]);
             $clientContactApi->updateContact($email, $contact);
             return true;
         } catch (ApiException $apiException) {

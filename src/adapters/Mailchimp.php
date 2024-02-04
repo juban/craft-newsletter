@@ -86,15 +86,15 @@ class Mailchimp extends BaseNewsletterAdapter
         $this->_listApi = $listsApi;
     }
 
-    public function subscribe(string $email, array $attributes = null): bool
+    public function subscribe(string $email, array $additionalFields = null): bool
     {
         $client = $this->getClient();
         $listsApi = $this->getListApi($client);
         $parsedListId = App::parseEnv($this->listId);
 
         if (!$this->_contactExist($email, $listsApi, $parsedListId)) {
-            return $this->_registerContact($email, $listsApi, $parsedListId);
-        }
+            return $this->_registerContact($email, $listsApi, $parsedListId, $additionalFields ?? []);
+       }
 
         return true;
     }
@@ -113,16 +113,27 @@ class Mailchimp extends BaseNewsletterAdapter
         }
     }
 
-    private function _registerContact(string $email, ListsApi $listsApi, string $listId): bool
+    private function _registerContact(string $email, ListsApi $listsApi, string $listId, array $additionalFields = []): bool
     {
         try {
-            $listsApi->addListMember($listId, [
+            $listsApi->setListMember($listId, $email, [
                 "email_address" => $email,
+                "status_if_new" => "subscribed",
                 "status" => "subscribed",
+                "double_optin" => true,
+                "merge_fields" => $additionalFields
             ]);
 
             return true;
         } catch (ClientException $clientException) {
+            $response = Json::decode($clientException->getResponse()->getBody()->getContents(), true);
+            $status = $response['status'] ?? 400;
+            $title = $response['title'] ?? '';
+            if($status === 400 && $title === 'Forgotten Email Not Subscribed') {
+                // Contact was permanently deleted from list,
+                // consider him as already subscribed to prevent email enumeration
+                return true;
+            }
             $this->_errorMessage = $this->_getErrorMessage($clientException);
             return false;
         } catch (ConnectException $connectException) {

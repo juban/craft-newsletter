@@ -2,7 +2,7 @@
     "name": "jub/craft-newsletter",
     "description": "Craft CMS Newsletter plugin",
     "type": "craft-plugin",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "keywords": [
         "craft",
         "cms",
