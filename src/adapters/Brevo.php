@@ -137,9 +137,8 @@ class Brevo extends BaseNewsletterAdapter
         string $email,
         int $listId,
         ContactsApi $clientContactApi,
-        array $attributes = null
-    ): bool
-    {
+        array $attributes = null,
+    ): bool {
         try {
             if (App::parseBooleanEnv($this->doi)) {
                 $contact = new CreateDoiContact([
