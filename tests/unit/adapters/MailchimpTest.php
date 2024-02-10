@@ -42,12 +42,6 @@ class MailchimpTest extends \Codeception\Test\Unit
 
         $listApiClientMock
             ->expects($this->once())
-            ->method('getListMember')
-            ->with('123abc', md5($email))
-            ->willThrowException($clientException);
-
-        $listApiClientMock
-            ->expects($this->once())
             ->method('setListMember')
             ->with(
                 '123abc',
@@ -61,45 +55,6 @@ class MailchimpTest extends \Codeception\Test\Unit
                 ]
             )
             ->willReturn(true);
-
-        $this->mailchimp->setApiClient($client);
-        $this->mailchimp->setListApi($listApiClientMock);
-
-        $isSubscribe = $this->mailchimp->subscribe($email);
-        self::assertTrue($isSubscribe);
-    }
-
-    public function testUserCanSubscribeIfUserAlreadyExist(): void
-    {
-        $dummyResponse = new Response(404, [], '{}');
-        $dummyRequest = new Request('get', '');
-        $clientException = new ClientException('', $dummyRequest, $dummyResponse);
-        $email = "mozelle.remy@gmail12345.com";
-
-        $client = $this->make(ApiClient::class);
-
-        $listApiClientMock = $this->createMock(ListsApi::class);
-        $listApiClientMock
-            ->expects($this->once())
-            ->method('getListMember')
-            ->with('123abc', md5($email))
-            ->willReturn(true);
-
-        $listApiClientMock
-            ->expects($this->never())
-            ->method('setListMember')
-            ->with(
-                '123abc',
-                $email,
-                [
-                    "email_address" => $email,
-                    "status_if_new" => "subscribed",
-                    "status" => "subscribed",
-                    "double_optin" => true,
-                    "merge_fields" => []
-                ]
-            )
-            ->willThrowException($clientException);
 
         $this->mailchimp->setApiClient($client);
         $this->mailchimp->setListApi($listApiClientMock);
@@ -116,11 +71,6 @@ class MailchimpTest extends \Codeception\Test\Unit
 
         $email = "mozelle.remy@gmail12345.com";
         $listApiClientMock = $this->createMock(ListsApi::class);
-        $listApiClientMock
-            ->expects($this->once())
-            ->method('getListMember')
-            ->with('123abc', md5($email))
-            ->willThrowException($clientException);
 
         $listApiClientMock
             ->expects($this->once())
@@ -160,11 +110,6 @@ class MailchimpTest extends \Codeception\Test\Unit
 
         $email = "mozelle.remy@gmail12345.com";
         $listApiClientMock = $this->createMock(ListsApi::class);
-        $listApiClientMock
-            ->expects($this->once())
-            ->method('getListMember')
-            ->with('123abc', md5($email))
-            ->willThrowException($clientException);
 
         $listApiClientMock
             ->expects($this->once())
@@ -204,11 +149,6 @@ class MailchimpTest extends \Codeception\Test\Unit
         $email = "mozelle.remy@gmail12345.com";
 
         $listApiClientMock = $this->createMock(ListsApi::class);
-        $listApiClientMock
-            ->expects($this->once())
-            ->method('getListMember')
-            ->with('123abc', md5($email))
-            ->willThrowException($connectException);
 
         $listApiClientMock
             ->expects($this->once())

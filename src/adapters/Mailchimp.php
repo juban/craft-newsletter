@@ -92,11 +92,7 @@ class Mailchimp extends BaseNewsletterAdapter
         $listsApi = $this->getListApi($client);
         $parsedListId = App::parseEnv($this->listId);
 
-        if (!$this->_contactExist($email, $listsApi, $parsedListId)) {
-            return $this->_registerContact($email, $listsApi, $parsedListId, $additionalFields ?? []);
-       }
-
-        return true;
+        return $this->_registerContact($email, $listsApi, $parsedListId, $additionalFields ?? []);
     }
 
     private function _contactExist(string $email, ListsApi $listsApi, string $listId): bool
@@ -113,15 +109,19 @@ class Mailchimp extends BaseNewsletterAdapter
         }
     }
 
-    private function _registerContact(string $email, ListsApi $listsApi, string $listId, array $additionalFields = []): bool
-    {
+    private function _registerContact(
+        string $email,
+        ListsApi $listsApi,
+        string $listId,
+        array $additionalFields = [],
+    ): bool {
         try {
             $listsApi->setListMember($listId, $email, [
                 "email_address" => $email,
                 "status_if_new" => "subscribed",
                 "status" => "subscribed",
                 "double_optin" => true,
-                "merge_fields" => $additionalFields
+                "merge_fields" => $additionalFields,
             ]);
 
             return true;
@@ -129,7 +129,7 @@ class Mailchimp extends BaseNewsletterAdapter
             $response = Json::decode($clientException->getResponse()->getBody()->getContents(), true);
             $status = $response['status'] ?? 400;
             $title = $response['title'] ?? '';
-            if($status === 400 && $title === 'Forgotten Email Not Subscribed') {
+            if ($status === 400 && $title === 'Forgotten Email Not Subscribed') {
                 // Contact was permanently deleted from list,
                 // consider him as already subscribed to prevent email enumeration
                 return true;
@@ -144,7 +144,10 @@ class Mailchimp extends BaseNewsletterAdapter
 
     private function _getErrorConnect(ConnectException $connectException): string
     {
-        $errorMessage = Craft::t('newsletter', 'The newsletter service is not available at that time. Please, try again later.');
+        $errorMessage = Craft::t(
+            'newsletter',
+            'The newsletter service is not available at that time. Please, try again later.'
+        );
         Craft::error('Mailchimp : ' . VarDumper::dumpAsString($connectException->getMessage()), __METHOD__);
 
         return $errorMessage;
@@ -164,12 +167,24 @@ class Mailchimp extends BaseNewsletterAdapter
             500 => 'Mailchimp An unexpected internal error has occurred. Please contact Support for more information (500).',
             503 => 'Mailchimp This method has been disabled (503).',
         ];
-        $errorMessage = Craft::t('newsletter', 'The newsletter service is not available at that time. Please, try again later.');
+        $errorMessage = Craft::t(
+            'newsletter',
+            'The newsletter service is not available at that time. Please, try again later.'
+        );
         if (array_key_exists($clientException->getCode(), $errorLogMessages)) {
-            Craft::error($errorLogMessages[$clientException->getCode()] . " " . VarDumper::dumpAsString($clientException->getResponse()), __METHOD__);
+            Craft::error(
+                $errorLogMessages[$clientException->getCode()] . " " . VarDumper::dumpAsString(
+                    $clientException->getResponse()
+                ),
+                __METHOD__
+            );
         } else {
             $body = Json::decode($clientException->getResponse()->getBody()->getContents(), false);
-            $errorMessage = Craft::t('newsletter', 'An error has occurred : {errorMessage}.', ['errorMessage' => $body->detail ?? '']);
+            $errorMessage = Craft::t(
+                'newsletter',
+                'An error has occurred : {errorMessage}.',
+                ['errorMessage' => $body->detail ?? '']
+            );
         }
         return $errorMessage;
     }
