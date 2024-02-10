@@ -138,6 +138,7 @@ class Mailchimp extends BaseNewsletterAdapter
             405 => 'Mailchimp The requested method and resource are not compatible. See the Allow header for this resource’s available methods (405).',
             414 => 'Mailchimp The sub-resource requested is nested too deeply (414).',
             422 => 'Mailchimp You can only use the X-HTTP-Method-Override header with the POST method (422).',
+            426 => 'Mailchimp Your request was made with the HTTP protocol. Please make your request via HTTPS rather than HTTP (426).',
             429 => 'Mailchimp You have exceeded the limit of 10 simultaneous connections (429).',
             500 => 'Mailchimp An unexpected internal error has occurred. Please contact Support for more information (500).',
             503 => 'Mailchimp This method has been disabled (503).',
@@ -154,10 +155,10 @@ class Mailchimp extends BaseNewsletterAdapter
                 __METHOD__
             );
         } else {
-            $body = Json::decode($clientException->getResponse()->getBody()->getContents(), false);
+            $body = Json::decode($clientException->getResponse()->getBody(), false);
             $errorMessage = Craft::t(
                 'newsletter',
-                'An error has occurred : {errorMessage}.',
+                'An error has occurred : {errorMessage}',
                 ['errorMessage' => $body->detail ?? '']
             );
         }

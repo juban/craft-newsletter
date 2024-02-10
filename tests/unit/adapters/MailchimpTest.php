@@ -7,6 +7,9 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
+use GuzzleHttp\Psr7\Utils;
+use http\Message\Body;
 use juban\newsletter\adapters\Mailchimp;
 use MailchimpMarketing\Api\ListsApi;
 use MailchimpMarketing\ApiClient;
@@ -139,6 +142,80 @@ class MailchimpTest extends \Codeception\Test\Unit
             'The newsletter service is not available at that time. Please, try again later.',
             $this->mailchimp->getSubscriptionError()
         );
+    }
+
+    public function testFailedSubscriptionWithUnhandledStatusServerError(): void
+    {
+        $dummyResponse = new Response(544, [], Utils::streamFor('{"status": 544, "title": "Some unknown error.", "detail": "Something went wrong."}') );
+        $dummyRequest = new Request('get', '');
+        $clientException = new ClientException('', $dummyRequest, $dummyResponse);
+
+        $email = "mozelle.remy@gmail12345.com";
+        $listApiClientMock = $this->createMock(ListsApi::class);
+
+        $listApiClientMock
+            ->expects($this->once())
+            ->method('setListMember')
+            ->with(
+                '123abc',
+                $email,
+                [
+                    "email_address" => $email,
+                    "status_if_new" => "subscribed",
+                    "status" => "subscribed",
+                    "double_optin" => true,
+                    "merge_fields" => []
+                ]
+            )
+            ->willThrowException($clientException);
+
+        $client = $this->make(ApiClient::class);
+
+        $this->mailchimp->setApiClient($client);
+        $this->mailchimp->setListApi($listApiClientMock);
+
+        $isSubscribe = $this->mailchimp->subscribe($email);
+
+        self::assertFalse($isSubscribe);
+        self::assertEquals(
+            'An error has occurred : Something went wrong.',
+            $this->mailchimp->getSubscriptionError()
+        );
+    }
+
+    public function testSuccessfullSubscriptionWhenEmailIsArchivedOrDeleted(): void
+    {
+        $dummyResponse = new Response(400, [], '{"status": 400, "title": "Forgotten Email Not Subscribed"}');
+        $dummyRequest = new Request('get', '');
+        $clientException = new ClientException('', $dummyRequest, $dummyResponse);
+
+        $email = "mozelle.remy@gmail12345.com";
+        $listApiClientMock = $this->createMock(ListsApi::class);
+
+        $listApiClientMock
+            ->expects($this->once())
+            ->method('setListMember')
+            ->with(
+                '123abc',
+                $email,
+                [
+                    "email_address" => $email,
+                    "status_if_new" => "subscribed",
+                    "status" => "subscribed",
+                    "double_optin" => true,
+                    "merge_fields" => []
+                ]
+            )
+            ->willThrowException($clientException);
+
+        $client = $this->make(ApiClient::class);
+
+        $this->mailchimp->setApiClient($client);
+        $this->mailchimp->setListApi($listApiClientMock);
+
+        $isSubscribe = $this->mailchimp->subscribe($email);
+
+        self::assertTrue($isSubscribe);
     }
 
     public function testFailedSubscriptionWithThrowConnectException(): void
