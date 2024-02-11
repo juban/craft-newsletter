@@ -18,10 +18,13 @@ use yii\helpers\VarDumper;
 class Mailjet extends BaseNewsletterAdapter
 {
     public $apiKey;
+
     public $apiSecret;
+
     public $listId;
 
     private $_client;
+
     private $_errorMessage;
 
     /**
@@ -85,12 +88,15 @@ class Mailjet extends BaseNewsletterAdapter
                 return false;
             }
         }
+
         if (null !== $additionalFields && !$this->_updateContactData($client, $contactId, $additionalFields)) {
             return false;
         }
+
         if ($this->listId) {
             return $this->_subscribeContactToList($client, $email);
         }
+
         return true;
     }
 
@@ -107,12 +113,11 @@ class Mailjet extends BaseNewsletterAdapter
                 ['version' => 'v3']
             );
         }
+
         return $this->_client;
     }
 
     /**
-     * @param Client $client
-     * @param string $email
      * @return int|null
      */
     private function _getContactId(Client $client, string $email): ?int
@@ -121,12 +126,11 @@ class Mailjet extends BaseNewsletterAdapter
         if ($response->success()) {
             return $response->getData()[0]['ID'] ?? null;
         }
+
         return null;
     }
 
     /**
-     * @param Client $client
-     * @param string $email
      * @return int|null
      */
     private function _registerContact(Client $client, string $email): ?int
@@ -141,11 +145,11 @@ class Mailjet extends BaseNewsletterAdapter
             $this->_errorMessage = $this->_getErrorMessageFromRessource($response);
             return null;
         }
+
         return $response->getData()[0]['ID'] ?? null;
     }
 
     /**
-     * @param Response $response
      * @return string
      */
     private function _getErrorMessageFromRessource(Response $response): string
@@ -172,18 +176,16 @@ class Mailjet extends BaseNewsletterAdapter
             $body = $response->getBody();
             if (isset($body['ErrorInfo']) || isset($body['ErrorMessage'])) {
                 Craft::error(
-                    "Mailjet unknown error ({$response->getStatus()}). " . VarDumper::dumpAsString($response),
+                    sprintf('Mailjet unknown error (%s). ', $response->getStatus()) . VarDumper::dumpAsString($response),
                     __METHOD__
                 );
             }
         }
+
         return $errorMessage;
     }
 
     /**
-     * @param Client $client
-     * @param int $contactId
-     * @param array $data
      * @return bool
      */
     private function _updateContactData(Client $client, int $contactId, array $data): bool
@@ -195,12 +197,11 @@ class Mailjet extends BaseNewsletterAdapter
         if (!$response->success()) {
             $this->_errorMessage = $this->_getErrorMessageFromRessource($response);
         }
+
         return $response->success();
     }
 
     /**
-     * @param Client $client
-     * @param string $email
      * @return bool
      */
     private function _subscribeContactToList(Client $client, string $email): bool
@@ -218,6 +219,7 @@ class Mailjet extends BaseNewsletterAdapter
         if (!$response->success()) {
             $this->_errorMessage = $this->_getErrorMessageFromRessource($response);
         }
+
         return $response->success();
     }
 

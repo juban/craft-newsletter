@@ -15,11 +15,15 @@ use yii\helpers\VarDumper;
 class Mailchimp extends BaseNewsletterAdapter
 {
     public $apiKey;
+
     public $serverPrefix;
+
     public $listId;
 
     private $_errorMessage;
+
     private $_client;
+
     private $_listApi;
 
     /**
@@ -87,6 +91,7 @@ class Mailchimp extends BaseNewsletterAdapter
         if (is_null($this->_listApi)) {
             $this->_listApi = new ListsApi($client);
         }
+
         return $this->_listApi;
     }
 
@@ -120,6 +125,7 @@ class Mailchimp extends BaseNewsletterAdapter
                 // consider him as already subscribed to prevent email enumeration
                 return true;
             }
+
             $this->_errorMessage = $this->_getErrorMessage($clientException);
             return false;
         } catch (ConnectException $connectException) {
@@ -162,6 +168,7 @@ class Mailchimp extends BaseNewsletterAdapter
                 ['errorMessage' => $body->detail ?? '']
             );
         }
+
         return $errorMessage;
     }
 

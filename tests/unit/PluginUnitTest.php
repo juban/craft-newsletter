@@ -64,7 +64,7 @@ class PluginUnitTest extends BaseUnitTest
 
     public function testGetAdaptersTypes()
     {
-        $this->tester->expectEvent(Newsletter::class, Newsletter::EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES, function () {
+        $this->tester->expectEvent(Newsletter::class, Newsletter::EVENT_REGISTER_NEWSLETTER_ADAPTER_TYPES, static function () {
             Newsletter::getAdaptersTypes();
         });
         $adapters = Newsletter::getAdaptersTypes();

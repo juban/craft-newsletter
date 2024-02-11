@@ -36,7 +36,8 @@
         "codeception/module-db": "^1.1",
         "craftcms/ecs": "dev-main",
         "craftcms/phpstan": "dev-main",
-        "jub/craft-google-recaptcha": "^2.1"
+        "jub/craft-google-recaptcha": "^2.1",
+        "rector/rector": "^1.0"
     },
     "autoload": {
         "psr-4": {

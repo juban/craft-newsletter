@@ -68,7 +68,6 @@ class MailjetTest extends BaseUnitTest
 
     /**
      *
-     * @param \PHPUnit\Framework\MockObject\MockObject $clientMock
      * @param array $params
      * @return mixed|\PHPUnit\Framework\MockObject\MockObject
      * @throws \Exception

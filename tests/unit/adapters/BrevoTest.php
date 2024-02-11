@@ -45,10 +45,10 @@ class BrevoTest extends \Codeception\Test\Unit
         $email = "mozelle.remy@gmail12345.com";
 
         $contactApi = $this->make(ContactsApi::class, [
-            'getContactInfo' => function () {
+            'getContactInfo' => static function () {
                 throw new ApiException();
             },
-            'createContact'  => function ($contact) {
+            'createContact'  => static function ($contact) {
                 self::assertNull($contact['listIds']);
                 self::assertEquals('mozelle.remy@gmail12345.com', $contact['email']);
             }
@@ -66,10 +66,10 @@ class BrevoTest extends \Codeception\Test\Unit
         $this->brevo->listId = 22;
 
         $contactApi = $this->make(ContactsApi::class, [
-            'getContactInfo' => function () {
+            'getContactInfo' => static function () {
                 throw new ApiException();
             },
-            'createContact'  => function ($contact) {
+            'createContact'  => static function ($contact) {
                 self::assertEquals(22, $contact['listIds'][0]);
                 self::assertIsNumeric($contact['listIds'][0]);
                 self::assertEquals('mozelle.remy@gmail12345.com', $contact['email']);
@@ -91,10 +91,10 @@ class BrevoTest extends \Codeception\Test\Unit
         $this->brevo->doiRedirectionUrl = 'https://www.somedomain.com/return-url';
 
         $contactApi = $this->make(ContactsApi::class, [
-            'getContactInfo'   => function () {
+            'getContactInfo'   => static function () {
                 throw new ApiException();
             },
-            'createDoiContact' => function ($contact) {
+            'createDoiContact' => static function ($contact) {
                 self::assertEquals(35, $contact['includeListIds'][0]);
                 self::assertIsNumeric($contact['includeListIds'][0]);
                 self::assertEquals('mozelle.remy@gmail12345.com', $contact['email']);
@@ -116,10 +116,8 @@ class BrevoTest extends \Codeception\Test\Unit
         $this->brevo->listId = 75;
 
         $contactApi = $this->make(ContactsApi::class, [
-            'getContactInfo' => function () {
-                return new GetExtendedContactDetails(['email' => "mozelle.remy@gmail12345.com"]);
-            },
-            'updateContact'  => function ($email, $contact) {
+            'getContactInfo' => static fn() => new GetExtendedContactDetails(['email' => "mozelle.remy@gmail12345.com"]),
+            'updateContact'  => static function ($email, $contact) {
                 self::assertEquals(75, $contact['listIds'][0]);
                 self::assertIsNumeric($contact['listIds'][0]);
             },
@@ -136,10 +134,10 @@ class BrevoTest extends \Codeception\Test\Unit
         $email = "mozelle.remy@gmail12345.com";
 
         $contactApi = $this->make(ContactsApi::class, [
-            'getContactInfo' => function () {
+            'getContactInfo' => static function () {
                 throw new ApiException("", 400);
             },
-            'createContact'  => function () {
+            'createContact'  => static function () {
                 throw new ApiException("", 400);
             }
         ]);
@@ -156,10 +154,10 @@ class BrevoTest extends \Codeception\Test\Unit
         $email = "mozelle.remy@gmail12345.com";
 
         $contactApi = $this->make(ContactsApi::class, [
-            'getContactInfo' => function () {
+            'getContactInfo' => static function () {
                 throw new ApiException("", 503);
             },
-            'createContact'  => function () {
+            'createContact'  => static function () {
                 throw new ApiException("", 503);
             }
         ]);

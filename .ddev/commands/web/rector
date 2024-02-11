@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## Description: Run rector inside the web container
+## Usage: rector [flags] [args]
+
+vendor/bin/rector $@

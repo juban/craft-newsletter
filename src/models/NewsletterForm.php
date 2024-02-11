@@ -14,7 +14,9 @@ use juban\newsletter\Newsletter;
 class NewsletterForm extends Model
 {
     public $email;
+
     public $consent;
+
     public $additionalFields;
 
     public function rules(): array
@@ -33,12 +35,14 @@ class NewsletterForm extends Model
         if (!$this->validate()) {
             return false;
         }
+
         // Use newsletter module to register new user
         $newsletterAdapater = Newsletter::$plugin->adapter;
         if (!$newsletterAdapater->subscribe($this->email, $this->additionalFields)) {
             $this->addError('email', $newsletterAdapater->getSubscriptionError());
             return false;
         }
+
         return true;
     }
 }

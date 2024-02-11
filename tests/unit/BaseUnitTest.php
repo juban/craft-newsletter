@@ -14,9 +14,6 @@ use yii\base\InvalidRouteException;
 class BaseUnitTest extends Unit
 {
     /**
-     * @param string $action
-     * @param array $params
-     *
      * @return mixed
      * @throws InvalidRouteException
      */

@@ -17,10 +17,12 @@ use Yii;
  **/
 class NewsletterTest extends BaseUnitTest
 {
+    public $tester;
+
     public function testSubscribeSuccess()
     {
         $componentInstance = \Craft::$app->get('urlManager');
-        \Craft::$app->set('urlManager', Stub::construct(get_class($componentInstance), [], [
+        \Craft::$app->set('urlManager', Stub::construct($componentInstance::class, [], [
             'setRouteParams' => Expected::never()
         ], $this));
 
@@ -37,7 +39,7 @@ class NewsletterTest extends BaseUnitTest
     public function testAjaxSubscribeSuccess()
     {
         $componentInstance = \Craft::$app->get('urlManager');
-        \Craft::$app->set('urlManager', Stub::construct(get_class($componentInstance), [], [
+        \Craft::$app->set('urlManager', Stub::construct($componentInstance::class, [], [
             'setRouteParams' => Expected::never()
         ], $this));
 
@@ -59,7 +61,7 @@ class NewsletterTest extends BaseUnitTest
     public function testSubscribeFailOnMissingConsent()
     {
         $componentInstance = \Craft::$app->get('urlManager');
-        \Craft::$app->set('urlManager', Stub::construct(get_class($componentInstance), [], [
+        \Craft::$app->set('urlManager', Stub::construct($componentInstance::class, [], [
             'setRouteParams' => Expected::once()
         ], $this));
 
@@ -75,7 +77,7 @@ class NewsletterTest extends BaseUnitTest
     public function testAjaxSubscribeFailOnMissingConsent()
     {
         $componentInstance = \Craft::$app->get('urlManager');
-        \Craft::$app->set('urlManager', Stub::construct(get_class($componentInstance), [], [
+        \Craft::$app->set('urlManager', Stub::construct($componentInstance::class, [], [
             'setRouteParams' => Expected::never()
         ], $this));
 
@@ -99,7 +101,7 @@ class NewsletterTest extends BaseUnitTest
     public function testSubscribeFailOnInvalidEmail()
     {
         $componentInstance = \Craft::$app->get('urlManager');
-        \Craft::$app->set('urlManager', Stub::construct(get_class($componentInstance), [], [
+        \Craft::$app->set('urlManager', Stub::construct($componentInstance::class, [], [
             'setRouteParams' => Expected::once()
         ], $this));
 
@@ -120,12 +122,8 @@ class NewsletterTest extends BaseUnitTest
             Newsletter::$plugin,
             'adapter',
             [
-                'subscribe'            => function (string $email) {
-                    return true;
-                },
-                'getSubscriptionError' => function () {
-                    return "Some error";
-                }
+                'subscribe'            => static fn(string $email) => true,
+                'getSubscriptionError' => static fn() => "Some error"
             ]
         );
 

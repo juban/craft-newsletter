@@ -24,12 +24,17 @@ use yii\helpers\VarDumper;
 class Brevo extends BaseNewsletterAdapter
 {
     public $apiKey;
+
     public $listId;
+
     public $doi = false;
+
     public $doiTemplateId;
+
     public $doiRedirectionUrl;
 
     private $_errorMessage;
+
     private $_contactsApi;
 
     /**
@@ -157,6 +162,7 @@ class Brevo extends BaseNewsletterAdapter
                 ]);
                 $clientContactApi->createContact($contact);
             }
+
             return true;
         } catch (ApiException $apiException) {
             $this->_errorMessage = $this->_getErrorMessage($apiException);
@@ -204,8 +210,9 @@ class Brevo extends BaseNewsletterAdapter
         if (array_key_exists($apiException->getCode(), $errorLogMessages)) {
             Craft::error($errorLogMessages[$apiException->getCode()] . " " . VarDumper::dumpAsString($apiException), __METHOD__);
         } else {
-            Craft::error("Brevo unknown error ({$apiException->getCode()}). " . VarDumper::dumpAsString($apiException->getResponseBody()), __METHOD__);
+            Craft::error(sprintf('Brevo unknown error (%d). ', $apiException->getCode()) . VarDumper::dumpAsString($apiException->getResponseBody()), __METHOD__);
         }
+
         return $errorMessage;
     }
 
@@ -227,6 +234,7 @@ class Brevo extends BaseNewsletterAdapter
         if ($this->doi) {
             $rules[] = [['listId', 'doiTemplateId', 'doiRedirectionUrl'], 'required'];
         }
+
         return $rules;
     }
 }

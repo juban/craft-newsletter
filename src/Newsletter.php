@@ -99,10 +99,12 @@ class Newsletter extends Plugin
             if (str_starts_with($this->settings->adapterType, "simplonprod")) {
                 $this->settings->adapterType = str_replace('simplonprod', 'juban', $this->settings->adapterType);
             }
+
             if ($this->settings->adapterType === null) {
                 $this->settings->adapterType = $adapterTypes[0];
                 $this->settings->adapterTypeSettings = [];
             }
+
             return self::createAdapter($this->settings->adapterType, $this->settings->adapterTypeSettings);
         });
 
@@ -126,12 +128,18 @@ class Newsletter extends Plugin
             Plugins::class,
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
             function(PluginEvent $event) {
-                if ($event->plugin === $this && Craft::$app->getRequest()->getIsCpRequest()) {
-                    // Redirect to settings page
-                    Craft::$app->getResponse()->redirect(
-                        UrlHelper::cpUrl('settings/plugins/newsletter')
-                    )->send();
+                if ($event->plugin !== $this) {
+                    return;
                 }
+
+                if (!Craft::$app->getRequest()->getIsCpRequest()) {
+                    return;
+                }
+
+                // Redirect to settings page
+                Craft::$app->getResponse()->redirect(
+                    UrlHelper::cpUrl('settings/plugins/newsletter')
+                )->send();
             }
         );
     }
@@ -141,19 +149,24 @@ class Newsletter extends Plugin
      */
     private function _registerRecaptchaVerification(): void
     {
-        if (App::parseBooleanEnv(Newsletter::$plugin->settings->recaptchaEnabled) === true
-            && Craft::$app->plugins->isPluginEnabled('google-recaptcha')) {
-            Event::on(
-                NewsletterForm::class,
-                NewsletterForm::EVENT_AFTER_VALIDATE,
-                static function(Event $event) {
-                    $form = $event->sender;
-                    if (!GoogleRecaptcha::$plugin->recaptcha->verify()) {
-                        $form->addError('recaptcha', Craft::t('newsletter', 'Please prove you are not a robot.'));
-                    }
-                }
-            );
+        if (App::parseBooleanEnv(Newsletter::$plugin->settings->recaptchaEnabled) !== true) {
+            return;
         }
+
+        if (!Craft::$app->plugins->isPluginEnabled('google-recaptcha')) {
+            return;
+        }
+
+        Event::on(
+            NewsletterForm::class,
+            NewsletterForm::EVENT_AFTER_VALIDATE,
+            static function(Event $event) {
+                $form = $event->sender;
+                if (!GoogleRecaptcha::$plugin->recaptcha->verify()) {
+                    $form->addError('recaptcha', Craft::t('newsletter', 'Please prove you are not a robot.'));
+                }
+            }
+        );
     }
 
     /**
@@ -178,9 +191,7 @@ class Newsletter extends Plugin
 
     // Protected Methods
     // =========================================================================
-
     /**
-     * @param string $type
      * @param array|null $settings
      * @return \craft\base\ComponentInterface
      * @throws \craft\errors\MissingComponentException
@@ -204,11 +215,13 @@ class Newsletter extends Plugin
                 if (!$adapter->validate()) {
                     return false;
                 }
+
                 $this->settings->adapterTypeSettings = $adapter->getAttributes();
             } else {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -242,7 +255,7 @@ class Newsletter extends Plugin
             $adapter->validate();
         }
 
-        if ($adapter === null) {
+        if (!$adapter instanceof \craft\base\ComponentInterface) {
             $adapter = $this->adapter;
         }
 

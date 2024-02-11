@@ -8,7 +8,6 @@ interface NewsletterAdapterInterface extends ConfigurableComponentInterface
 {
     /**
      * Try to subscribe the given email into the newsletter mailing list service
-     * @param string $email
      * @param array|null $additionalFields
      * @return bool
      */
