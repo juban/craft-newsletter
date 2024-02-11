@@ -4,10 +4,10 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/jub/craft-newsletter)](https://packagist.org/packages/jub/craft-newsletter)
 ![Tests status](https://github.com/juban/craft-newsletter/actions/workflows/ci.yml/badge.svg?branch=master)
 
-
 ![](logo.png)
 
-Newsletter for Craft CMS plugin makes it possible to let end users subscribe with various emailing services from a frontend form.
+Newsletter for Craft CMS plugin makes it possible to let end users subscribe with various emailing services from a
+frontend form.
 
 It currently supports the following services:
 
@@ -17,19 +17,21 @@ It currently supports the following services:
 
 This plugin is GDPR compliant and requires the user to give its consent when subscribing to the newsletter.
 
-> 💡 Similar to Craft Mailer adapters, you can even [create your own adapter](#how-to-create-an-adapter) to connect to unsupported services.
+> 💡 Similar to Craft Mailer adapters, you can even [create your own adapter](#how-to-create-an-adapter) to connect to
+> unsupported services.
 
 ## Requirements
 
 This plugin requires Craft CMS 4.0.0 or later and PHP 8.0.2 or later.
 
-> In order to support automatic Google reCAPTCHA verification, you will need to install `jub/craft-google-recaptcha` plugin.
-
+> In order to support automatic Google reCAPTCHA verification, you will need to install `jub/craft-google-recaptcha`
+> plugin.
 
 ## Installation
 
 1. Install with composer via `composer require jub/craft-newsletter` from your project directory.
-2. Install the plugin in the Craft Control Panel under Settings → Plugins, or from the command line via `./craft install/plugin newsletter`.
+2. Install the plugin in the Craft Control Panel under Settings → Plugins, or from the command line
+   via `./craft install/plugin newsletter`.
 
 ## Configuration
 
@@ -38,10 +40,12 @@ This plugin requires Craft CMS 4.0.0 or later and PHP 8.0.2 or later.
 You can manage configuration setting through the Control Panel by going to Settings → Newsletter
 
 * From the **Service type** dropdown, select the service type you wish to use to handle newsletter users subscription
-* Provide the required API keys and parameters [as described below](#service-configuration).  
-* If Google reCAPTCHA plugin is installed and enabled, choose whether to verify the submission or not using the **Enable Google reCAPTCHA** light-switch.
+* Provide the required API keys and parameters [as described below](#service-configuration).
+* If Google reCAPTCHA plugin is installed and enabled, choose whether to verify the submission or not using the **Enable
+  Google reCAPTCHA** light-switch.
 
-> ⚠️ When enabled, the Google reCAPTCHA feature will **not** render the frontend widget for you. You have to add `{{ craft.googleRecaptcha.render() }}` somewhere in the form view.
+> ⚠️ When enabled, the Google reCAPTCHA feature will **not** render the frontend widget for you. You have to
+> add `{{ craft.googleRecaptcha.render() }}` somewhere in the form view.
 
 #### Service configuration
 
@@ -51,9 +55,11 @@ You can manage configuration setting through the Control Panel by going to Setti
 * **API Secret** (`apiSecret`)
 * **List ID** (optional) (`listId`)
 
-You can find these informations in your [Mailjet account informations](https://app.mailjet.com/account) in the REST API keys section.
+You can find these informations in your [Mailjet account informations](https://app.mailjet.com/account) in the REST API
+keys section.
 
-You can provide a [contact list ID](https://app.mailjet.com/contacts) in order to subscribe the enduser to a specific one. 
+You can provide a [contact list ID](https://app.mailjet.com/contacts) in order to subscribe the enduser to a specific
+one.
 
 > If no list ID is provided, user will only be created as a contact.
 
@@ -67,21 +73,28 @@ You can provide a [contact list ID](https://app.mailjet.com/contacts) in order t
 
 You can find these informations in your [Brevo account](https://app.brevo.com/settings/keys/api).
 
-You can provide a [contact list ID](https://app.brevo.com/contact/list-listing) in order to subscribe the enduser to a specific one. 
+You can provide a [contact list ID](https://app.brevo.com/contact/list-listing) in order to subscribe the enduser to a
+specific one.
 
-You can also enable Brevo Double Opt-in feature. You will need a Sendinblue template as described [here](https://help.brevo.com/hc/en-us/articles/360019540880-Create-a-double-opt-in-DOI-confirmation-template-for-Sendinblue-form).
+You can also enable Brevo Double Opt-in feature. You will need a Sendinblue template as
+described [here](https://help.brevo.com/hc/en-us/articles/360019540880-Create-a-double-opt-in-DOI-confirmation-template-for-Sendinblue-form).
 
 > If no list ID is provided, user will only be created as a contact.
 
 ##### Mailchimp settings
 
-* **API Key** (`apiKey`): You can find that information from your [Mailchimp account](https://us4.admin.mailchimp.com/account/api/).
-* **Server prefix** (`serverPrefix`): You can find that information by looking at the url when logged into your Mailchimp account. For instance, `https://us4.admin.mailchimp.com/account/api/` indicate the server prefix to use is `us4`
-* **Audience ID** (`listId`): You can find that information in `Audience` > `All contacts` > `Settings` >  `Audience name and campaign defaults`
+* **API Key** (`apiKey`): You can find that information from
+  your [Mailchimp account](https://us4.admin.mailchimp.com/account/api/).
+* **Server prefix** (`serverPrefix`): You can find that information by looking at the url when logged into your
+  Mailchimp account. For instance, `https://us4.admin.mailchimp.com/account/api/` indicate the server prefix to use
+  is `us4`
+* **Audience ID** (`listId`): You can find that information
+  in `Audience` > `All contacts` > `Settings` >  `Audience name and campaign defaults`
 
 ### Configuration file
 
-You can create a `newsletter.php` file in the `config` folder of your project and provide the settings as follow (example):
+You can create a `newsletter.php` file in the `config` folder of your project and provide the settings as follow (
+example):
 
 ```php
 return [
@@ -95,10 +108,11 @@ return [
 ];
 ```
 
-Depending on the service and its specific settings, adjust the `adapterType` to the according service adapter class name and provide required parameters in the `adapterTypeSettings` associative array (see [Service configuration](#service-configuration)).
+Depending on the service and its specific settings, adjust the `adapterType` to the according service adapter class name
+and provide required parameters in the `adapterTypeSettings` associative array (
+see [Service configuration](#service-configuration)).
 
 > ⚠️ Any value provided in that file will override the settings from the Control Panel.
-
 
 ## Front-end form
 
@@ -139,6 +153,16 @@ You can use the following template as a starting point for your registration for
         <label for="newsletter-email">{{ 'Votre email'|t }}<span aria-hidden="true">*</span></label>
         <input id="newsletter-email" required name="email" type="email" placeholder="j.dupont@gmail.com" value="{{ newsletterForm.email }}" {% if newsletterForm.hasErrors('email') %}aria-invalid="true" aria-describedby="email-error"{% endif %}>
 
+        {# firstname additional field (optional) #}
+        <label for="newsletter-firstname">{{ 'Firstname'|t }}</label>
+        <input id="newsletter-firstname" name="additionalFields[firstname]" type="text"
+           value="{{ newsletterForm.additionalFields.firstname ?? '' }}">
+
+        {# lastname additional field (optional) #}
+        <label for="newsletter-lastname">{{ 'Lastname'|t }}</label>
+        <input id="newsletter-lastname" name="additionalFields[lastname]" type="text"
+           value="{{ newsletterForm.additionalFields.lastname ?? '' }}">
+           
         {% if newsletterForm.hasErrors('email') %}
             <div id="email-error" role="alert" class="text-sm text-error font-bold">{{ newsletterForm.getFirstError('email') }}</div>
         {% endif %}
@@ -154,14 +178,20 @@ The `newsletter/newsletter/subscribe` action expects the following inputs submit
 * `email`: User email to subscribe
 * `consent`: Any value indicating that the user gives its consent to receive the newsletter
 
-> ⚠️ Don’t forget to add `{{ craft.googleRecaptcha.render() }}` in the form view if the Google reCAPTCHA verification is enabled.
+Optionally, you can provide additional fields depending on the service support and configuration.
+Each additional field should be provided in one or mode `additionalFields` inputs indexed by its field name.
+For example, to provide a `firstname` field, input should be named `additionalFields[firstname]`.
+
+> ⚠️ Don’t forget to add `{{ craft.googleRecaptcha.render() }}` in the form view if the Google reCAPTCHA verification is
+> enabled.
 
 ## XHR / AJAX form
 
 Alternatively, you can submit the newsletter form with Javascript.   
-This gives you more freedom to provide visual effects to the user and prevents the page from reloading and scrolling to the top of the page.  
+This gives you more freedom to provide visual effects to the user and prevents the page from reloading and scrolling to
+the top of the page.  
 The downside is that you need to write the ajax-request.  
-Use the example below as a reference, note the required `application/json` header:  
+Use the example below as a reference, note the required `application/json` header:
 
 ```javascript
 var data = new FormData();
@@ -171,10 +201,10 @@ data.append("email", email);
 var xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
 
-xhr.addEventListener("readystatechange", function() {
-  if (this.readyState === 4) {
-    console.log(this.responseText);
-  }
+xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+        console.log(this.responseText);
+    }
 });
 
 xhr.open("POST", "https://{YOUR_DOMAIN}/actions/newsletter/newsletter/subscribe/");
@@ -182,11 +212,13 @@ xhr.setRequestHeader("Accept", "application/json");
 xhr.send(data);
 ```
 
-> ⚠️ If the Google reCAPTCHA verification is enabled, add the `data.append("g-recaptcha-response", "");` to the request as well!
- 
+> ⚠️ If the Google reCAPTCHA verification is enabled, add the `data.append("g-recaptcha-response", "");` to the request
+> as well!
+
 ## Custom validations
 
-You can provide your own validations on frontend form submission in a project module or a plugin using the `afterValidate` event on the `NewsletterForm` model:
+You can provide your own validations on frontend form submission in a project module or a plugin using
+the `afterValidate` event on the `NewsletterForm` model:
 
 ```php
 use yii\base\Event;
@@ -221,9 +253,9 @@ use Craft;
 class MySuperNewsletterAdapter extends BaseNewsletterAdapter
 {
 
-	// Declare every attributes required by the service (ie API keys and secrets, etc...)
+	// Declare every attribute required by the service (ie API keys and secrets, etc...)
     public $apiKey;
-    // Store any error occuring in the subscribe method here
+    // Store any error occurring in the subscribe method here
     private $_errorMessage;
     
     /**
@@ -267,11 +299,11 @@ class MySuperNewsletterAdapter extends BaseNewsletterAdapter
 	 * @param string $email
 	 * @return bool
 	 */
-    public function subscribe(string $email): bool
+    public function subscribe(string $email, array $additionalFields = null): bool
     {
         // Call the service API here
         $this->_errorMessage = null;
-        if(!MySuperNewsletterService::subscribe($email)) {
+        if(!MySuperNewsletterService::subscribe($email, $additionalFields)) {
             // If something goes wrong, store the error message
             $this->_errorMessage = MySuperNewsletterService::getError();
             return false;
@@ -318,7 +350,7 @@ The template settings view could look like this:
 }) }}
 ```
 
-> The adapter model can be accessed in the twig view using the `adapter` variable. 
+> The adapter model can be accessed in the twig view using the `adapter` variable.
 
 Last, in a module or a plugin, register the adapter as follow:
 
@@ -337,9 +369,7 @@ Event::on(
 
 ## Roadmap
 
-* Support additional form fields
 * Support for multiple lists
-
 
 ---
 

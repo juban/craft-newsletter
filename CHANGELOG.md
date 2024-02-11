@@ -1,5 +1,18 @@
 # Release Notes for Newsletter
 
+## 3.0.0 - 2024-02-11
+
+### Changed
+
+- Brevo adapter refactofing with additional fields support
+- Mailjet adapter refactofing with additional fields support
+- Mailchimp adapter refactofing with additional fields support
+
+> {note} `NewsletterAdapterInterface` has been updated to support additional fields.
+> As a result, custom adapters should update their `subscribe` method from `subscribe(string $email)`
+> to `subscribe(string $email, array $additionalFields = null)`.
+> However, `additionalFields` parameter can be totally ignored if the service doesn't support it at all.
+
 ## 2.2.0 - 2023-08-05
 
 ### Changed
@@ -8,7 +21,7 @@
 
 > {note} Previous Sendinblue adapter class has been renamed from `juban\newsletter\adapters\Sendinblue`
 > to `juban\newsletter\adapters\Brevo`.
-> 
+>
 > Plugin configuration automatic update will occur during migrations to ensure adapter portability.
 
 ## 2.1.0 - 2022-07-23
